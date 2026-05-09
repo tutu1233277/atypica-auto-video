@@ -1,0 +1,345 @@
+{
+  "defaults": {
+    "fps": 30,
+    "width": 1080,
+    "height": 1920,
+    "style": {
+      "accent": "#ff8d4d",
+      "background": "#050816"
+    }
+  },
+  "features": [
+    {
+      "key": "research",
+      "label": "AI Research",
+      "cases": [
+        {
+          "key": "market",
+          "label": "市场验证",
+          "title": "AI Research / 市场验证",
+          "topic": "AI interior design market",
+          "score": 92,
+          "configBaseName": "ai-research-market-demo",
+          "inspiration": {
+            "platform": "TikTok",
+            "title": "Market validation creator-style proof flow",
+            "insight": "Use a surprised hook, then show the workflow moving from question to repeated signals to a decision."
+          },
+          "hookVariants": {
+            "secret": {
+              "zh": "我差点花三个月\n做一个没人想要的东西",
+              "en": "I almost spent 3 months\nbuilding something nobody wanted"
+            },
+            "mistake": {
+              "zh": "我差点把时间\n全砸在错的方向上",
+              "en": "I almost burned months\non the wrong direction"
+            },
+            "panic": {
+              "zh": "看到这个结果的时候\n我真的慌了一下",
+              "en": "When I saw this result\nI actually panicked"
+            }
+          },
+          "audit": [
+            "AI Research 的功能归属明确：问题、信号、模式、决策这条链路是清楚的。",
+            "字幕里没有直接出现品牌名，因此更像 creator 分享，不像硬广。",
+            "价值点放在总结与归纳，而不是手动刷 TikTok 评论。",
+            "如果要正式放量，最后一幕还需要更强的报告结果画面。"
+          ],
+          "scenes": [
+            {
+              "id": "hook-reaction",
+              "time": "0-3s",
+              "title": "惊讶 Hook",
+              "assetPath": "hook/特写脸部惊讶表情.mp4",
+              "previewPath": "/public/hook/特写脸部惊讶表情.mp4",
+              "note": "真人惊讶表情，像刚意识到自己差点踩坑。",
+              "isHook": true
+            },
+            {
+              "id": "research-question",
+              "time": "3-6s",
+              "title": "研究问题输入",
+              "assetPath": "source/室内设计是否有市场：抓取社媒界面.mp4",
+              "previewPath": "/public/source/室内设计是否有市场：抓取社媒界面.mp4",
+              "note": "产品画面展示输入问题，不要像普通搜索。",
+              "subtitle": {
+                "zh": "我把这个市场问题\n直接丢进去",
+                "en": "I dropped the market question\nstraight in"
+              }
+            },
+            {
+              "id": "signal-patterns",
+              "time": "6-9s",
+              "title": "信号归纳",
+              "assetPath": "source/market-social-proof.mp4",
+              "previewPath": "/public/source/market-social-proof.mp4",
+              "note": "重点是 scale + synthesis，不是手动刷评论。",
+              "subtitle": {
+                "zh": "它不是给我几条评论\n而是找重复出现的信号",
+                "en": "It did not give me random comments\nit found repeated signals"
+              }
+            },
+            {
+              "id": "decision-payoff",
+              "time": "9-12s",
+              "title": "决策结论",
+              "assetPath": "source/atypica-pointing-hand.mp4",
+              "previewPath": "/public/source/atypica-pointing-hand.mp4",
+              "note": "结尾必须给一个能改变决策的发现。",
+              "subtitle": {
+                "zh": "结果我发现\n用户卡住的点完全不是价格",
+                "en": "Turns out\nprice was not the real blocker"
+              }
+            }
+          ]
+        },
+        {
+          "key": "competitor",
+          "label": "竞品分析",
+          "title": "AI Research / 竞品分析",
+          "topic": "Competitor weakness research",
+          "score": 90,
+          "configBaseName": "competitor-ugc",
+          "inspiration": {
+            "platform": "TikTok",
+            "title": "Competitor teardown with proof footage",
+            "insight": "Lead with secrecy, then use workflow proof and a report reveal instead of generic commentary."
+          },
+          "hookVariants": {
+            "secret": {
+              "zh": "千万别让我老板\n知道这个",
+              "en": "DO NOT let my boss\nfind out about this"
+            },
+            "mistake": {
+              "zh": "我差点把产品方向\n判断反了",
+              "en": "I almost read the market\ncompletely wrong"
+            },
+            "panic": {
+              "zh": "我看到竞品用户在骂什么后\n背后一凉",
+              "en": "Seeing what users hated\nmade my stomach drop"
+            }
+          },
+          "audit": [
+            "竞品分析这个 case 是成立的，但不能变成默认唯一方向。",
+            "产品能力通过报告归纳这一步被看见了。",
+            "Hook 有 TikTok 原生感，而且没有直接提品牌。",
+            "除非报告画面能证明，否则不要把结论说得过满。"
+          ],
+          "scenes": [
+            {
+              "id": "hook-reaction",
+              "time": "0-3s",
+              "title": "秘密感 Hook",
+              "assetPath": "hook/特写脸部惊讶表情.mp4",
+              "previewPath": "/public/hook/competitor-hook-reaction.mp4",
+              "note": "秘密感 hook，适合 boss/team tension。",
+              "isHook": true
+            },
+            {
+              "id": "social-signal-pull",
+              "time": "3-6s",
+              "title": "抓取社媒信号",
+              "assetPath": "source/竞品分析：抓取社媒界面.mp4",
+              "previewPath": "/public/source/竞品分析：抓取社媒界面.mp4",
+              "note": "这里要看起来像产品流程，不是普通网页截图。",
+              "subtitle": {
+                "zh": "我只输入了一个问题\n它开始抓真实社媒信号",
+                "en": "I typed one question\nand it pulled real social signals"
+              }
+            },
+            {
+              "id": "report-formation",
+              "time": "6-9s",
+              "title": "形成报告",
+              "assetPath": "source/competitor-report-proof.mp4",
+              "previewPath": "/public/source/competitor-report-proof.mp4",
+              "note": "明确反驳手动刷评论也能做的感觉。",
+              "subtitle": {
+                "zh": "不是几条评论截图\n是直接整理成痛点报告",
+                "en": "Not random screenshots\nan actual pain-point report"
+              }
+            },
+            {
+              "id": "competitive-decision",
+              "time": "9-12s",
+              "title": "竞争决策",
+              "assetPath": "source/竞品分析：报告结果中总结的三个痛点.mp4",
+              "previewPath": "/public/source/竞品分析：报告结果中总结的三个痛点.mp4",
+              "note": "结尾有攻击点和决策感。",
+              "subtitle": {
+                "zh": "20分钟后\n我知道该从哪里打他们",
+                "en": "20 minutes later\nI knew exactly where to compete"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "interviews",
+      "label": "AI Interviews",
+      "cases": [
+        {
+          "key": "job",
+          "label": "面试准备",
+          "title": "AI Interviews / 求职面试",
+          "topic": "Hiring manager rejection reasons",
+          "score": 88,
+          "configBaseName": "interview-insights",
+          "inspiration": {
+            "platform": "TikTok",
+            "title": "Personal confessional with persona proof",
+            "insight": "Keep it personal, then show persona selection and follow-up probing rather than broad research."
+          },
+          "hookVariants": {
+            "secret": {
+              "zh": "千万别让我面试官\n知道我看过这个",
+              "en": "DO NOT let my interviewer\nknow I saw this"
+            },
+            "mistake": {
+              "zh": "我以前一直以为\n自己只是经验不够",
+              "en": "I used to think\nI just lacked experience"
+            },
+            "panic": {
+              "zh": "知道他们为什么秒拒人后\n我头皮发麻",
+              "en": "Learning why they reject people\nmade me panic a little"
+            }
+          },
+          "audit": [
+            "这是 AI Interviews 的 case，不是 AI Research。",
+            "因为核心是人设与追问，所以这种高流量个人向题材是成立的。",
+            "文案避免了“真的采访了招聘经理”这种容易误解的说法。",
+            "如果要正式上线，需要补更清楚的人设选择产品画面。"
+          ],
+          "scenes": [
+            {
+              "id": "confessional-hook",
+              "time": "0-3s",
+              "title": "自白式 Hook",
+              "assetPath": "hook/嘘.mp4",
+              "previewPath": "/hook/嘘.mp4",
+              "note": "高流量个人 case，必须走 AI Interviews 逻辑。",
+              "isHook": true
+            },
+            {
+              "id": "persona-selection",
+              "time": "3-6s",
+              "title": "选择人设",
+              "assetPath": "source/atypica-pointing-hand.mp4",
+              "previewPath": "/public/source/atypica-pointing-hand.mp4",
+              "note": "强调选择人设，而不是泛泛 AI 建议。",
+              "subtitle": {
+                "zh": "我先选了会筛简历的人\n不是随便问AI",
+                "en": "I picked the people\nwho actually screen candidates"
+              }
+            },
+            {
+              "id": "follow-up-probing",
+              "time": "6-9s",
+              "title": "继续追问",
+              "assetPath": "source/market-social-proof.mp4",
+              "previewPath": "/public/source/market-social-proof.mp4",
+              "note": "展示 AI Interviews 的追问能力。",
+              "subtitle": {
+                "zh": "然后让它追问\n为什么会直接拒掉一个人",
+                "en": "Then I made it ask\nwhy they reject someone instantly"
+              }
+            },
+            {
+              "id": "motive-reveal",
+              "time": "9-12s",
+              "title": "原因揭示",
+              "assetPath": "source/atypica-pointing-hand.mp4",
+              "previewPath": "/public/source/atypica-pointing-hand.mp4",
+              "note": "结尾要反直觉，适合评论区讨论。",
+              "subtitle": {
+                "zh": "最吓人的是\n问题根本不是经验不够",
+                "en": "The scary part was\nexperience was not the problem"
+              }
+            }
+          ]
+        },
+        {
+          "key": "dating",
+          "label": "关系模式",
+          "title": "AI Interviews / 两性关系",
+          "topic": "Why people stop replying",
+          "score": 87,
+          "configBaseName": "dating-patterns",
+          "inspiration": {
+            "platform": "TikTok",
+            "title": "Emotional relationship hook with pattern payoff",
+            "insight": "Use a personal pain hook, then move into persona grouping, repeated patterns, and one brutal insight."
+          },
+          "hookVariants": {
+            "secret": {
+              "zh": "我一直不敢承认\n问题可能不是太主动",
+              "en": "I did not want to admit\nbeing too available was not the issue"
+            },
+            "mistake": {
+              "zh": "我以前一直以为\n别人不回我是因为我太主动",
+              "en": "I thought people stopped replying\nbecause I was too available"
+            },
+            "panic": {
+              "zh": "看到反复出现的模式后\n我整个人都沉默了",
+              "en": "Seeing the repeated pattern\nleft me speechless"
+            }
+          },
+          "audit": [
+            "这个 case 只适合放在 AI Interviews 下面。",
+            "Hook 有流量感，而且情绪很具体。",
+            "这类题材文案要更谨慎，避免把关系结论说成绝对真相。",
+            "如果能补一段报告或整理结果画面，证明感会更强。"
+          ],
+          "scenes": [
+            {
+              "id": "emotional-hook",
+              "time": "0-3s",
+              "title": "情绪 Hook",
+              "assetPath": "hook/不可置信的表情.mp4",
+              "previewPath": "/hook/不可置信的表情.mp4",
+              "note": "个人高流量 case，要像真实情感困惑。",
+              "isHook": true
+            },
+            {
+              "id": "persona-group",
+              "time": "3-6s",
+              "title": "人设分组",
+              "assetPath": "source/atypica-pointing-hand.mp4",
+              "previewPath": "/public/source/atypica-pointing-hand.mp4",
+              "note": "核心是人设和追问，不是 AI Research。",
+              "subtitle": {
+                "zh": "我选了一批有类似经历的人\n让它继续追问",
+                "en": "I picked people with similar stories\nand made it ask deeper"
+              }
+            },
+            {
+              "id": "repeated-patterns",
+              "time": "6-9s",
+              "title": "重复模式",
+              "assetPath": "source/market-social-proof.mp4",
+              "previewPath": "/public/source/market-social-proof.mp4",
+              "note": "这里体现分析深度。",
+              "subtitle": {
+                "zh": "它把那些回答整理成\n几个反复出现的模式",
+                "en": "It turned the answers into\na few repeated patterns"
+              }
+            },
+            {
+              "id": "brutal-insight",
+              "time": "9-12s",
+              "title": "扎心结论",
+              "assetPath": "hook/邪恶一笑.mp4",
+              "previewPath": "/hook/邪恶一笑.mp4",
+              "note": "结尾最好补第二句 insight，避免只停在情绪。",
+              "subtitle": {
+                "zh": "最扎心的是\n问题不是主动",
+                "en": "The brutal part\nwas not being available"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

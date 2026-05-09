@@ -1,0 +1,28 @@
+{
+  "private": true,
+  "scripts": {
+    "studio": "node scripts/studio.mjs",
+    "render": "node scripts/render-video.mjs",
+    "render:example": "node scripts/render-video.mjs --config=data/videos/competitor-ugc.json --out=out/competitor-ugc.mp4",
+    "tool": "node scripts/video-tool-server.mjs",
+    "generate-script": "node scripts/generate-script.mjs",
+    "research:ugc": "node scripts/research-ugc.mjs",
+    "generate:x-post": "node scripts/generate-x-post.mjs",
+    "post:x": "node scripts/post-to-x.mjs",
+    "launch:x": "node scripts/run-x-launch-flow.mjs"
+  },
+  "dependencies": {
+    "@remotion/cli": "^4.0.454",
+    "@remotion/player": "^4.0.454",
+    "@ai-sdk/openai": "^2.0.56",
+    "@types/node": "^25.6.0",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "ai": "^5.0.91",
+    "react": "^19.2.5",
+    "react-dom": "^19.2.5",
+    "remotion": "^4.0.454",
+    "typescript": "^6.0.3",
+    "zod": "^4.3.6"
+  }
+}

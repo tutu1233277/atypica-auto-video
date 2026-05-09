@@ -1,0 +1,25 @@
+{
+  "apify": {
+    "tokenEnv": "APIFY_TOKEN",
+    "platforms": {
+      "tiktok": {
+        "taskId": "replace-with-your-tiktok-task-id",
+        "actorId": "optional-actor-id-if-you-dont-use-task",
+        "baseInput": {
+          "query": "{{query}}",
+          "limit": "{{limit}}",
+          "sort": "top"
+        }
+      },
+      "instagram": {
+        "taskId": "replace-with-your-instagram-task-id",
+        "actorId": "optional-actor-id-if-you-dont-use-task",
+        "baseInput": {
+          "query": "{{query}}",
+          "limit": "{{limit}}",
+          "sort": "top"
+        }
+      }
+    }
+  }
+}

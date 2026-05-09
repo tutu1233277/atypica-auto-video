@@ -1,0 +1,6 @@
+{
+  "appKey": "replace-with-x-api-key",
+  "appSecret": "replace-with-x-api-secret",
+  "accessToken": "replace-with-user-access-token",
+  "accessSecret": "replace-with-user-access-token-secret"
+}
