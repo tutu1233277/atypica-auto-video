@@ -1,0 +1,60 @@
+{
+  "query": "this is crazy ai tool",
+  "platforms": [
+    "tiktok"
+  ],
+  "provider": "apify",
+  "generatedAt": "2026-05-09T08:33:05.078Z",
+  "summary": {
+    "itemCount": 1,
+    "topFormats": [
+      {
+        "name": "low-cost ai ugc",
+        "count": 1
+      }
+    ],
+    "platforms": [
+      {
+        "name": "tiktok",
+        "count": 1
+      }
+    ],
+    "sampleHooks": [
+      "An MIT researcher just gave AI a physical body to control."
+    ]
+  },
+  "items": [
+    {
+      "id": "7629340491724688671",
+      "platform": "tiktok",
+      "url": "https://www.tiktok.com/@kanekallaway/video/7629340491724688671",
+      "title": "An MIT researcher just gave AI a physical body to control. \n\nThe first thing it did...was breathe.\n\n#ai #artificialintelligence #tech #technology #robot",
+      "hook": "An MIT researcher just gave AI a physical body to control.",
+      "summary": "An MIT researcher just gave AI a physical body to control. \n\nThe first thing it did...was breathe.\n\n#ai #artificialintelligence #tech #technology #robot",
+      "creator": "kanekallaway",
+      "likes": 16900,
+      "views": 157300,
+      "comments": 113,
+      "postedAt": "2026-04-16T12:57:50.000Z",
+      "source": "apify",
+      "format": "low-cost ai ugc",
+      "mediaType": null,
+      "productType": null,
+      "isVideo": null,
+      "fitScore": 3,
+      "fitVerdict": "weak",
+      "fitReasons": [
+        "AI/product signals: ai, research",
+        "Short hook line"
+      ],
+      "flags": [
+        "Missing emotional/confessional hook"
+      ],
+      "hardReject": false
+    }
+  ],
+  "diagnostics": [
+    "Apify tiktok returned 12 items.",
+    "Applied minimum likes filter: 5000."
+  ]
+}

@@ -1,0 +1,63 @@
+{
+  "query": "automation app",
+  "platforms": [
+    "tiktok"
+  ],
+  "provider": "apify",
+  "generatedAt": "2026-05-09T08:51:15.244Z",
+  "summary": {
+    "itemCount": 1,
+    "topFormats": [
+      {
+        "name": "low-cost ai ugc",
+        "count": 1
+      }
+    ],
+    "platforms": [
+      {
+        "name": "tiktok",
+        "count": 1
+      }
+    ],
+    "sampleHooks": [
+      "Most people run one AI agent… this runs 60.RuFlow plugs into Claude Code and handles research, coding, testing, all at once."
+    ]
+  },
+  "items": [
+    {
+      "id": "7635040847767014669",
+      "platform": "tiktok",
+      "url": "https://www.tiktok.com/@duncanrogoff/video/7635040847767014669",
+      "title": "Most people run one AI agent… this runs 60.RuFlow plugs into Claude Code and handles research, coding, testing, all at once.\n\nSmart routing = cheaper + faster\nShared memory = better results over time But if your inputs are bad, output will still suck.\n\nDM “flow” and I’ll send you the setup link.\n\n#aitools #claudecode #aiagents #automation #tiktoktech",
+      "hook": "Most people run one AI agent… this runs 60.RuFlow plugs into Claude Code and handles research, coding, testing, all at once.",
+      "summary": "Most people run one AI agent… this runs 60.RuFlow plugs into Claude Code and handles research, coding, testing, all at once.\n\nSmart routing = cheaper + faster\nShared memory = better results over time But if your inputs are bad, output will still suck.\n\nDM “flow” and I’ll send you the setup link.\n\n#aitools #claudecode #aiagents #automation #tiktoktech",
+      "creator": "duncanrogoff",
+      "likes": 34000,
+      "views": 531000,
+      "comments": 629,
+      "postedAt": "2026-05-01T21:38:18.000Z",
+      "source": "apify",
+      "format": "low-cost ai ugc",
+      "mediaType": null,
+      "productType": null,
+      "isVideo": null,
+      "fitScore": 19,
+      "fitVerdict": "strong",
+      "fitReasons": [
+        "AI/product signals: ai, claude, tool",
+        "First-person creator framing",
+        "Human hook framing: i , me ",
+        "Product UI/proof signals: tool, results, input"
+      ],
+      "flags": [
+        "Missing emotional/confessional hook",
+        "Heavy CTA without enough proof"
+      ],
+      "hardReject": false
+    }
+  ],
+  "diagnostics": [
+    "Apify tiktok returned 15 items.",
+    "Applied minimum likes filter: 5000."
+  ]
+}

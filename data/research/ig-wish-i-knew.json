@@ -1,0 +1,92 @@
+{
+  "query": "wish i knew this earlier ai",
+  "platforms": [
+    "instagram"
+  ],
+  "provider": "apify",
+  "generatedAt": "2026-05-09T08:29:40.848Z",
+  "summary": {
+    "itemCount": 2,
+    "topFormats": [
+      {
+        "name": "low-cost ai ugc",
+        "count": 2
+      }
+    ],
+    "platforms": [
+      {
+        "name": "instagram",
+        "count": 2
+      }
+    ],
+    "sampleHooks": [
+      "What if your content could move exactly how you imagine it? 🎬✨",
+      "Are you making the most of the sunshine today?? 🧼 🧼 🧼"
+    ]
+  },
+  "items": [
+    {
+      "id": "3890602422128585368",
+      "platform": "instagram",
+      "url": "https://www.instagram.com/p/DX-MkolP6qY/",
+      "title": "What if your content could move exactly how you imagine it? 🎬✨\n\nI’ve been testing Higgsfield.ai Motion Control and the precision is next level. This is where AI meets real creativity.\n\nIf you’re into content, you need to see this 👀\n👉 Check it out & comment “AI” and I’ll send you the details\n\n#aitools #contentcreation #higgsfieldai #digitalcreator #tech",
+      "hook": "What if your content could move exactly how you imagine it? 🎬✨",
+      "summary": "What if your content could move exactly how you imagine it? 🎬✨\n\nI’ve been testing Higgsfield.ai Motion Control and the precision is next level. This is where AI meets real creativity.\n\nIf you’re into content, you need to see this 👀\n👉 Check it out & comment “AI” and I’ll send you the details\n\n#aitools #contentcreation #higgsfieldai #digitalcreator #tech",
+      "creator": "lifebymel3",
+      "likes": 12833,
+      "views": 558130,
+      "comments": 156,
+      "postedAt": "2026-05-05T21:20:44.000Z",
+      "source": "apify",
+      "format": "low-cost ai ugc",
+      "mediaType": "Video",
+      "productType": "clips",
+      "isVideo": null,
+      "fitScore": 12,
+      "fitVerdict": "usable",
+      "fitReasons": [
+        "Instagram Reel format",
+        "First-person creator framing",
+        "Short hook line",
+        "Reaction/confessional hooks: what if, you need to see this"
+      ],
+      "flags": [
+        "Missing emotional/confessional hook",
+        "Heavy CTA without enough proof"
+      ],
+      "hardReject": false
+    },
+    {
+      "id": "3870884948899054318",
+      "platform": "instagram",
+      "url": "https://www.instagram.com/p/DW4JVopiMLu/",
+      "title": "Are you making the most of the sunshine today?? 🧼 🧼 🧼 \nThe NimBrush makes bath time easy. Double the cleaning in half the time 💪\nTag a friend who needs to add this to their grooming kit ready for spring cleaning!! \n#horsecare #equestrianlife #nimbrush #bathtime #worksmarternotharder",
+      "hook": "Are you making the most of the sunshine today?? 🧼 🧼 🧼",
+      "summary": "Are you making the most of the sunshine today?? 🧼 🧼 🧼 \nThe NimBrush makes bath time easy. Double the cleaning in half the time 💪\nTag a friend who needs to add this to their grooming kit ready for spring cleaning!! \n#horsecare #equestrianlife #nimbrush #bathtime #worksmarternotharder",
+      "creator": "parallax_equestrian",
+      "likes": 5630,
+      "views": 237382,
+      "comments": 58,
+      "postedAt": "2026-04-08T16:33:21.000Z",
+      "source": "apify",
+      "format": "low-cost ai ugc",
+      "mediaType": "Video",
+      "productType": "clips",
+      "isVideo": null,
+      "fitScore": 2,
+      "fitVerdict": "weak",
+      "fitReasons": [
+        "Instagram Reel format",
+        "Short hook line"
+      ],
+      "flags": [
+        "Missing emotional/confessional hook"
+      ],
+      "hardReject": false
+    }
+  ],
+  "diagnostics": [
+    "Apify instagram returned 96 items.",
+    "Applied minimum likes filter: 5000."
+  ]
+}

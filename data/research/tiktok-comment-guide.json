@@ -1,0 +1,62 @@
+{
+  "query": "comment guide ai tool",
+  "platforms": [
+    "tiktok"
+  ],
+  "provider": "apify",
+  "generatedAt": "2026-05-09T08:34:33.805Z",
+  "summary": {
+    "itemCount": 1,
+    "topFormats": [
+      {
+        "name": "shock-hook + step proof",
+        "count": 1
+      }
+    ],
+    "platforms": [
+      {
+        "name": "tiktok",
+        "count": 1
+      }
+    ],
+    "sampleHooks": [
+      "Comment \"Fitness\" and I'll send you the full guide 👇"
+    ]
+  },
+  "items": [
+    {
+      "id": "7637167673851284767",
+      "platform": "tiktok",
+      "url": "https://www.tiktok.com/@maverickgpt/video/7637167673851284767",
+      "title": "Comment \"Fitness\" and I'll send you the full guide 👇\n\nClaude just killed personal trainers.\n\nYou can now connect Claude directly to your Apple Health and Google Calendar so it builds personalized workout plans based on your actual data.\n\nHere's how to set it up in 30 seconds:\n\n1. Go to Claude → Projects → Create New Project and name it Fitness Coach\n2. Paste in the master prompt under Instructions\n3. Open the Claude app on iPhone → Settings → Permissions and turn on Read for Health and Calendar\n\nNow Claude pulls from your real data (steps, sleep, heart rate) and builds you a full workout plan automatically slotted into your calendar.\n\nThe craziest part? Claude actually adjusts based on the data. Only slept 4 hours? It swaps your heavy lifting day for active recovery and updates your calendar instantly.\n\n#ai #claude #fitness #applehealth #aitools",
+      "hook": "Comment \"Fitness\" and I'll send you the full guide 👇",
+      "summary": "Comment \"Fitness\" and I'll send you the full guide 👇\n\nClaude just killed personal trainers.\n\nYou can now connect Claude directly to your Apple Health and Google Calendar so it builds personalized workout plans based on your actual data.\n\nHere's how to set it up in 30 seconds:\n\n1. Go to Claude → Projects → Create New Project and name it Fitness Coach\n2. Paste in the master prompt under Instructions\n3. Open the Claude app on iPhone → Settings → Permissions and turn on Read for Health and Calendar\n\nNow Claude pulls from your real data (steps, sleep, heart rate) and builds you a full workout plan automatically slotted into your calendar.\n\nThe craziest part? Claude actually adjusts based on the data. Only slept 4 hours? It swaps your heavy lifting day for active recovery and updates your calendar instantly.\n\n#ai #claude #fitness #applehealth #aitools",
+      "creator": "maverickgpt",
+      "likes": 16000,
+      "views": 436700,
+      "comments": 2548,
+      "postedAt": "2026-05-07T15:11:21.000Z",
+      "source": "apify",
+      "format": "shock-hook + step proof",
+      "mediaType": null,
+      "productType": null,
+      "isVideo": null,
+      "fitScore": 16,
+      "fitVerdict": "strong",
+      "fitReasons": [
+        "Shows proof, steps, or workflow",
+        "AI/product signals: ai, claude, tool",
+        "First-person creator framing",
+        "Short hook line"
+      ],
+      "flags": [
+        "Missing emotional/confessional hook"
+      ],
+      "hardReject": false
+    }
+  ],
+  "diagnostics": [
+    "Apify tiktok returned 12 items.",
+    "Applied minimum likes filter: 5000."
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "query": "i almost paid for this ai",
+  "platforms": [
+    "instagram"
+  ],
+  "provider": "local_markdown",
+  "generatedAt": "2026-05-09T07:57:31.065Z",
+  "summary": {
+    "itemCount": 0,
+    "topFormats": [],
+    "platforms": [],
+    "sampleHooks": []
+  },
+  "items": [],
+  "diagnostics": [
+    "Apify fetch failed: fetch failed",
+    "Applied minimum likes filter: 5000."
+  ]
+}

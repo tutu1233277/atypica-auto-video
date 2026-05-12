@@ -1,0 +1,165 @@
+{
+  "query": "i almost paid for this ai",
+  "platforms": [
+    "tiktok"
+  ],
+  "provider": "apify",
+  "generatedAt": "2026-05-09T07:32:35.173Z",
+  "summary": {
+    "itemCount": 5,
+    "topFormats": [
+      {
+        "name": "low-cost ai ugc",
+        "count": 4
+      },
+      {
+        "name": "screen-proof + insight reveal",
+        "count": 1
+      }
+    ],
+    "platforms": [
+      {
+        "name": "tiktok",
+        "count": 5
+      }
+    ],
+    "sampleHooks": [
+      "I Paid $500 For Devin AI “Software Engineer” Was It Worth It? #ai #softwareengineer #programming #devinai #greenscreen",
+      "I Spent Thousands Of Dollars On This AI-Generated Ad To See If It Was Real",
+      "I spent 250,000 AI credits on Kling 3.0 so you don’t have to. 🎬"
+    ]
+  },
+  "items": [
+    {
+      "id": "7472163306128690475",
+      "platform": "tiktok",
+      "url": "https://www.tiktok.com/@connerardman/video/7472163306128690475",
+      "title": "I Paid $500 For Devin AI “Software Engineer” Was It Worth It? #ai #softwareengineer #programming #devinai #greenscreen",
+      "hook": "I Paid $500 For Devin AI “Software Engineer” Was It Worth It? #ai #softwareengineer #programming #devinai #greenscreen",
+      "summary": "I Paid $500 For Devin AI “Software Engineer” Was It Worth It? #ai #softwareengineer #programming #devinai #greenscreen",
+      "creator": "connerardman",
+      "likes": 130,
+      "views": 6845,
+      "comments": 8,
+      "postedAt": "2025-02-16T23:30:36.000Z",
+      "source": "apify",
+      "format": "screen-proof + insight reveal",
+      "fitScore": 14,
+      "fitVerdict": "usable",
+      "fitReasons": [
+        "UGC hook signals: i paid",
+        "Shows proof, steps, or workflow",
+        "First-person creator framing",
+        "Short hook line"
+      ],
+      "flags": [],
+      "hardReject": false
+    },
+    {
+      "id": "7485204192584273194",
+      "platform": "tiktok",
+      "url": "https://www.tiktok.com/@sambucha/video/7485204192584273194",
+      "title": "I Spent Thousands Of Dollars On This AI-Generated Ad To See If It Was Real",
+      "hook": "I Spent Thousands Of Dollars On This AI-Generated Ad To See If It Was Real",
+      "summary": "I Spent Thousands Of Dollars On This AI-Generated Ad To See If It Was Real",
+      "creator": "sambucha",
+      "likes": 177500,
+      "views": 1800000,
+      "comments": 482,
+      "postedAt": "2025-04-02T17:15:00.000Z",
+      "source": "apify",
+      "format": "low-cost ai ugc",
+      "fitScore": 3,
+      "fitVerdict": "weak",
+      "fitReasons": [
+        "Shows proof, steps, or workflow",
+        "First-person creator framing",
+        "Short hook line"
+      ],
+      "flags": [
+        "Missing emotional/confessional hook"
+      ],
+      "hardReject": false
+    },
+    {
+      "id": "7622780485252533518",
+      "platform": "tiktok",
+      "url": "https://www.tiktok.com/@taylorgreathead/video/7622780485252533518",
+      "title": "I spent 250,000 AI credits on Kling 3.0 so you don’t have to. 🎬\n\nRight now, Kling 3.0 is an absolute powerhouse. Until Seedance 2.0 finally drops, this is the heavyweight champion of AI video models.\n\nAfter burning through a quarter of a million credits building out actual projects, I’ve found where this model is a unicorn and what still needs work. I’m putting together a full breakdown of its exact strengths and its biggest weaknesses.\n\n👇 This is Part 2. Make sure you’re following, and drop a comment below if you want me to remind you when Part 3 drops next week!\n\n(If you’re wondering what the best AI video model is right now, Kling 3.0 is currently head of the class for cinematic generation. You may ask how to use Kling AI to get consistent results, and understanding its specific strengths and weaknesses is crucial. While the community waits for the full release of Seedance 2.0, mastering current generative AI video tools and prompt engineering is the quickest way to produce production-ready AI filmmaking.)\n\nMade on @Freepik",
+      "hook": "I spent 250,000 AI credits on Kling 3.0 so you don’t have to. 🎬",
+      "summary": "I spent 250,000 AI credits on Kling 3.0 so you don’t have to. 🎬\n\nRight now, Kling 3.0 is an absolute powerhouse. Until Seedance 2.0 finally drops, this is the heavyweight champion of AI video models.\n\nAfter burning through a quarter of a million credits building out actual projects, I’ve found where this model is a unicorn and what still needs work. I’m putting together a full breakdown of its exact strengths and its biggest weaknesses.\n\n👇 This is Part 2. Make sure you’re following, and drop a comment below if you want me to remind you when Part 3 drops next week!\n\n(If you’re wondering what the best AI video model is right now, Kling 3.0 is currently head of the class for cinematic generation. You may ask how to use Kling AI to get consistent results, and understanding its specific strengths and weaknesses is crucial. While the community waits for the full release of Seedance 2.0, mastering current generative AI video tools and prompt engineering is the quickest way to produce production-ready AI filmmaking.)\n\nMade on @Freepik",
+      "creator": "taylorgreathead",
+      "likes": 2499,
+      "views": 45600,
+      "comments": 58,
+      "postedAt": "2026-03-29T20:41:49.000Z",
+      "source": "apify",
+      "format": "low-cost ai ugc",
+      "fitScore": 3,
+      "fitVerdict": "weak",
+      "fitReasons": [
+        "Shows proof, steps, or workflow",
+        "First-person creator framing",
+        "Short hook line"
+      ],
+      "flags": [
+        "Missing emotional/confessional hook",
+        "Caption is very long, likely explainer-heavy"
+      ],
+      "hardReject": false
+    },
+    {
+      "id": "7626132450439073037",
+      "platform": "tiktok",
+      "url": "https://www.tiktok.com/@creator.league2/video/7626132450439073037",
+      "title": "I Bought AI-Generated Ads Part1 #sambuca#bowl#losangeles#diy#matthewbeem",
+      "hook": "I Bought AI-Generated Ads Part1 #sambuca#bowl#losangeles#diy#matthewbeem",
+      "summary": "I Bought AI-Generated Ads Part1 #sambuca#bowl#losangeles#diy#matthewbeem",
+      "creator": "creator.league2",
+      "likes": 10700,
+      "views": 377300,
+      "comments": 53,
+      "postedAt": "2026-04-07T21:28:58.000Z",
+      "source": "apify",
+      "format": "low-cost ai ugc",
+      "fitScore": 1,
+      "fitVerdict": "weak",
+      "fitReasons": [
+        "Shows proof, steps, or workflow",
+        "First-person creator framing",
+        "Short hook line"
+      ],
+      "flags": [
+        "Missing emotional/confessional hook"
+      ],
+      "hardReject": false
+    },
+    {
+      "id": "7495221387397729559",
+      "platform": "tiktok",
+      "url": "https://www.tiktok.com/@wackyandweird/video/7495221387397729559",
+      "title": "What seems like easy money could cost you your voice — forever.\nThe #truth about #ai voice cloning is darker than you think…\n#comment your take. #would you do it?\n😱🫣#fyp #following \n#voicecloning #aitruth #darktech #mysterytok #scaryfacts #viralstory #blackmirrorvibes #deepfakewarning #realorai #ModernMystery #toofar #ai #follow",
+      "hook": "What seems like easy money could cost you your voice — forever.",
+      "summary": "What seems like easy money could cost you your voice — forever.\nThe #truth about #ai voice cloning is darker than you think…\n#comment your take. #would you do it?\n😱🫣#fyp #following \n#voicecloning #aitruth #darktech #mysterytok #scaryfacts #viralstory #blackmirrorvibes #deepfakewarning #realorai #ModernMystery #toofar #ai #follow",
+      "creator": "wackyandweird",
+      "likes": 15,
+      "views": 537,
+      "comments": 5,
+      "postedAt": "2025-04-20T02:47:30.000Z",
+      "source": "apify",
+      "format": "low-cost ai ugc",
+      "fitScore": -1,
+      "fitVerdict": "weak",
+      "fitReasons": [
+        "Short hook line"
+      ],
+      "flags": [
+        "Missing emotional/confessional hook"
+      ],
+      "hardReject": false
+    }
+  ],
+  "diagnostics": [
+    "Apify tiktok returned 8 items."
+  ]
+}

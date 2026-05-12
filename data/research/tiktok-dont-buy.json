@@ -1,0 +1,90 @@
+{
+  "query": "dont buy this yet ai tool",
+  "platforms": [
+    "tiktok"
+  ],
+  "provider": "apify",
+  "generatedAt": "2026-05-09T08:33:24.752Z",
+  "summary": {
+    "itemCount": 2,
+    "topFormats": [
+      {
+        "name": "low-cost ai ugc",
+        "count": 2
+      }
+    ],
+    "platforms": [
+      {
+        "name": "tiktok",
+        "count": 2
+      }
+    ],
+    "sampleHooks": [
+      "Don't use these bad AI tools, use the great ones instead",
+      "Free vs Paid 🤖"
+    ]
+  },
+  "items": [
+    {
+      "id": "7616009715398610232",
+      "platform": "tiktok",
+      "url": "https://www.tiktok.com/@danvmartell/video/7616009715398610232",
+      "title": "Don't use these bad AI tools, use the great ones instead",
+      "hook": "Don't use these bad AI tools, use the great ones instead",
+      "summary": "Don't use these bad AI tools, use the great ones instead",
+      "creator": "danvmartell",
+      "likes": 197900,
+      "views": 3600000,
+      "comments": 1042,
+      "postedAt": "2026-03-11T15:01:01.000Z",
+      "source": "apify",
+      "format": "low-cost ai ugc",
+      "mediaType": null,
+      "productType": null,
+      "isVideo": null,
+      "fitScore": -2,
+      "fitVerdict": "weak",
+      "fitReasons": [
+        "AI/product signals: ai, tool, tools",
+        "Short hook line"
+      ],
+      "flags": [
+        "Missing emotional/confessional hook"
+      ],
+      "hardReject": false
+    },
+    {
+      "id": "7609638279385812245",
+      "platform": "tiktok",
+      "url": "https://www.tiktok.com/@dani_douen/video/7609638279385812245",
+      "title": "Free vs Paid 🤖\n\nIf you just need a one-off solution and use AI tools only occasionally, I’d definitely suggest checking out these free alternatives instead of paying for multiple AI subscriptions.\n\n#freeai #genai #aiimage",
+      "hook": "Free vs Paid 🤖",
+      "summary": "Free vs Paid 🤖\n\nIf you just need a one-off solution and use AI tools only occasionally, I’d definitely suggest checking out these free alternatives instead of paying for multiple AI subscriptions.\n\n#freeai #genai #aiimage",
+      "creator": "dani_douen",
+      "likes": 9487,
+      "views": 248500,
+      "comments": 75,
+      "postedAt": "2026-02-22T10:43:10.000Z",
+      "source": "apify",
+      "format": "low-cost ai ugc",
+      "mediaType": null,
+      "productType": null,
+      "isVideo": null,
+      "fitScore": -2,
+      "fitVerdict": "weak",
+      "fitReasons": [
+        "AI/product signals: ai, tool, tools",
+        "First-person creator framing",
+        "Short hook line"
+      ],
+      "flags": [
+        "Missing emotional/confessional hook"
+      ],
+      "hardReject": false
+    }
+  ],
+  "diagnostics": [
+    "Apify tiktok returned 12 items.",
+    "Applied minimum likes filter: 5000."
+  ]
+}

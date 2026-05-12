@@ -1,0 +1,77 @@
+{
+  "id": "竞品分析",
+  "title": "竞品分析 Auto Script",
+  "topic": "Competitor Research",
+  "fps": 30,
+  "width": 1080,
+  "height": 1920,
+  "style": {
+    "accent": "#ff8d4d",
+    "background": "#050816"
+  },
+  "inspiration": [
+    {
+      "platform": "Tiktok",
+      "title": "Comment “LIST” and I’ll send you my guide to the Top 10 AI Apps You Need Right Now ⚡📱\n\nThis guide breaks down the most powerful AI tools in 2025 — apps that help you write, design, edit, and create faster than ever. Whether you’re building a business, scaling content, or just exploring AI, these tools will save you time and money while giving you pro-level results.\n\nHere’s what’s inside the guide:\n💻 AI for writing, content creation, and brainstorming ideas in seconds\n🎨 The best image, logo, and design tools for creators and brands\n🎥 Studio-level video and avatar tools powered by AI\n🎵 Platforms that generate full music tracks instantly\n🌐 Website builders that launch your ideas into live products\n\nMost people don’t even know these tools exist and end up overpaying for outdated software or wasting hours learning clunky systems. With this list, you’ll know exactly which AI apps to use so you can create faster, launch smarter, and grow without roadblocks.\n\nIf you’ve been searching for:\n⚡ “Best AI tools 2025”\n⚡ “AI apps for content creation”\n⚡ “AI for business and productivity”\n⚡ “AI video and design tools”\nThis guide is the shortcut you need.\n\nDay 70 of posting every day 📅\n\n👉 Comment “LIST” and I’ll DM you the full guide today.\n\n#AIapps #AItools #AIworkflow #AIautomation #AIstartup",
+      "url": "https://www.tiktok.com/@kayvon.ai/video/7556034406796807438",
+      "insight": "Use a low-cost ai ugc structure and keep production low-cost."
+    }
+  ],
+  "scenes": [
+    {
+      "id": "hook-reaction",
+      "assetPath": "hook/competitor-hook-reaction.mp4",
+      "durationInFrames": 54,
+      "subtitle": {
+        "zh": "我用20分钟\n搞懂了竞品的所有弱点",
+        "en": "I uncovered every weakness\nmy competitor has in 20 minutes"
+      }
+    },
+    {
+      "id": "scrape-proof",
+      "assetPath": "source/competitor-social-proof.mp4",
+      "durationInFrames": 60,
+      "subtitle": {
+        "zh": "AI把社媒上的吐槽\n全都抓出来了",
+        "en": "AI scraped social posts\nand pulled every complaint"
+      }
+    },
+    {
+      "id": "report-proof",
+      "assetPath": "source/competitor-report-proof.mp4",
+      "durationInFrames": 72,
+      "subtitle": {
+        "zh": "定价太贵 客服太差 功能缺失\n三个痛点一次看完",
+        "en": "Too expensive. Bad support.\nMissing features. All in one pass"
+      }
+    },
+    {
+      "id": "cta-hand",
+      "assetPath": "source/atypica-pointing-hand.mp4",
+      "durationInFrames": 42,
+      "subtitle": {
+        "zh": "这才是我现在做竞品分析的方法",
+        "en": "This is how I do competitor research now"
+      }
+    }
+  ],
+  "cta": {
+    "zh": "atypica.com",
+    "en": "atypica.com"
+  },
+  "notes": {
+    "sourceDocs": 15891,
+    "researchProvider": "apify",
+    "researchQuery": "aitools",
+    "topFormats": [
+      {
+        "name": "low-cost ai ugc",
+        "count": 9
+      },
+      {
+        "name": "screen-proof + insight reveal",
+        "count": 1
+      }
+    ]
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "query": "nobody tells you ai tool",
+  "platforms": [
+    "tiktok"
+  ],
+  "provider": "apify",
+  "generatedAt": "2026-05-09T08:33:06.646Z",
+  "summary": {
+    "itemCount": 0,
+    "topFormats": [],
+    "platforms": [],
+    "sampleHooks": []
+  },
+  "items": [],
+  "diagnostics": [
+    "Apify tiktok returned 12 items.",
+    "Applied minimum likes filter: 5000."
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "query": "this is crazy ai",
+  "platforms": [
+    "instagram"
+  ],
+  "provider": "apify",
+  "generatedAt": "2026-05-09T08:21:04.085Z",
+  "summary": {
+    "itemCount": 0,
+    "topFormats": [],
+    "platforms": [],
+    "sampleHooks": []
+  },
+  "items": [],
+  "diagnostics": [
+    "Apify instagram returned 1 items.",
+    "Applied minimum likes filter: 5000."
+  ]
+}

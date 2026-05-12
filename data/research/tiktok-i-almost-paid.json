@@ -1,0 +1,60 @@
+{
+  "query": "i almost paid for this ai",
+  "platforms": [
+    "tiktok"
+  ],
+  "provider": "apify",
+  "generatedAt": "2026-05-09T08:34:33.309Z",
+  "summary": {
+    "itemCount": 1,
+    "topFormats": [
+      {
+        "name": "low-cost ai ugc",
+        "count": 1
+      }
+    ],
+    "platforms": [
+      {
+        "name": "tiktok",
+        "count": 1
+      }
+    ],
+    "sampleHooks": [
+      "#fyp #ai to clear up some fog in the comments, I do NOT support ai I’m just saying that ai is not affecting people as much as you say"
+    ]
+  },
+  "items": [
+    {
+      "id": "7624633784834542862",
+      "platform": "tiktok",
+      "url": "https://www.tiktok.com/@agrahgda4um/video/7624633784834542862",
+      "title": "#fyp #ai to clear up some fog in the comments, I do NOT support ai I’m just saying that ai is not affecting people as much as you say",
+      "hook": "#fyp #ai to clear up some fog in the comments, I do NOT support ai I’m just saying that ai is not affecting people as much as you say",
+      "summary": "#fyp #ai to clear up some fog in the comments, I do NOT support ai I’m just saying that ai is not affecting people as much as you say",
+      "creator": "agrahgda4um",
+      "likes": 170400,
+      "views": 2700000,
+      "comments": 3265,
+      "postedAt": "2026-04-03T20:33:37.000Z",
+      "source": "apify",
+      "format": "low-cost ai ugc",
+      "mediaType": null,
+      "productType": null,
+      "isVideo": null,
+      "fitScore": 4,
+      "fitVerdict": "weak",
+      "fitReasons": [
+        "AI/product signals: ai",
+        "First-person creator framing"
+      ],
+      "flags": [
+        "Missing emotional/confessional hook"
+      ],
+      "hardReject": false
+    }
+  ],
+  "diagnostics": [
+    "Apify tiktok returned 12 items.",
+    "Applied minimum likes filter: 5000."
+  ]
+}

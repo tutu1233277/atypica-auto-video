@@ -1,0 +1,80 @@
+{
+  "query": "viral ai tools ugc",
+  "platforms": [
+    "tiktok",
+    "instagram"
+  ],
+  "provider": "local_markdown",
+  "generatedAt": "2026-05-03T11:33:45.376Z",
+  "summary": {
+    "itemCount": 3,
+    "topFormats": [
+      {
+        "name": "low-cost ai ugc",
+        "count": 2
+      },
+      {
+        "name": "shock-hook + step proof",
+        "count": 1
+      }
+    ],
+    "platforms": [
+      {
+        "name": "tiktok",
+        "count": 1
+      },
+      {
+        "name": "instagram",
+        "count": 2
+      }
+    ],
+    "sampleHooks": []
+  },
+  "items": [
+    {
+      "id": "local-1",
+      "platform": "tiktok",
+      "url": null,
+      "title": "Local reference 1",
+      "hook": "",
+      "summary": "Use a low-cost proof-driven UGC structure.",
+      "creator": "",
+      "likes": 0,
+      "views": 0,
+      "comments": 0,
+      "source": "local_markdown",
+      "format": "low-cost ai ugc"
+    },
+    {
+      "id": "local-2",
+      "platform": "instagram",
+      "url": "https://www.instagram.com/reel/DIJjZqEOpC8/",
+      "title": "@mazedesignhq · Instagram · 50s · 11 likes（直接竞品）",
+      "hook": "",
+      "summary": "核心借鉴： 这是 atypica 不该做的——低互动，太教育，没有情绪钩子",
+      "creator": "",
+      "likes": 0,
+      "views": 0,
+      "comments": 0,
+      "source": "local_markdown",
+      "format": "low-cost ai ugc"
+    },
+    {
+      "id": "local-3",
+      "platform": "instagram",
+      "url": "https://www.instagram.com/reel/DXkZxLRkjq_/?igsh=MWExMmw2dnY3NjZnbA==",
+      "title": "@money_glitchai · Instagram · 26s · 4,156 likes",
+      "hook": "",
+      "summary": "核心借鉴： \"How is this even legal\" 句式 + 步骤编号格式 + 爆点放结尾",
+      "creator": "",
+      "likes": 0,
+      "views": 0,
+      "comments": 0,
+      "source": "local_markdown",
+      "format": "shock-hook + step proof"
+    }
+  ],
+  "diagnostics": [
+    "Missing config/research-providers.json, using local markdown references."
+  ]
+}

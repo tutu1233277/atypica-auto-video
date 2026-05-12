@@ -1,0 +1,83 @@
+{
+  "query": "ai tools",
+  "platforms": [
+    "instagram"
+  ],
+  "provider": "local_markdown",
+  "generatedAt": "2026-05-09T07:47:05.138Z",
+  "summary": {
+    "itemCount": 2,
+    "topFormats": [
+      {
+        "name": "shock-hook + step proof",
+        "count": 1
+      },
+      {
+        "name": "low-cost ai ugc",
+        "count": 1
+      }
+    ],
+    "platforms": [
+      {
+        "name": "instagram",
+        "count": 2
+      }
+    ],
+    "sampleHooks": [
+      "How is this even legal 💰",
+      "没有 Hook：第一句\"Who owns user research?\"不是悬念，是问卷题"
+    ]
+  },
+  "items": [
+    {
+      "id": "local-2",
+      "platform": "instagram",
+      "url": "https://www.instagram.com/reel/DXkZxLRkjq_/?igsh=MWExMmw2dnY3NjZnbA==",
+      "title": "@money_glitchai · Instagram · 26s · 4,156 likes",
+      "hook": "How is this even legal 💰",
+      "summary": "核心借鉴： \"How is this even legal\" 句式 + 步骤编号格式 + 爆点放结尾",
+      "creator": "",
+      "likes": 4156,
+      "views": 0,
+      "comments": 0,
+      "source": "local_markdown",
+      "format": "shock-hook + step proof",
+      "fitScore": 18,
+      "fitVerdict": "strong",
+      "fitReasons": [
+        "Instagram Reel format",
+        "UGC hook signals: how is this even legal",
+        "Short hook line"
+      ],
+      "flags": [],
+      "hardReject": false
+    },
+    {
+      "id": "local-1",
+      "platform": "instagram",
+      "url": "https://www.instagram.com/reel/DIJjZqEOpC8/",
+      "title": "@mazedesignhq · Instagram · 50s · 11 likes（直接竞品）",
+      "hook": "没有 Hook：第一句\"Who owns user research?\"不是悬念，是问卷题",
+      "summary": "核心借鉴： 这是 atypica 不该做的——低互动，太教育，没有情绪钩子",
+      "creator": "",
+      "likes": 11,
+      "views": 0,
+      "comments": 0,
+      "source": "local_markdown",
+      "format": "low-cost ai ugc",
+      "fitScore": 6,
+      "fitVerdict": "weak",
+      "fitReasons": [
+        "Instagram Reel format",
+        "Short hook line"
+      ],
+      "flags": [
+        "Missing emotional/confessional hook"
+      ],
+      "hardReject": false
+    }
+  ],
+  "diagnostics": [
+    "Apify fetch failed: fetch failed"
+  ]
+}

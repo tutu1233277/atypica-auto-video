@@ -1,0 +1,151 @@
+{
+  "query": "competitor",
+  "platforms": [
+    "tiktok",
+    "instagram"
+  ],
+  "provider": "apify",
+  "generatedAt": "2026-05-03T13:27:51.481Z",
+  "summary": {
+    "itemCount": 8,
+    "topFormats": [
+      {
+        "name": "low-cost ai ugc",
+        "count": 8
+      }
+    ],
+    "platforms": [
+      {
+        "name": "tiktok",
+        "count": 8
+      }
+    ],
+    "sampleHooks": [
+      "DONT WASTE your money like i did😭😭 #fyp #makeup #deinfluencing",
+      "product review of @Drippin Spice - absolutely terrible, wont refund and its such low quality! i normally dont make videos like this, but one thing about me is im very honest- im not going to lie and say i love a product if its low quality! dont want you guys wasting your money on this when this is what youll receive! very unhappy! #fyp #foryoupage #summer #sunshine #aloha #mahalo #hawaii #beachvibes #beach #beachweather #fypp #fypシ゚viral #beachysounds #summervibes #hermit #hermitcrab #hermitcrabsoftiktok #hermitcrabshell #malibupalmtree #coconutsurf #terribleproduct #honestreview #drippinspice #worstproductever",
+      "Y’all wanted real hair reviews of @Cardi B @growgoodbeauty so here y’all goo! And don’t worry I got the whole line so we’ll get into that next! 🙂"
+    ]
+  },
+  "items": [
+    {
+      "id": "7270621514347629829",
+      "platform": "tiktok",
+      "url": "https://www.tiktok.com/@mahaaa.c/video/7270621514347629829",
+      "title": "DONT WASTE your money like i did😭😭 #fyp #makeup #deinfluencing",
+      "hook": "DONT WASTE your money like i did😭😭 #fyp #makeup #deinfluencing",
+      "summary": "DONT WASTE your money like i did😭😭 #fyp #makeup #deinfluencing",
+      "creator": "mahaaa.c",
+      "likes": 950400,
+      "views": 8400000,
+      "comments": 4549,
+      "source": "apify",
+      "format": "low-cost ai ugc"
+    },
+    {
+      "id": "7430671256824974635",
+      "platform": "tiktok",
+      "url": "https://www.tiktok.com/@paiges_purple_pinchers/video/7430671256824974635",
+      "title": "product review of @Drippin Spice - absolutely terrible, wont refund and its such low quality! i normally dont make videos like this, but one thing about me is im very honest- im not going to lie and say i love a product if its low quality! dont want you guys wasting your money on this when this is what youll receive! very unhappy! #fyp #foryoupage #summer #sunshine #aloha #mahalo #hawaii #beachvibes #beach #beachweather #fypp #fypシ゚viral #beachysounds #summervibes #hermit #hermitcrab #hermitcrabsoftiktok #hermitcrabshell #malibupalmtree #coconutsurf #terribleproduct #honestreview #drippinspice #worstproductever",
+      "hook": "product review of @Drippin Spice - absolutely terrible, wont refund and its such low quality! i normally dont make videos like this, but one thing about me is im very honest- im not going to lie and say i love a product if its low quality! dont want you guys wasting your money on this when this is what youll receive! very unhappy! #fyp #foryoupage #summer #sunshine #aloha #mahalo #hawaii #beachvibes #beach #beachweather #fypp #fypシ゚viral #beachysounds #summervibes #hermit #hermitcrab #hermitcrabsoftiktok #hermitcrabshell #malibupalmtree #coconutsurf #terribleproduct #honestreview #drippinspice #worstproductever",
+      "summary": "product review of @Drippin Spice - absolutely terrible, wont refund and its such low quality! i normally dont make videos like this, but one thing about me is im very honest- im not going to lie and say i love a product if its low quality! dont want you guys wasting your money on this when this is what youll receive! very unhappy! #fyp #foryoupage #summer #sunshine #aloha #mahalo #hawaii #beachvibes #beach #beachweather #fypp #fypシ゚viral #beachysounds #summervibes #hermit #hermitcrab #hermitcrabsoftiktok #hermitcrabshell #malibupalmtree #coconutsurf #terribleproduct #honestreview #drippinspice #worstproductever",
+      "creator": "paiges_purple_pinchers",
+      "likes": 419300,
+      "views": 12200000,
+      "comments": 8920,
+      "source": "apify",
+      "format": "low-cost ai ugc"
+    },
+    {
+      "id": "7630165741131681038",
+      "platform": "tiktok",
+      "url": "https://www.tiktok.com/@zyliaarmoni/video/7630165741131681038",
+      "title": "Y’all wanted real hair reviews of @Cardi B @growgoodbeauty so here y’all goo! And don’t worry I got the whole line so we’ll get into that next! 🙂\n\n#type4naturalhair #growgoodbeautyreview #blackgirlwashday #getrichhairmask #cardibhaircompany",
+      "hook": "Y’all wanted real hair reviews of @Cardi B @growgoodbeauty so here y’all goo! And don’t worry I got the whole line so we’ll get into that next! 🙂",
+      "summary": "Y’all wanted real hair reviews of @Cardi B @growgoodbeauty so here y’all goo! And don’t worry I got the whole line so we’ll get into that next! 🙂\n\n#type4naturalhair #growgoodbeautyreview #blackgirlwashday #getrichhairmask #cardibhaircompany",
+      "creator": "zyliaarmoni",
+      "likes": 217600,
+      "views": 2200000,
+      "comments": 1378,
+      "source": "apify",
+      "format": "low-cost ai ugc"
+    },
+    {
+      "id": "7535642220456611102",
+      "platform": "tiktok",
+      "url": "https://www.tiktok.com/@robdon567/video/7535642220456611102",
+      "title": "Follow me here & on IG 😊: Therobdon567",
+      "hook": "Follow me here & on IG 😊: Therobdon567",
+      "summary": "Follow me here & on IG 😊: Therobdon567",
+      "creator": "robdon567",
+      "likes": 17400,
+      "views": 232500,
+      "comments": 198,
+      "source": "apify",
+      "format": "low-cost ai ugc"
+    },
+    {
+      "id": "7587760117181893906",
+      "platform": "tiktok",
+      "url": "https://www.tiktok.com/@elongilad/video/7587760117181893906",
+      "title": "Did you know that in 2015, Israel banned Heinz from calling its product \"ketchup\"? 🍅🚫🇮🇱\nIt started when their biggest competitor, Osem, used an old legal standard to claim Heinz didn't meet the definition of ketchup. The authorities agreed, and Heinz had a massive branding crisis.\nThey needed a new name in Hebrew, but there wasn't a good everyday word for \"condiment.\" So they dug into the dictionary and found an obscure word invented in the 1950s by a linguist who hated foreign words: Mitbal (מִתְבָּל).\nThe word had been a total failure for decades—no one used it. But for a whole year, Heinz had no choice but to put \"Tomato Mitbal\" on their bottles.\nThe law eventually changed back, but a dead word got a second life thanks to corporate condiment warfare.\n#Heinz #Ketchup #Israel #Hebrew #Linguistics #FoodHistory #Mitbal #Osem #MarketingFacts #TelAviv",
+      "hook": "Did you know that in 2015, Israel banned Heinz from calling its product \"ketchup\"? 🍅🚫🇮🇱",
+      "summary": "Did you know that in 2015, Israel banned Heinz from calling its product \"ketchup\"? 🍅🚫🇮🇱\nIt started when their biggest competitor, Osem, used an old legal standard to claim Heinz didn't meet the definition of ketchup. The authorities agreed, and Heinz had a massive branding crisis.\nThey needed a new name in Hebrew, but there wasn't a good everyday word for \"condiment.\" So they dug into the dictionary and found an obscure word invented in the 1950s by a linguist who hated foreign words: Mitbal (מִתְבָּל).\nThe word had been a total failure for decades—no one used it. But for a whole year, Heinz had no choice but to put \"Tomato Mitbal\" on their bottles.\nThe law eventually changed back, but a dead word got a second life thanks to corporate condiment warfare.\n#Heinz #Ketchup #Israel #Hebrew #Linguistics #FoodHistory #Mitbal #Osem #MarketingFacts #TelAviv",
+      "creator": "elongilad",
+      "likes": 5058,
+      "views": 138600,
+      "comments": 172,
+      "source": "apify",
+      "format": "low-cost ai ugc"
+    },
+    {
+      "id": "7603328850596203796",
+      "platform": "tiktok",
+      "url": "https://www.tiktok.com/@3minutebreakdowns/video/7603328850596203796",
+      "title": "What do you think of this?",
+      "hook": "What do you think of this?",
+      "summary": "What do you think of this?",
+      "creator": "3minutebreakdowns",
+      "likes": 4691,
+      "views": 179900,
+      "comments": 139,
+      "source": "apify",
+      "format": "low-cost ai ugc"
+    },
+    {
+      "id": "7429361439598447903",
+      "platform": "tiktok",
+      "url": "https://www.tiktok.com/@kyliewhitespace/video/7429361439598447903",
+      "title": "HP is going to be my 13th reason I stg 🖕🏻🖕🏻🖕🏻🖕🏻  #hpprinter #boycotthp",
+      "hook": "HP is going to be my 13th reason I stg 🖕🏻🖕🏻🖕🏻🖕🏻  #hpprinter #boycotthp",
+      "summary": "HP is going to be my 13th reason I stg 🖕🏻🖕🏻🖕🏻🖕🏻  #hpprinter #boycotthp",
+      "creator": "kyliewhitespace",
+      "likes": 1757,
+      "views": 142200,
+      "comments": 150,
+      "source": "apify",
+      "format": "low-cost ai ugc"
+    },
+    {
+      "id": "7482551831789341982",
+      "platform": "tiktok",
+      "url": "https://www.tiktok.com/@iamnursestephie/video/7482551831789341982",
+      "title": "Tai Brown aka Tainika Brown tried to extort me by threatening to file a false complaint against me to the Maryland Board of Nursing if I did NOT hand over my intellectual property to her… We are industry competitors. Both providing post op education to professionals, but only one of us is licensed and only one of us is a nurse. \n\nThis is abuse of the regulatory process and extortion. \n\n#nursesoftiktok",
+      "hook": "Tai Brown aka Tainika Brown tried to extort me by threatening to file a false complaint against me to the Maryland Board of Nursing if I did NOT hand over my intellectual property to her… We are industry competitors. Both providing post op education to professionals, but only one of us is licensed and only one of us is a nurse.",
+      "summary": "Tai Brown aka Tainika Brown tried to extort me by threatening to file a false complaint against me to the Maryland Board of Nursing if I did NOT hand over my intellectual property to her… We are industry competitors. Both providing post op education to professionals, but only one of us is licensed and only one of us is a nurse. \n\nThis is abuse of the regulatory process and extortion. \n\n#nursesoftiktok",
+      "creator": "iamnursestephie",
+      "likes": 1150,
+      "views": 24300,
+      "comments": 57,
+      "source": "apify",
+      "format": "low-cost ai ugc"
+    }
+  ],
+  "diagnostics": [
+    "Apify tiktok returned 8 items.",
+    "Apify instagram returned 1 items.",
+    "Apify tiktok returned 8 items.",
+    "Apify instagram returned 1 items.",
+    "Apify tiktok returned 8 items.",
+    "Apify instagram returned 1 items."
+  ]
+}

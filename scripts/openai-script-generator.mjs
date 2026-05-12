@@ -4,7 +4,13 @@ import {fileURLToPath} from 'node:url';
 import {generateText} from 'ai';
 import {createOpenAI} from '@ai-sdk/openai';
 import {z} from 'zod';
-import {loadEnvFiles, readVaultDoc, slugify} from './research-lib.mjs';
+import {
+  annotateTrendItem,
+  loadEnvFiles,
+  rankInspiration,
+  readVaultDoc,
+  slugify,
+} from './research-lib.mjs';
 
 const root = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 const presetsPath = path.join(root, 'data/tool/script-generator-presets.json');
@@ -74,7 +80,7 @@ export function findFeaturePreset(featureKey) {
   return {presets, feature};
 }
 
-export async function generateScriptCandidates({featureKey, topic}) {
+export async function generateScriptCandidates({featureKey, topic, researchPath = ''}) {
   loadEnvFiles();
 
   const apiKey = process.env.AI_SDK_API_KEY || process.env.LITELLM_API_KEY;
@@ -92,6 +98,11 @@ export async function generateScriptCandidates({featureKey, topic}) {
   const knowledge = trimForPrompt(readVaultDoc('atypica产品知识库.md'), 5000);
   const historicalScripts = trimForPrompt(readVaultDoc('atypica海外内容完整脚本.md'), 4000);
   const resolvedTopic = topic?.trim() || feature.defaultTopic;
+  const recentResearch = loadRecentResearchReferences({
+    featureKey,
+    topic: resolvedTopic,
+    researchPath,
+  });
 
   const instructions = [
     'You generate short-form UGC video script candidates for Atypica internal use.',
@@ -121,6 +132,10 @@ export async function generateScriptCandidates({featureKey, topic}) {
     knowledge,
     'Historical script examples summary:',
     historicalScripts,
+    'Recent viral hook references:',
+    recentResearch.length > 0
+      ? recentResearch.map((item) => `- ${item}`).join('\n')
+      : '- No recent research cache found. Lean on hook rules and product proof.',
     [
       'Output requirements:',
       '- Generate 3 clearly different script candidates.',
@@ -128,6 +143,7 @@ export async function generateScriptCandidates({featureKey, topic}) {
       '- Each candidate must have 4 scenes matching the provided scene plan.',
       '- Scene 1 should be a TikTok-native hook.',
       '- Scenes 2-4 should show workflow proof, synthesis/follow-up, and a decision insight.',
+      '- Borrow hook structure or pacing from the recent references when useful, but do not copy niche details that do not fit Atypica.',
       '- English subtitle lines should be concise and readable in 2-3 seconds.',
       '- Chinese subtitle lines are only for internal review and should match the English meaning.',
       '- Audit points should explain why the candidate passes or what to watch out for.',
@@ -182,11 +198,103 @@ export async function generateScriptCandidates({featureKey, topic}) {
     baseURL,
     topic: resolvedTopic,
     feature: feature.key,
+    recentResearch,
     candidates: parsed.candidates.map((candidate, index) => ({
       ...candidate,
       candidateId: slugify(candidate.candidateId || `${feature.key}-${index + 1}`),
     })),
   };
+}
+
+function loadRecentResearchReferences({featureKey, topic, researchPath}) {
+  const reports = loadResearchReports(researchPath);
+  const hint = featureKey === 'research' ? 'report' : 'interview';
+  const references = reports
+    .flatMap((report) =>
+      (report.items ?? []).map((item) => ({
+        ...annotateTrendItem(item, {topic, hint}),
+        reportGeneratedAt: report.generatedAt ?? null,
+      })),
+    )
+    .filter((item) => !item.hardReject)
+    .sort((a, b) => {
+      const rankDelta = rankInspiration(b, {topic, hint}) - rankInspiration(a, {topic, hint});
+      if (rankDelta !== 0) {
+        return rankDelta;
+      }
+      return (Date.parse(b.reportGeneratedAt ?? '') || 0) - (Date.parse(a.reportGeneratedAt ?? '') || 0);
+    });
+
+  const seen = new Set();
+  return references
+    .filter((item) => {
+      const key = item.url || `${item.platform}:${item.title}`;
+      if (seen.has(key)) {
+        return false;
+      }
+      seen.add(key);
+      return true;
+    })
+    .slice(0, 4)
+    .map((item) => formatReferenceLine(item));
+}
+
+function loadResearchReports(researchPath) {
+  const targetPaths = resolveResearchPaths(researchPath);
+  const reports = [];
+
+  for (const targetPath of targetPaths) {
+    if (!fs.existsSync(targetPath)) {
+      continue;
+    }
+
+    try {
+      const parsed = JSON.parse(fs.readFileSync(targetPath, 'utf8'));
+      if (parsed && typeof parsed === 'object' && Array.isArray(parsed.items)) {
+        reports.push(parsed);
+      }
+    } catch {
+      // Ignore malformed cache files and continue with the rest.
+    }
+  }
+
+  return reports;
+}
+
+function resolveResearchPaths(researchPath) {
+  if (researchPath) {
+    return [path.isAbsolute(researchPath) ? researchPath : path.join(root, researchPath)];
+  }
+
+  const researchDir = path.join(root, 'data/research');
+  if (!fs.existsSync(researchDir)) {
+    return [];
+  }
+
+  return fs
+    .readdirSync(researchDir)
+    .filter((fileName) => fileName.endsWith('.json') && fileName !== 'x-launch-examples.json')
+    .map((fileName) => path.join(researchDir, fileName));
+}
+
+function formatReferenceLine(item) {
+  const hook = trimInline(item.hook || item.title, 90);
+  const why = trimInline((item.fitReasons ?? []).join('; '), 120);
+  return `${capitalize(item.platform)} | ${item.fitVerdict} | ${item.format} | Hook: ${hook} | Why it worked: ${why}`;
+}
+
+function capitalize(value) {
+  const text = typeof value === 'string' ? value : 'unknown';
+  return text.slice(0, 1).toUpperCase() + text.slice(1);
+}
+
+function trimInline(value, limit) {
+  const text = String(value ?? '').replace(/\s+/g, ' ').trim();
+  if (text.length <= limit) {
+    return text;
+  }
+
+  return `${text.slice(0, limit - 1)}…`;
 }
 
 function normalizeCandidateResponse(value) {

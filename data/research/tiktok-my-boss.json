@@ -1,0 +1,61 @@
+{
+  "query": "my boss ai tool",
+  "platforms": [
+    "tiktok"
+  ],
+  "provider": "apify",
+  "generatedAt": "2026-05-09T08:33:02.008Z",
+  "summary": {
+    "itemCount": 1,
+    "topFormats": [
+      {
+        "name": "secret-weapon confession",
+        "count": 1
+      }
+    ],
+    "platforms": [
+      {
+        "name": "tiktok",
+        "count": 1
+      }
+    ],
+    "sampleHooks": [
+      "Turned my bosses texts into a song using @Suno #aimusic #aitools #songreaction #sunomusic #texttosong"
+    ]
+  },
+  "items": [
+    {
+      "id": "7630226059329277198",
+      "platform": "tiktok",
+      "url": "https://www.tiktok.com/@quis.jamz/video/7630226059329277198",
+      "title": "Turned my bosses texts into a song using @Suno #aimusic #aitools #songreaction #sunomusic #texttosong",
+      "hook": "Turned my bosses texts into a song using @Suno #aimusic #aitools #songreaction #sunomusic #texttosong",
+      "summary": "Turned my bosses texts into a song using @Suno #aimusic #aitools #songreaction #sunomusic #texttosong",
+      "creator": "quis.jamz",
+      "likes": 6187,
+      "views": 121600,
+      "comments": 328,
+      "postedAt": "2026-04-18T22:14:30.000Z",
+      "source": "apify",
+      "format": "secret-weapon confession",
+      "mediaType": null,
+      "productType": null,
+      "isVideo": null,
+      "fitScore": 18,
+      "fitVerdict": "strong",
+      "fitReasons": [
+        "UGC hook signals: my boss",
+        "AI/product signals: ai, tool, tools",
+        "First-person creator framing",
+        "Short hook line",
+        "Reaction/confessional hooks: my boss"
+      ],
+      "flags": [],
+      "hardReject": false
+    }
+  ],
+  "diagnostics": [
+    "Apify tiktok returned 12 items.",
+    "Applied minimum likes filter: 5000."
+  ]
+}

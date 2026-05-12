@@ -1,0 +1,64 @@
+{
+  "query": "my boss ai",
+  "platforms": [
+    "instagram"
+  ],
+  "provider": "apify",
+  "generatedAt": "2026-05-09T08:31:53.858Z",
+  "summary": {
+    "itemCount": 1,
+    "topFormats": [
+      {
+        "name": "low-cost ai ugc",
+        "count": 1
+      }
+    ],
+    "platforms": [
+      {
+        "name": "instagram",
+        "count": 1
+      }
+    ],
+    "sampleHooks": [
+      "What if your content could move exactly how you imagine it? 🎬✨"
+    ]
+  },
+  "items": [
+    {
+      "id": "3890602422128585368",
+      "platform": "instagram",
+      "url": "https://www.instagram.com/p/DX-MkolP6qY/",
+      "title": "What if your content could move exactly how you imagine it? 🎬✨\n\nI’ve been testing Higgsfield.ai Motion Control and the precision is next level. This is where AI meets real creativity.\n\nIf you’re into content, you need to see this 👀\n👉 Check it out & comment “AI” and I’ll send you the details\n\n#aitools #contentcreation #higgsfieldai #digitalcreator #tech",
+      "hook": "What if your content could move exactly how you imagine it? 🎬✨",
+      "summary": "What if your content could move exactly how you imagine it? 🎬✨\n\nI’ve been testing Higgsfield.ai Motion Control and the precision is next level. This is where AI meets real creativity.\n\nIf you’re into content, you need to see this 👀\n👉 Check it out & comment “AI” and I’ll send you the details\n\n#aitools #contentcreation #higgsfieldai #digitalcreator #tech",
+      "creator": "lifebymel3",
+      "likes": 12833,
+      "views": 558130,
+      "comments": 156,
+      "postedAt": "2026-05-05T21:20:44.000Z",
+      "source": "apify",
+      "format": "low-cost ai ugc",
+      "mediaType": "Video",
+      "productType": "clips",
+      "isVideo": null,
+      "fitScore": 16,
+      "fitVerdict": "strong",
+      "fitReasons": [
+        "Instagram Reel format",
+        "AI/product signals: ai, tool, tools",
+        "First-person creator framing",
+        "Short hook line",
+        "Reaction/confessional hooks: what if, you need to see this"
+      ],
+      "flags": [
+        "Missing emotional/confessional hook",
+        "Heavy CTA without enough proof"
+      ],
+      "hardReject": false
+    }
+  ],
+  "diagnostics": [
+    "Apify instagram returned 72 items.",
+    "Applied minimum likes filter: 5000."
+  ]
+}

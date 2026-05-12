@@ -1,0 +1,61 @@
+{
+  "query": "turns out ai tool",
+  "platforms": [
+    "tiktok"
+  ],
+  "provider": "apify",
+  "generatedAt": "2026-05-09T08:33:08.248Z",
+  "summary": {
+    "itemCount": 1,
+    "topFormats": [
+      {
+        "name": "low-cost ai ugc",
+        "count": 1
+      }
+    ],
+    "platforms": [
+      {
+        "name": "tiktok",
+        "count": 1
+      }
+    ],
+    "sampleHooks": [
+      "This student got flagged at 89% AI by Turnitin and faced EXPULSION 😭"
+    ]
+  },
+  "items": [
+    {
+      "id": "7597842989691505927",
+      "platform": "tiktok",
+      "url": "https://www.tiktok.com/@africantechbro.ai/video/7597842989691505927",
+      "title": "This student got flagged at 89% AI by Turnitin and faced EXPULSION 😭\nThey only had 48hrs to prove they wrote it themselves…\nHere's the tool that saved them (and it's genius) 🧵👇\n\n#turnitin #aidetection #aitools #plagiarism #students",
+      "hook": "This student got flagged at 89% AI by Turnitin and faced EXPULSION 😭",
+      "summary": "This student got flagged at 89% AI by Turnitin and faced EXPULSION 😭\nThey only had 48hrs to prove they wrote it themselves…\nHere's the tool that saved them (and it's genius) 🧵👇\n\n#turnitin #aidetection #aitools #plagiarism #students",
+      "creator": "africantechbro.ai",
+      "likes": 23400,
+      "views": 505700,
+      "comments": 140,
+      "postedAt": "2026-01-21T15:51:17.000Z",
+      "source": "apify",
+      "format": "low-cost ai ugc",
+      "mediaType": null,
+      "productType": null,
+      "isVideo": null,
+      "fitScore": 4,
+      "fitVerdict": "weak",
+      "fitReasons": [
+        "Shows proof, steps, or workflow",
+        "AI/product signals: ai, tool, tools",
+        "Short hook line"
+      ],
+      "flags": [
+        "Missing emotional/confessional hook"
+      ],
+      "hardReject": false
+    }
+  ],
+  "diagnostics": [
+    "Apify tiktok returned 12 items.",
+    "Applied minimum likes filter: 5000."
+  ]
+}

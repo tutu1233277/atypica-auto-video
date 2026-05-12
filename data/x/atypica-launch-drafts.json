@@ -1,0 +1,96 @@
+{
+  "product": {
+    "name": "Atypica",
+    "url": "https://atypica.com",
+    "category": "AI-driven market research",
+    "audience": "founders, product teams, and UX researchers",
+    "oldWay": "3 months + $50,000",
+    "newWay": "20 minutes + $20/month",
+    "sources": "X, TikTok, Instagram, and Reddit",
+    "outcome": "clear market answers before you build the wrong thing"
+  },
+  "research": {
+    "provider": "manual_web_research",
+    "query": "popular X product launch copy",
+    "topPatterns": [
+      "Lead with one sharp category claim, not feature soup.",
+      "Use numbers when they compress the value fast.",
+      "The best posts make the old way feel obviously broken.",
+      "Threads earn attention when the founder backstory is part of the launch."
+    ],
+    "topExamples": [
+      {
+        "title": "Kairos launch one-liner",
+        "url": "https://x.com/bamitsmanas/status/1909602760406044874",
+        "hook": "We built Kairos: AI that learns by watching you work once, then automates it forever."
+      },
+      {
+        "title": "Holoworld official launch",
+        "url": "https://x.com/HoloworldAI/status/1966096463647158543",
+        "hook": "It’s official. $HOLO is live."
+      },
+      {
+        "title": "SuperX founder launch thread",
+        "url": "https://x.com/tibo_maker/status/2020770083912429781",
+        "hook": "Tweet Hunter started falling apart, so we rebuilt it properly with SuperX."
+      }
+    ]
+  },
+  "generatedAt": "2026-05-06T16:36:43.250Z",
+  "recommendedId": "founder-pain",
+  "variants": [
+    {
+      "id": "founder-pain",
+      "angle": "founder_story",
+      "inspiredBy": [
+        "SuperX"
+      ],
+      "text": "Founders should not need 3 months + $50,000 to learn what users actually want.\n\nSo we built Atypica.\n\nIt turns real conversations from X, TikTok, Instagram, and Reddit into market research in 20 minutes + $20/month.\n\nhttps://atypica.com",
+      "charCount": 236,
+      "score": 41
+    },
+    {
+      "id": "social-proof",
+      "angle": "proof",
+      "inspiredBy": [
+        "virat",
+        "Unlink"
+      ],
+      "text": "We built Atypica for one reason:\nmarket research is still way too slow and way too expensive.\n\nAtypica turns real social signal from X, TikTok, Instagram, and Reddit into a usable report in 20 minutes + $20/month.\n\nNo agency timeline. No five-figure scope.\n\nhttps://atypica.com",
+      "charCount": 277,
+      "score": 41
+    },
+    {
+      "id": "contrast-launch",
+      "angle": "contrast",
+      "inspiredBy": [
+        "Kairos",
+        "Unlink"
+      ],
+      "text": "Market research used to mean 3 months + $50,000.\n\nWe built Atypica so founders and product teams can go from question to answer in 20 minutes + $20/month.\n\nReal signals in. Clear decision out.\n\nhttps://atypica.com",
+      "charCount": 213,
+      "score": 38
+    },
+    {
+      "id": "one-line-promise",
+      "angle": "one_liner",
+      "inspiredBy": [
+        "Kairos",
+        "YC / chasi_ai"
+      ],
+      "text": "We built Atypica: AI-driven market research that turns 3 months + $50,000 into 20 minutes + $20/month.\n\nBuilt for founders, product teams, and UX researchers who need clear market answers before you build the wrong thing.\n\nhttps://atypica.com",
+      "charCount": 242,
+      "score": 38
+    },
+    {
+      "id": "official-launch",
+      "angle": "official",
+      "inspiredBy": [
+        "Holoworld AI"
+      ],
+      "text": "It’s official. Atypica is live.\n\nThis is AI-driven market research for teams that do not have months or a $50k research budget.\n\nAsk a market question. Get real social signal. Leave with a decision.\n\nhttps://atypica.com",
+      "charCount": 219,
+      "score": 33
+    }
+  ]
+}

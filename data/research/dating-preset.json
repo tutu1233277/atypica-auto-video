@@ -1,0 +1,151 @@
+{
+  "query": "dating",
+  "platforms": [
+    "tiktok",
+    "instagram"
+  ],
+  "provider": "apify",
+  "generatedAt": "2026-05-03T13:56:20.468Z",
+  "summary": {
+    "itemCount": 8,
+    "topFormats": [
+      {
+        "name": "low-cost ai ugc",
+        "count": 8
+      }
+    ],
+    "platforms": [
+      {
+        "name": "tiktok",
+        "count": 8
+      }
+    ],
+    "sampleHooks": [
+      "If you don’t dump him today that’s just more sadness for you in the future",
+      "PLS DO THIS #texting #text #messaging #couples #dating #textback #advice #relationshipadvice",
+      "ladies dont let men maks you feel any way besides happy 🤚🏼 #redflags #redflagsinmen #sistersdvice #sisteradvice #bigsisteradvice #relationshipadvice #talkingstage #talkingstagetips"
+    ]
+  },
+  "items": [
+    {
+      "id": "7539270405891050782",
+      "platform": "tiktok",
+      "url": "https://www.tiktok.com/@chloe.juliett/video/7539270405891050782",
+      "title": "If you don’t dump him today that’s just more sadness for you in the future \n\n#dating #relationships #advice #dumphim #redflags",
+      "hook": "If you don’t dump him today that’s just more sadness for you in the future",
+      "summary": "If you don’t dump him today that’s just more sadness for you in the future \n\n#dating #relationships #advice #dumphim #redflags",
+      "creator": "chloe.juliett",
+      "likes": 410300,
+      "views": 2800000,
+      "comments": 2334,
+      "source": "apify",
+      "format": "low-cost ai ugc"
+    },
+    {
+      "id": "7441739323726122271",
+      "platform": "tiktok",
+      "url": "https://www.tiktok.com/@osiekaplan/video/7441739323726122271",
+      "title": "PLS DO THIS #texting #text #messaging #couples #dating #textback #advice #relationshipadvice",
+      "hook": "PLS DO THIS #texting #text #messaging #couples #dating #textback #advice #relationshipadvice",
+      "summary": "PLS DO THIS #texting #text #messaging #couples #dating #textback #advice #relationshipadvice",
+      "creator": "osiekaplan",
+      "likes": 363800,
+      "views": 1700000,
+      "comments": 1933,
+      "source": "apify",
+      "format": "low-cost ai ugc"
+    },
+    {
+      "id": "7354517053451128107",
+      "platform": "tiktok",
+      "url": "https://www.tiktok.com/@tayrankine/video/7354517053451128107",
+      "title": "ladies dont let men maks you feel any way besides happy 🤚🏼 #redflags #redflagsinmen #sistersdvice #sisteradvice #bigsisteradvice #relationshipadvice #talkingstage #talkingstagetips",
+      "hook": "ladies dont let men maks you feel any way besides happy 🤚🏼 #redflags #redflagsinmen #sistersdvice #sisteradvice #bigsisteradvice #relationshipadvice #talkingstage #talkingstagetips",
+      "summary": "ladies dont let men maks you feel any way besides happy 🤚🏼 #redflags #redflagsinmen #sistersdvice #sisteradvice #bigsisteradvice #relationshipadvice #talkingstage #talkingstagetips",
+      "creator": "tayrankine",
+      "likes": 291900,
+      "views": 3300000,
+      "comments": 1038,
+      "source": "apify",
+      "format": "low-cost ai ugc"
+    },
+    {
+      "id": "7532632709449911565",
+      "platform": "tiktok",
+      "url": "https://www.tiktok.com/@julionomartello/video/7532632709449911565",
+      "title": "#datingadviceforwomen",
+      "hook": "#datingadviceforwomen",
+      "summary": "#datingadviceforwomen",
+      "creator": "julionomartello",
+      "likes": 263900,
+      "views": 3900000,
+      "comments": 1884,
+      "source": "apify",
+      "format": "low-cost ai ugc"
+    },
+    {
+      "id": "7488398992376679726",
+      "platform": "tiktok",
+      "url": "https://www.tiktok.com/@ddp8792/video/7488398992376679726",
+      "title": "The real reason men ghost women\n#women #girls #datingadvice #relationshipadvice #dating #ghost #relationship",
+      "hook": "The real reason men ghost women",
+      "summary": "The real reason men ghost women\n#women #girls #datingadvice #relationshipadvice #dating #ghost #relationship",
+      "creator": "ddp8792",
+      "likes": 231500,
+      "views": 3000000,
+      "comments": 2821,
+      "source": "apify",
+      "format": "low-cost ai ugc"
+    },
+    {
+      "id": "7387563574677261574",
+      "platform": "tiktok",
+      "url": "https://www.tiktok.com/@sarahlauren71/video/7387563574677261574",
+      "title": "we are worth more than that. #fyp #ghosting",
+      "hook": "we are worth more than that. #fyp #ghosting",
+      "summary": "we are worth more than that. #fyp #ghosting",
+      "creator": "sarahlauren71",
+      "likes": 216700,
+      "views": 3200000,
+      "comments": 1452,
+      "source": "apify",
+      "format": "low-cost ai ugc"
+    },
+    {
+      "id": "7372669365256211718",
+      "platform": "tiktok",
+      "url": "https://www.tiktok.com/@kevinxpasco/video/7372669365256211718",
+      "title": "There is only ONE reason a man will ghost a woman \n\nAnd it doesnt matter what stage of the relationship they’re in \n\nDo you agree? \n\n#healthyrelationship #relationshiptipsformen #ghosting #couples",
+      "hook": "There is only ONE reason a man will ghost a woman",
+      "summary": "There is only ONE reason a man will ghost a woman \n\nAnd it doesnt matter what stage of the relationship they’re in \n\nDo you agree? \n\n#healthyrelationship #relationshiptipsformen #ghosting #couples",
+      "creator": "kevinxpasco",
+      "likes": 144800,
+      "views": 3400000,
+      "comments": 2710,
+      "source": "apify",
+      "format": "low-cost ai ugc"
+    },
+    {
+      "id": "7633810642071211278",
+      "platform": "tiktok",
+      "url": "https://www.tiktok.com/@marriedtoalunatic/video/7633810642071211278",
+      "title": "✨Dating Advice from Retired FBI✨ #dating #redflags #tipsandtricks #fbi @alekscoach1",
+      "hook": "✨Dating Advice from Retired FBI✨ #dating #redflags #tipsandtricks #fbi @alekscoach1",
+      "summary": "✨Dating Advice from Retired FBI✨ #dating #redflags #tipsandtricks #fbi @alekscoach1",
+      "creator": "marriedtoalunatic",
+      "likes": 119400,
+      "views": 1200000,
+      "comments": 1131,
+      "source": "apify",
+      "format": "low-cost ai ugc"
+    }
+  ],
+  "diagnostics": [
+    "Apify tiktok returned 8 items.",
+    "Apify instagram returned 1 items.",
+    "Apify tiktok returned 8 items.",
+    "Apify instagram returned 1 items.",
+    "Apify tiktok returned 8 items.",
+    "Apify instagram returned 1 items."
+  ]
+}

@@ -1,0 +1,62 @@
+{
+  "id": "competitor-ugc",
+  "title": "Competitor Weaknesses UGC",
+  "topic": "Competitor Research",
+  "fps": 30,
+  "width": 1080,
+  "height": 1920,
+  "style": {
+    "accent": "#ff8d4d",
+    "background": "#050816"
+  },
+  "inspiration": [
+    {
+      "platform": "Instagram",
+      "title": "@money_glitchai · Instagram · 26s · 4,156 likes",
+      "url": "https://www.instagram.com/reel/DXkZxLRkjq_/?igsh=MWExMmw2dnY3NjZnbA==",
+      "insight": "Use a shocked face hook, numbered proof steps, and a strong ROI reveal without requiring any street shooting."
+    }
+  ],
+  "scenes": [
+    {
+      "id": "hook-reaction",
+      "assetPath": "hook/特写脸部惊讶表情.mp4",
+      "durationInFrames": 90,
+      "subtitle": {
+        "zh": "千万别让我老板\n知道这个",
+        "en": "DO NOT let my boss\nfind out about this"
+      }
+    },
+    {
+      "id": "research-question",
+      "assetPath": "source/竞品分析：抓取社媒界面.mp4",
+      "durationInFrames": 90,
+      "subtitle": {
+        "zh": "我只输入了一个问题\n它开始抓真实社媒信号",
+        "en": "I typed one question\nand it pulled real social signals"
+      }
+    },
+    {
+      "id": "report-patterns",
+      "assetPath": "source/competitor-report-proof.mp4",
+      "durationInFrames": 90,
+      "subtitle": {
+        "zh": "不是几条评论截图\n是直接整理成痛点报告",
+        "en": "Not random screenshots\nan actual pain-point report"
+      }
+    },
+    {
+      "id": "report-result",
+      "assetPath": "source/竞品分析：报告结果中总结的三个痛点.mp4",
+      "durationInFrames": 90,
+      "subtitle": {
+        "zh": "20分钟后\n我知道该从哪里打他们",
+        "en": "20 minutes later\nI knew exactly where to compete"
+      }
+    }
+  ],
+  "cta": {
+    "zh": "atypica.com",
+    "en": "atypica.com"
+  }
+}

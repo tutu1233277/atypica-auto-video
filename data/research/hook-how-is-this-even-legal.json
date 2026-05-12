@@ -1,0 +1,53 @@
+{
+  "query": "how is this even legal ai",
+  "platforms": [
+    "tiktok"
+  ],
+  "provider": "apify",
+  "generatedAt": "2026-05-09T07:32:37.733Z",
+  "summary": {
+    "itemCount": 1,
+    "topFormats": [
+      {
+        "name": "low-cost ai ugc",
+        "count": 1
+      }
+    ],
+    "platforms": [
+      {
+        "name": "tiktok",
+        "count": 1
+      }
+    ],
+    "sampleHooks": [
+      "This is CRAZY 😳 go try it for yourself and comment “Dropmagic” to learn more 🤝 #dropshipping #aiwebsites #aidropshipping #dropmagic #ecom"
+    ]
+  },
+  "items": [
+    {
+      "id": "7608819325113339166",
+      "platform": "tiktok",
+      "url": "https://www.tiktok.com/@shon.ecom/video/7608819325113339166",
+      "title": "This is CRAZY 😳 go try it for yourself and comment “Dropmagic” to learn more 🤝 #dropshipping #aiwebsites #aidropshipping #dropmagic #ecom",
+      "hook": "This is CRAZY 😳 go try it for yourself and comment “Dropmagic” to learn more 🤝 #dropshipping #aiwebsites #aidropshipping #dropmagic #ecom",
+      "summary": "This is CRAZY 😳 go try it for yourself and comment “Dropmagic” to learn more 🤝 #dropshipping #aiwebsites #aidropshipping #dropmagic #ecom",
+      "creator": "shon.ecom",
+      "likes": 10800,
+      "views": 227100,
+      "comments": 381,
+      "postedAt": "2026-02-20T05:45:42.000Z",
+      "source": "apify",
+      "format": "low-cost ai ugc",
+      "fitScore": -1,
+      "fitVerdict": "weak",
+      "fitReasons": [],
+      "flags": [
+        "Missing emotional/confessional hook"
+      ],
+      "hardReject": false
+    }
+  ],
+  "diagnostics": [
+    "Apify tiktok returned 8 items."
+  ]
+}

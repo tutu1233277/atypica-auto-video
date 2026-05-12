@@ -1,0 +1,39 @@
+{
+  "apify": {
+    "tokenEnv": "APIFY_TOKEN",
+    "platforms": {
+      "tiktok": {
+        "actorId": "clockworks~tiktok-scraper",
+        "memoryMb": 1024,
+        "baseInput": {
+          "commentsPerPost": 0,
+          "excludePinnedPosts": false,
+          "maxFollowersPerProfile": 0,
+          "maxFollowingPerProfile": 0,
+          "maxRepliesPerComment": 0,
+          "proxyCountryCode": "None",
+          "resultsPerPage": "{{limit}}",
+          "scrapeRelatedVideos": false,
+          "searchQueries": ["{{query}}"],
+          "searchSection": "/video",
+          "shouldDownloadAvatars": false,
+          "shouldDownloadCovers": false,
+          "shouldDownloadMusicCovers": false,
+          "shouldDownloadSlideshowImages": false,
+          "shouldDownloadVideos": false,
+          "topLevelCommentsPerPost": 0
+        }
+      },
+      "instagram": {
+        "actorId": "apify~instagram-hashtag-scraper",
+        "memoryMb": 1024,
+        "timeoutSecs": 120,
+        "baseInput": {
+          "hashtags": ["aitools", "chatgpt", "openai", "automation", "productivitytools"],
+          "resultsLimit": "{{limit}}",
+          "resultsType": "reels"
+        }
+      }
+    }
+  }
+}

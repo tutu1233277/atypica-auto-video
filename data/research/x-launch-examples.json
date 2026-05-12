@@ -1,0 +1,119 @@
+{
+  "query": "popular X product launch copy",
+  "platforms": [
+    "x"
+  ],
+  "provider": "manual_web_research",
+  "generatedAt": "2026-05-07T00:00:00.000Z",
+  "summary": {
+    "topFormats": [
+      {
+        "name": "pain contrast + one-line promise",
+        "count": 3
+      },
+      {
+        "name": "founder story + launch CTA",
+        "count": 2
+      },
+      {
+        "name": "official launch + category claim",
+        "count": 2
+      }
+    ],
+    "patterns": [
+      "Lead with one sharp category claim, not feature soup.",
+      "Use numbers when they compress the value fast.",
+      "The best posts make the old way feel obviously broken.",
+      "Threads earn attention when the founder backstory is part of the launch."
+    ]
+  },
+  "items": [
+    {
+      "id": "kairos-computer-2025-04-08",
+      "platform": "x",
+      "url": "https://x.com/bamitsmanas/status/1909602760406044874",
+      "title": "Kairos launch one-liner",
+      "hook": "We built Kairos: AI that learns by watching you work once, then automates it forever.",
+      "summary": "Short, bold, and concrete. It names the behavior, explains the outcome, then removes friction with 'No code. No drag and drop.'",
+      "creator": "Manas / Kairos",
+      "likes": 6800,
+      "views": 850000,
+      "comments": 290,
+      "format": "pain contrast + one-line promise",
+      "postedAt": "2025-04-08"
+    },
+    {
+      "id": "holoworld-2025-09-11",
+      "platform": "x",
+      "url": "https://x.com/HoloworldAI/status/1966096463647158543",
+      "title": "Holoworld official launch",
+      "hook": "It’s official. $HOLO is live.",
+      "summary": "Launch framing plus category positioning. It quickly says why this is new, then stacks three sharp 'No...' differentiators.",
+      "creator": "Holoworld AI",
+      "likes": 464,
+      "views": 287600,
+      "comments": 341,
+      "format": "official launch + category claim",
+      "postedAt": "2025-09-11"
+    },
+    {
+      "id": "superx-2026-02-09",
+      "platform": "x",
+      "url": "https://x.com/tibo_maker/status/2020770083912429781",
+      "title": "SuperX founder launch thread",
+      "hook": "Tweet Hunter started falling apart, so we rebuilt it properly with SuperX.",
+      "summary": "This works because the product launch is really a founder story: broken status quo, personal pain, rebuild, then feature bullets and a direct ask for support.",
+      "creator": "Tibo",
+      "likes": 154,
+      "views": 12300,
+      "comments": 77,
+      "format": "founder story + launch CTA",
+      "postedAt": "2026-02-09"
+    },
+    {
+      "id": "virat-earnings-api-2026-02-17",
+      "platform": "x",
+      "url": "https://x.com/virattt/status/2023869068697067625",
+      "title": "Earnings API launch",
+      "hook": "We just launched our new Earnings API.",
+      "summary": "The post adds build difficulty, cost, and immediate value. That combination makes the launch feel real and expensive to replicate.",
+      "creator": "virat",
+      "likes": 168,
+      "views": 18600,
+      "comments": 7,
+      "format": "build effort + free window",
+      "postedAt": "2026-02-17"
+    },
+    {
+      "id": "unlink-2026-02-20",
+      "platform": "x",
+      "url": "https://x.com/unlink_xyz/status/2024955935119024510",
+      "title": "Unlink pre-launch teaser",
+      "hook": "Public blockchains made everything transparent. We built Unlink so any app can be private in 5 lines of code.",
+      "summary": "Strong old-world problem, immediate product contrast, and a simple implementation promise. Great model for Atypica because it reframes a market problem in one sentence.",
+      "creator": "Unlink",
+      "likes": 0,
+      "views": 7742,
+      "comments": 0,
+      "format": "problem statement + compressed promise",
+      "postedAt": "2026-02-20"
+    },
+    {
+      "id": "yc-chasi-2026-02-17",
+      "platform": "x",
+      "url": "https://x.com/ycombinator/status/2023789545242710115",
+      "title": "YC launch shoutout",
+      "hook": "deploys AI agents for the $1T+ equipment distribution industry, helping dealers sell more, respond faster, and maximize fleet utilization - 24/7.",
+      "summary": "This is pure positioning: market size, target customer, and three outcomes. It is useful as a formula for writing a clean company-intro launch post.",
+      "creator": "Y Combinator",
+      "likes": 201,
+      "views": 23100,
+      "comments": 34,
+      "format": "market size + outcomes",
+      "postedAt": "2026-02-17"
+    }
+  ],
+  "diagnostics": [
+    "Examples collected from publicly indexed X result pages and official X/partner pages on 2026-05-07."
+  ]
+}

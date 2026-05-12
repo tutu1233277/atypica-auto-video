@@ -1,0 +1,109 @@
+{
+  "query": "ai tools",
+  "platforms": [
+    "tiktok",
+    "instagram"
+  ],
+  "provider": "apify",
+  "generatedAt": "2026-05-03T12:24:49.984Z",
+  "summary": {
+    "itemCount": 5,
+    "topFormats": [
+      {
+        "name": "low-cost ai ugc",
+        "count": 4
+      },
+      {
+        "name": "screen-proof + insight reveal",
+        "count": 1
+      }
+    ],
+    "platforms": [
+      {
+        "name": "tiktok",
+        "count": 5
+      }
+    ],
+    "sampleHooks": [
+      "Most people run one AI agent… this runs 60.RuFlow plugs into Claude Code and handles research, coding, testing, all at once.",
+      "Comment \"CLAUDE\" and follow me to get the free unlimited videos tutorial.",
+      "Most people are using Claude wrong. Here's how to make you better than 90% of users. 👇 Comment ‘Claude’ and I’ll send you my Claude setup guide."
+    ]
+  },
+  "items": [
+    {
+      "id": "7635040847767014669",
+      "platform": "tiktok",
+      "url": "https://www.tiktok.com/@duncanrogoff/video/7635040847767014669",
+      "title": "Most people run one AI agent… this runs 60.RuFlow plugs into Claude Code and handles research, coding, testing, all at once.\n\nSmart routing = cheaper + faster\nShared memory = better results over time But if your inputs are bad, output will still suck.\n\nDM “flow” and I’ll send you the setup link.\n\n#aitools #claudecode #aiagents #automation #tiktoktech",
+      "hook": "Most people run one AI agent… this runs 60.RuFlow plugs into Claude Code and handles research, coding, testing, all at once.",
+      "summary": "Most people run one AI agent… this runs 60.RuFlow plugs into Claude Code and handles research, coding, testing, all at once.\n\nSmart routing = cheaper + faster\nShared memory = better results over time But if your inputs are bad, output will still suck.\n\nDM “flow” and I’ll send you the setup link.\n\n#aitools #claudecode #aiagents #automation #tiktoktech",
+      "creator": "duncanrogoff",
+      "likes": 10300,
+      "views": 166700,
+      "comments": 273,
+      "source": "apify",
+      "format": "low-cost ai ugc"
+    },
+    {
+      "id": "7634965212478606606",
+      "platform": "tiktok",
+      "url": "https://www.tiktok.com/@sabrina_ramonov/video/7634965212478606606",
+      "title": "Comment \"CLAUDE\" and follow me to get the free unlimited videos tutorial.\nClaude + Remotion makes unlimited AI videos for free on your local computer.\nNo paid image gen. No paid video gen. No monthly subscription (besides Claude itself).\nSetup takes around 30 minutes. After setup, you write a prompt, Claude builds the video with Remotion (a React-based video framework), and you render it locally.\nOne prompt. Unlimited renders. Zero cost.\nHow do I make free AI videos with Claude?\nWhat is Remotion and how does it work with Claude?\nHow do I generate unlimited AI videos locally?\n#ai #claude #aivideos #chatgptprompts #aitools",
+      "hook": "Comment \"CLAUDE\" and follow me to get the free unlimited videos tutorial.",
+      "summary": "Comment \"CLAUDE\" and follow me to get the free unlimited videos tutorial.\nClaude + Remotion makes unlimited AI videos for free on your local computer.\nNo paid image gen. No paid video gen. No monthly subscription (besides Claude itself).\nSetup takes around 30 minutes. After setup, you write a prompt, Claude builds the video with Remotion (a React-based video framework), and you render it locally.\nOne prompt. Unlimited renders. Zero cost.\nHow do I make free AI videos with Claude?\nWhat is Remotion and how does it work with Claude?\nHow do I generate unlimited AI videos locally?\n#ai #claude #aivideos #chatgptprompts #aitools",
+      "creator": "sabrina_ramonov",
+      "likes": 1302,
+      "views": 19600,
+      "comments": 602,
+      "source": "apify",
+      "format": "low-cost ai ugc"
+    },
+    {
+      "id": "7634966749095415062",
+      "platform": "tiktok",
+      "url": "https://www.tiktok.com/@iamlauriewang/video/7634966749095415062",
+      "title": "Most people are using Claude wrong. Here's how to make you better than 90% of users. 👇 Comment ‘Claude’ and I’ll send you my Claude setup guide.\n\n1. Turn on Memory\n2. Install skills\n3. Set up projects\n4. Connect tools\n5. Write in your voice\n\n#ai #claudeai #learntok #aitools #productivity",
+      "hook": "Most people are using Claude wrong. Here's how to make you better than 90% of users. 👇 Comment ‘Claude’ and I’ll send you my Claude setup guide.",
+      "summary": "Most people are using Claude wrong. Here's how to make you better than 90% of users. 👇 Comment ‘Claude’ and I’ll send you my Claude setup guide.\n\n1. Turn on Memory\n2. Install skills\n3. Set up projects\n4. Connect tools\n5. Write in your voice\n\n#ai #claudeai #learntok #aitools #productivity",
+      "creator": "iamlauriewang",
+      "likes": 1206,
+      "views": 35600,
+      "comments": 243,
+      "source": "apify",
+      "format": "low-cost ai ugc"
+    },
+    {
+      "id": "7635465496896245013",
+      "platform": "tiktok",
+      "url": "https://www.tiktok.com/@hustle.faceless/video/7635465496896245013",
+      "title": "This AI can transcribe YouTube videos, summarize content, and translate into multiple languages with just one click\n\n#clipto #transcription #aitool #socialmedia #creators @Clipto.ai",
+      "hook": "This AI can transcribe YouTube videos, summarize content, and translate into multiple languages with just one click",
+      "summary": "This AI can transcribe YouTube videos, summarize content, and translate into multiple languages with just one click\n\n#clipto #transcription #aitool #socialmedia #creators @Clipto.ai",
+      "creator": "hustle.faceless",
+      "likes": 838,
+      "views": 22400,
+      "comments": 9,
+      "source": "apify",
+      "format": "screen-proof + insight reveal"
+    },
+    {
+      "id": "7635393130551938326",
+      "platform": "tiktok",
+      "url": "https://www.tiktok.com/@faceless.inc.proj/video/7635393130551938326",
+      "title": "How to make cute cat AI videos with millions of views 🤔🤖\n\n#tiktokautomation #ai #aitools #contentcreator #makeaivideos",
+      "hook": "How to make cute cat AI videos with millions of views 🤔🤖",
+      "summary": "How to make cute cat AI videos with millions of views 🤔🤖\n\n#tiktokautomation #ai #aitools #contentcreator #makeaivideos",
+      "creator": "faceless.inc.proj",
+      "likes": 89,
+      "views": 2333,
+      "comments": 11,
+      "source": "apify",
+      "format": "low-cost ai ugc"
+    }
+  ],
+  "diagnostics": [
+    "Apify tiktok returned 5 items.",
+    "Apify instagram is not configured with taskId or actorId."
+  ]
+}

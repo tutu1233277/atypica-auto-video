@@ -1,0 +1,61 @@
+{
+  "id": "ai-research-market-demo",
+  "title": "AI Research Market Validation Demo",
+  "topic": "Market Validation",
+  "fps": 30,
+  "width": 1080,
+  "height": 1920,
+  "style": {
+    "accent": "#ff8d4d",
+    "background": "#050816"
+  },
+  "inspiration": [
+    {
+      "platform": "TikTok",
+      "title": "Atypica AI Research demo",
+      "insight": "Use a shocked face hook, then show the product workflow turning social signals into a decision-ready insight."
+    }
+  ],
+  "scenes": [
+    {
+      "id": "hook-reaction",
+      "assetPath": "hook/特写脸部惊讶表情.mp4",
+      "durationInFrames": 90,
+      "subtitle": {
+        "zh": "我差点花三个月\n做一个没人想要的东西",
+        "en": "I almost spent 3 months\nbuilding something nobody wanted"
+      }
+    },
+    {
+      "id": "research-question",
+      "assetPath": "source/室内设计是否有市场：抓取社媒界面.mp4",
+      "durationInFrames": 90,
+      "subtitle": {
+        "zh": "我把这个市场问题\n直接丢进去",
+        "en": "I dropped the market question\nstraight in"
+      }
+    },
+    {
+      "id": "signal-patterns",
+      "assetPath": "source/market-social-proof.mp4",
+      "durationInFrames": 90,
+      "subtitle": {
+        "zh": "它不是给我几条评论\n而是找重复出现的信号",
+        "en": "It did not give me random comments\nit found repeated signals"
+      }
+    },
+    {
+      "id": "decision-payoff",
+      "assetPath": "source/atypica-pointing-hand.mp4",
+      "durationInFrames": 90,
+      "subtitle": {
+        "zh": "结果我发现\n用户卡住的点完全不是价格",
+        "en": "Turns out\nprice was not the real blocker"
+      }
+    }
+  ],
+  "cta": {
+    "zh": "",
+    "en": ""
+  }
+}

@@ -1,0 +1,65 @@
+{
+  "id": "dating-patterns",
+  "title": "Dating Patterns Auto Script",
+  "topic": "Dating Patterns",
+  "fps": 30,
+  "width": 1080,
+  "height": 1920,
+  "style": {
+    "accent": "#ff8d4d",
+    "background": "#050816"
+  },
+  "inspiration": [
+    {
+      "platform": "Tiktok",
+      "title": "If you don’t dump him today that’s just more sadness for you in the future \n\n#dating #relationships #advice #dumphim #redflags",
+      "url": "https://www.tiktok.com/@chloe.juliett/video/7539270405891050782",
+      "insight": "Use a low-cost ai ugc structure and keep production low-cost."
+    }
+  ],
+  "scenes": [
+    {
+      "id": "hook-reaction",
+      "assetPath": "hook/market-hook-closeup.mp4",
+      "durationInFrames": 54,
+      "subtitle": {
+        "zh": "I scraped why people get ghosted",
+        "en": "I scraped why people\nkeep getting ghosted"
+      }
+    },
+    {
+      "id": "scrape-proof",
+      "assetPath": "source/market-social-proof.mp4",
+      "durationInFrames": 78,
+      "subtitle": {
+        "zh": "It was not because they texted first",
+        "en": "It was not because they texted first.\nIt was low-effort replies"
+      }
+    },
+    {
+      "id": "cta-hand",
+      "assetPath": "source/atypica-pointing-hand.mp4",
+      "durationInFrames": 48,
+      "subtitle": {
+        "zh": "That changed how I read dating advice",
+        "en": "That changed how I read dating advice"
+      }
+    }
+  ],
+  "cta": {
+    "zh": "atypica.com",
+    "en": "atypica.com"
+  },
+  "notes": {
+    "sourceDocs": 17116,
+    "researchProvider": "apify",
+    "researchQuery": "dating",
+    "templateKey": "dating",
+    "topFormats": [
+      {
+        "name": "low-cost ai ugc",
+        "count": 8
+      }
+    ]
+  }
+}

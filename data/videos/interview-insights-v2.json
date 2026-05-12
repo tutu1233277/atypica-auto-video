@@ -1,0 +1,69 @@
+{
+  "id": "interview-insights",
+  "title": "Interview Insights Auto Script",
+  "topic": "Interview Insights",
+  "fps": 30,
+  "width": 1080,
+  "height": 1920,
+  "style": {
+    "accent": "#ff8d4d",
+    "background": "#050816"
+  },
+  "inspiration": [
+    {
+      "platform": "Tiktok",
+      "title": "Mistakes i see candidates making in interviews as a hiring manager #interviewtips #jobinterview #jobinterviewtips #careertok #careertiktok #careeradvice",
+      "url": "https://www.tiktok.com/@m7admissions/video/7218552246257093931",
+      "insight": "Use a low-cost ai ugc structure and keep production low-cost."
+    }
+  ],
+  "scenes": [
+    {
+      "id": "hook-reaction",
+      "assetPath": "hook/market-hook-closeup.mp4",
+      "durationInFrames": 54,
+      "subtitle": {
+        "zh": "I scraped what hiring managers complain about",
+        "en": "I scraped what hiring managers\nactually reject people for"
+      }
+    },
+    {
+      "id": "scrape-proof",
+      "assetPath": "source/market-social-proof.mp4",
+      "durationInFrames": 78,
+      "subtitle": {
+        "zh": "The pattern was not experience",
+        "en": "The pattern was not experience.\nIt was vague, generic answers"
+      }
+    },
+    {
+      "id": "cta-hand",
+      "assetPath": "source/atypica-pointing-hand.mp4",
+      "durationInFrames": 48,
+      "subtitle": {
+        "zh": "That is how I prep for interviews now",
+        "en": "That is how I prep for interviews now"
+      }
+    }
+  ],
+  "cta": {
+    "zh": "atypica.com",
+    "en": "atypica.com"
+  },
+  "notes": {
+    "sourceDocs": 17116,
+    "researchProvider": "apify",
+    "researchQuery": "interview",
+    "templateKey": "interview",
+    "topFormats": [
+      {
+        "name": "low-cost ai ugc",
+        "count": 7
+      },
+      {
+        "name": "screen-proof + insight reveal",
+        "count": 1
+      }
+    ]
+  }
+}

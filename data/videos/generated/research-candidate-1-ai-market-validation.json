@@ -1,0 +1,79 @@
+{
+  "id": "research-candidate-1-ai-market-validation",
+  "title": "AI Research / 差点烧钱建错产品",
+  "topic": "AI market validation",
+  "fps": 30,
+  "width": 1080,
+  "height": 1920,
+  "style": {
+    "accent": "#ff8d4d",
+    "background": "#050816"
+  },
+  "inspiration": [
+    {
+      "platform": "Claude",
+      "title": "差点烧钱建错产品",
+      "insight": "结构合理，但仍建议在最终出片前人工复核字幕节奏与镜头匹配。"
+    }
+  ],
+  "scenes": [
+    {
+      "id": "hook-reaction",
+      "assetPath": "hook/特写脸部惊讶表情.mp4",
+      "durationInFrames": 90,
+      "subtitle": {
+        "zh": "我差点花半年时间\n做了个没人想要的东西",
+        "en": "I almost spent 6 months\nbuilding something nobody wanted"
+      },
+      "note": "Match subtitle pacing to footage."
+    },
+    {
+      "id": "research-question",
+      "assetPath": "source/室内设计是否有市场：抓取社媒界面.mp4",
+      "durationInFrames": 90,
+      "subtitle": {
+        "zh": "我把想法打进去\nAI开始抓社交媒体上的真实反馈",
+        "en": "I typed in my idea\nand it started pulling real signals from social"
+      },
+      "note": "Match subtitle pacing to footage."
+    },
+    {
+      "id": "signal-patterns",
+      "assetPath": "source/market-social-proof.mp4",
+      "durationInFrames": 90,
+      "subtitle": {
+        "zh": "几千条帖子\n同一个抱怨反复出现\n这就是信号",
+        "en": "Thousands of posts\nSame complaint showing up again and again\nThat's a signal"
+      },
+      "note": "Match subtitle pacing to footage."
+    },
+    {
+      "id": "decision-payoff",
+      "assetPath": "source/atypica-pointing-hand.mp4",
+      "durationInFrames": 90,
+      "subtitle": {
+        "zh": "他们不是不需要这个\n他们只是不愿意为现在的方案付钱",
+        "en": "They don't hate the idea\nThey just won't pay for how it's built right now"
+      },
+      "note": "Match subtitle pacing to footage."
+    }
+  ],
+  "cta": {
+    "zh": "",
+    "en": ""
+  },
+  "notes": {
+    "generatedBy": "video-tool-claude",
+    "generatedAt": "2026-05-08T11:03:37.857Z",
+    "featureKey": "research",
+    "candidateId": "candidate-1",
+    "hookStyle": "mistake",
+    "score": 96,
+    "audit": [
+      "结构合理，但仍建议在最终出片前人工复核字幕节奏与镜头匹配。",
+      "结构合理，但仍建议在最终出片前人工复核字幕节奏与镜头匹配。",
+      "结构合理，但仍建议在最终出片前人工复核字幕节奏与镜头匹配。"
+    ],
+    "model": "claude-sonnet-4-6"
+  }
+}

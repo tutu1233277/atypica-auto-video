@@ -1,0 +1,73 @@
+{
+  "id": "竞品分析",
+  "title": "竞品分析 Auto Script",
+  "topic": "Competitor Research",
+  "fps": 30,
+  "width": 1080,
+  "height": 1920,
+  "style": {
+    "accent": "#ff8d4d",
+    "background": "#050816"
+  },
+  "inspiration": [
+    {
+      "platform": "Tiktok",
+      "title": "DONT WASTE your money like i did😭😭 #fyp #makeup #deinfluencing",
+      "url": "https://www.tiktok.com/@mahaaa.c/video/7270621514347629829",
+      "insight": "Use a low-cost ai ugc structure and keep production low-cost."
+    }
+  ],
+  "scenes": [
+    {
+      "id": "hook-reaction",
+      "assetPath": "hook/competitor-hook-reaction.mp4",
+      "durationInFrames": 54,
+      "subtitle": {
+        "zh": "我用20分钟\n搞懂了竞品的所有弱点",
+        "en": "I uncovered every weakness\nmy competitor has in 20 minutes"
+      }
+    },
+    {
+      "id": "scrape-proof",
+      "assetPath": "source/competitor-social-proof.mp4",
+      "durationInFrames": 60,
+      "subtitle": {
+        "zh": "AI把社媒上的吐槽\n全都抓出来了",
+        "en": "AI scraped social posts\nand pulled every complaint"
+      }
+    },
+    {
+      "id": "report-proof",
+      "assetPath": "source/competitor-report-proof.mp4",
+      "durationInFrames": 72,
+      "subtitle": {
+        "zh": "定价太贵 客服太差 功能缺失\n三个痛点一次看完",
+        "en": "Too expensive. Bad support.\nMissing features. All in one pass"
+      }
+    },
+    {
+      "id": "cta-hand",
+      "assetPath": "source/atypica-pointing-hand.mp4",
+      "durationInFrames": 42,
+      "subtitle": {
+        "zh": "这才是我现在做竞品分析的方法",
+        "en": "This is how I do competitor research now"
+      }
+    }
+  ],
+  "cta": {
+    "zh": "atypica.com",
+    "en": "atypica.com"
+  },
+  "notes": {
+    "sourceDocs": 17116,
+    "researchProvider": "apify",
+    "researchQuery": "competitor",
+    "topFormats": [
+      {
+        "name": "low-cost ai ugc",
+        "count": 8
+      }
+    ]
+  }
+}

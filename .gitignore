@@ -5,17 +5,3 @@ node_modules/
 .cache/
 dist/
 build/
-out/
-hook/
-public/hook/
-public/source/
-public/assets/
-视频素材/
-data/research/
-data/videos/
-data/x/
-atypica产品知识库.md
-atypica海外内容完整脚本.md
-项目续接说明.md
-config/research-providers.json
-*.mp4

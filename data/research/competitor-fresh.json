@@ -1,0 +1,248 @@
+{
+  "query": "competitor",
+  "platforms": [
+    "tiktok",
+    "instagram"
+  ],
+  "provider": "apify",
+  "generatedAt": "2026-05-09T07:29:33.617Z",
+  "summary": {
+    "itemCount": 8,
+    "topFormats": [
+      {
+        "name": "low-cost ai ugc",
+        "count": 4
+      },
+      {
+        "name": "screen-proof + insight reveal",
+        "count": 3
+      },
+      {
+        "name": "secret-weapon confession",
+        "count": 1
+      }
+    ],
+    "platforms": [
+      {
+        "name": "tiktok",
+        "count": 8
+      }
+    ],
+    "sampleHooks": [
+      "ChatGPT can do your competitor research in a couple of minutes.",
+      "If your business depends on beating the competition—sales, real estate, mortgages, B2B—you need this. Running this one prompt saves me days of research. It instantly pulls a market overview, competitor analysis, opportunities, gaps, and even a clear action plan. Instead of scrolling reports or piecing together data, I get structured insights I can use right away. It even checks my inputs and confirms before diving in so I know it’s on track. I tested it as a mortgage broker in Boise, Idaho, targeting residential. It broke down competitors, online reviews, economic factors, weaknesses, differentiators, partnerships, digital strategies, offline tactics, and KPIs—all in one run. This is the type of analysis that would normally take me hours, even days, to build. Now it’s a 2-minute process. If you’re in sales and not using this, you’re leaving money and opportunities on the table.",
+      "Most business owners spend hours on competitor research. Here is how to do it in 45 seconds."
+    ]
+  },
+  "items": [
+    {
+      "id": "7502488344664804615",
+      "platform": "tiktok",
+      "url": "https://www.tiktok.com/@theaiimpact/video/7502488344664804615",
+      "title": "ChatGPT can do your competitor research in a couple of minutes.\nI used ChatGPT O3 to analyze top competitors.\n\nIn just a few minutes, AI mapped out:\n✅ Strengths and weaknesses\n✅ Pricing and standout features\n✅ Feature gaps we can exploit\n✅ CRO mistakes costing them leads\n\n✅ A full action plan ranked by impact and ease   \n\n  With ChatGPT and AI, you can build faster and find opportunities  \n\nComment 'Prompt' below and I'll share the detailed Prompt\n\n#chatgpt #chatgpto3 #chatgpttips #competitorresearch #ai #aitips #aitools #greenscreenvideo",
+      "hook": "ChatGPT can do your competitor research in a couple of minutes.",
+      "summary": "ChatGPT can do your competitor research in a couple of minutes.\nI used ChatGPT O3 to analyze top competitors.\n\nIn just a few minutes, AI mapped out:\n✅ Strengths and weaknesses\n✅ Pricing and standout features\n✅ Feature gaps we can exploit\n✅ CRO mistakes costing them leads\n\n✅ A full action plan ranked by impact and ease   \n\n  With ChatGPT and AI, you can build faster and find opportunities  \n\nComment 'Prompt' below and I'll share the detailed Prompt\n\n#chatgpt #chatgpto3 #chatgpttips #competitorresearch #ai #aitips #aitools #greenscreenvideo",
+      "creator": "theaiimpact",
+      "likes": 23,
+      "views": 640,
+      "comments": 7,
+      "postedAt": "2025-05-09T16:46:35.000Z",
+      "source": "apify",
+      "format": "screen-proof + insight reveal",
+      "fitScore": 19,
+      "fitVerdict": "strong",
+      "fitReasons": [
+        "Shows proof, steps, or workflow",
+        "First-person creator framing",
+        "Short hook line"
+      ],
+      "flags": [
+        "Missing emotional/confessional hook"
+      ],
+      "hardReject": false
+    },
+    {
+      "id": "7555968667515735351",
+      "platform": "tiktok",
+      "url": "https://www.tiktok.com/@quantcrawler/video/7555968667515735351",
+      "title": "If your business depends on beating the competition—sales, real estate, mortgages, B2B—you need this. Running this one prompt saves me days of research. It instantly pulls a market overview, competitor analysis, opportunities, gaps, and even a clear action plan. Instead of scrolling reports or piecing together data, I get structured insights I can use right away. It even checks my inputs and confirms before diving in so I know it’s on track. I tested it as a mortgage broker in Boise, Idaho, targeting residential. It broke down competitors, online reviews, economic factors, weaknesses, differentiators, partnerships, digital strategies, offline tactics, and KPIs—all in one run. This is the type of analysis that would normally take me hours, even days, to build. Now it’s a 2-minute process. If you’re in sales and not using this, you’re leaving money and opportunities on the table.\n\n#salesstrategy #businessgrowth #realtorlife #mortgagebroker #aiprompt",
+      "hook": "If your business depends on beating the competition—sales, real estate, mortgages, B2B—you need this. Running this one prompt saves me days of research. It instantly pulls a market overview, competitor analysis, opportunities, gaps, and even a clear action plan. Instead of scrolling reports or piecing together data, I get structured insights I can use right away. It even checks my inputs and confirms before diving in so I know it’s on track. I tested it as a mortgage broker in Boise, Idaho, targeting residential. It broke down competitors, online reviews, economic factors, weaknesses, differentiators, partnerships, digital strategies, offline tactics, and KPIs—all in one run. This is the type of analysis that would normally take me hours, even days, to build. Now it’s a 2-minute process. If you’re in sales and not using this, you’re leaving money and opportunities on the table.",
+      "summary": "If your business depends on beating the competition—sales, real estate, mortgages, B2B—you need this. Running this one prompt saves me days of research. It instantly pulls a market overview, competitor analysis, opportunities, gaps, and even a clear action plan. Instead of scrolling reports or piecing together data, I get structured insights I can use right away. It even checks my inputs and confirms before diving in so I know it’s on track. I tested it as a mortgage broker in Boise, Idaho, targeting residential. It broke down competitors, online reviews, economic factors, weaknesses, differentiators, partnerships, digital strategies, offline tactics, and KPIs—all in one run. This is the type of analysis that would normally take me hours, even days, to build. Now it’s a 2-minute process. If you’re in sales and not using this, you’re leaving money and opportunities on the table.\n\n#salesstrategy #businessgrowth #realtorlife #mortgagebroker #aiprompt",
+      "creator": "quantcrawler",
+      "likes": 68,
+      "views": 2770,
+      "comments": 4,
+      "postedAt": "2025-10-01T13:00:00.000Z",
+      "source": "apify",
+      "format": "screen-proof + insight reveal",
+      "fitScore": 15,
+      "fitVerdict": "usable",
+      "fitReasons": [
+        "Shows proof, steps, or workflow",
+        "First-person creator framing"
+      ],
+      "flags": [
+        "Missing emotional/confessional hook",
+        "Caption is very long, likely explainer-heavy"
+      ],
+      "hardReject": false
+    },
+    {
+      "id": "7626404362327248150",
+      "platform": "tiktok",
+      "url": "https://www.tiktok.com/@operatorai_/video/7626404362327248150",
+      "title": "Most business owners spend hours on competitor research. Here is how to do it in 45 seconds.\n\nPaste any competitor website URL into ChatGPT with this exact prompt:\n\n\"You are a world-class business strategist. Analyse this website and tell me: who their target audience is, their main value proposition, what they are doing well, what gaps they have left open, and three things a competitor could do better.\"\n\nWhat comes back is a strategic analysis that consultants charge thousands for. In under a minute. For free.\n\nSave this prompt. Then drop your competitor's website URL in the comments below — I will tell you what I see when I run it.\n\n#aitools #chatgpt #viral #solopreneur #fyp",
+      "hook": "Most business owners spend hours on competitor research. Here is how to do it in 45 seconds.",
+      "summary": "Most business owners spend hours on competitor research. Here is how to do it in 45 seconds.\n\nPaste any competitor website URL into ChatGPT with this exact prompt:\n\n\"You are a world-class business strategist. Analyse this website and tell me: who their target audience is, their main value proposition, what they are doing well, what gaps they have left open, and three things a competitor could do better.\"\n\nWhat comes back is a strategic analysis that consultants charge thousands for. In under a minute. For free.\n\nSave this prompt. Then drop your competitor's website URL in the comments below — I will tell you what I see when I run it.\n\n#aitools #chatgpt #viral #solopreneur #fyp",
+      "creator": "operatorai_",
+      "likes": 4,
+      "views": 747,
+      "comments": 2,
+      "postedAt": "2026-04-08T15:04:01.000Z",
+      "source": "apify",
+      "format": "low-cost ai ugc",
+      "fitScore": 13,
+      "fitVerdict": "usable",
+      "fitReasons": [
+        "Shows proof, steps, or workflow",
+        "First-person creator framing",
+        "Short hook line"
+      ],
+      "flags": [
+        "Missing emotional/confessional hook"
+      ],
+      "hardReject": false
+    },
+    {
+      "id": "7536616009520745783",
+      "platform": "tiktok",
+      "url": "https://www.tiktok.com/@techtribecollective/video/7536616009520745783",
+      "title": "Stop wasting hours on competitor research. This AI tool delivers instant, detailed reports—strengths, weaknesses, and market insights. Try it now! #AItools #competitiveanalysis #productivityhacks #TechTribeCollective\nUnlock your content potential with TechTribe Unlimited! AI-powered hacks for creators in 2025.Subscribe for more tips & free templates [Link in bio or YouTube channel]What's your top AI tool? Comment below! #AITools #AIVideo #ContentCreation #FYP #Viral #AIArt #TechTips #2025 #Trending #Creators #TechHacks",
+      "hook": "Stop wasting hours on competitor research. This AI tool delivers instant, detailed reports—strengths, weaknesses, and market insights. Try it now! #AItools #competitiveanalysis #productivityhacks #TechTribeCollective",
+      "summary": "Stop wasting hours on competitor research. This AI tool delivers instant, detailed reports—strengths, weaknesses, and market insights. Try it now! #AItools #competitiveanalysis #productivityhacks #TechTribeCollective\nUnlock your content potential with TechTribe Unlimited! AI-powered hacks for creators in 2025.Subscribe for more tips & free templates [Link in bio or YouTube channel]What's your top AI tool? Comment below! #AITools #AIVideo #ContentCreation #FYP #Viral #AIArt #TechTips #2025 #Trending #Creators #TechHacks",
+      "creator": "techtribecollective",
+      "likes": 4,
+      "views": 136,
+      "comments": 0,
+      "postedAt": "2025-08-09T16:00:07.000Z",
+      "source": "apify",
+      "format": "secret-weapon confession",
+      "fitScore": 11,
+      "fitVerdict": "usable",
+      "fitReasons": [
+        "Shows proof, steps, or workflow"
+      ],
+      "flags": [
+        "Missing emotional/confessional hook"
+      ],
+      "hardReject": false
+    },
+    {
+      "id": "7631879059194072328",
+      "platform": "tiktok",
+      "url": "https://www.tiktok.com/@flickersocials/video/7631879059194072328",
+      "title": "spy on your competitors to see what content is working in a quarter of the time ⏳ game changing for agencies!! #socialmedia #claudeai",
+      "hook": "spy on your competitors to see what content is working in a quarter of the time ⏳ game changing for agencies!! #socialmedia #claudeai",
+      "summary": "spy on your competitors to see what content is working in a quarter of the time ⏳ game changing for agencies!! #socialmedia #claudeai",
+      "creator": "flickersocials",
+      "likes": 101,
+      "views": 2220,
+      "comments": 8,
+      "postedAt": "2026-04-23T09:08:38.000Z",
+      "source": "apify",
+      "format": "screen-proof + insight reveal",
+      "fitScore": 5,
+      "fitVerdict": "weak",
+      "fitReasons": [],
+      "flags": [
+        "Missing emotional/confessional hook"
+      ],
+      "hardReject": false
+    },
+    {
+      "id": "7635699761651191062",
+      "platform": "tiktok",
+      "url": "https://www.tiktok.com/@awkurd0/video/7635699761651191062",
+      "title": "#fyp",
+      "hook": "#fyp",
+      "summary": "#fyp",
+      "creator": "awkurd0",
+      "likes": 136100,
+      "views": 722800,
+      "comments": 371,
+      "postedAt": "2026-05-03T16:14:57.000Z",
+      "source": "apify",
+      "format": "low-cost ai ugc",
+      "fitScore": -1,
+      "fitVerdict": "weak",
+      "fitReasons": [
+        "Short hook line"
+      ],
+      "flags": [
+        "Missing emotional/confessional hook"
+      ],
+      "hardReject": false
+    },
+    {
+      "id": "7626499625398144276",
+      "platform": "tiktok",
+      "url": "https://www.tiktok.com/@samdespo/video/7626499625398144276",
+      "title": "The most underrated AI tool for paid ads, creative insights and competitor analysis #metaads #facebookads #googleads #tiktokads",
+      "hook": "The most underrated AI tool for paid ads, creative insights and competitor analysis #metaads #facebookads #googleads #tiktokads",
+      "summary": "The most underrated AI tool for paid ads, creative insights and competitor analysis #metaads #facebookads #googleads #tiktokads",
+      "creator": "samdespo",
+      "likes": 1715,
+      "views": 36600,
+      "comments": 420,
+      "postedAt": "2026-04-08T21:13:54.000Z",
+      "source": "apify",
+      "format": "low-cost ai ugc",
+      "fitScore": 3,
+      "fitVerdict": "weak",
+      "fitReasons": [],
+      "flags": [
+        "Missing emotional/confessional hook"
+      ],
+      "hardReject": false
+    },
+    {
+      "id": "7614130873595677974",
+      "platform": "tiktok",
+      "url": "https://www.tiktok.com/@kortexy.com/video/7614130873595677974",
+      "title": "This AI reviews your code before your team even opens the pull request.\n\nKilo Code Reviewer automatically scans your PR for security issues, performance problems, and style inconsistencies, then leaves inline comments with suggestions.\n\nSince it’s built directly into Kilo Code, it already understands your repo and context. If you want cleaner PRs and faster code reviews, this is worth trying.\n\nComment Kilo and I’ll send you the link.\n\n#KiloCode #AIcoding #DevTools #CodeReview #Programming",
+      "hook": "This AI reviews your code before your team even opens the pull request.",
+      "summary": "This AI reviews your code before your team even opens the pull request.\n\nKilo Code Reviewer automatically scans your PR for security issues, performance problems, and style inconsistencies, then leaves inline comments with suggestions.\n\nSince it’s built directly into Kilo Code, it already understands your repo and context. If you want cleaner PRs and faster code reviews, this is worth trying.\n\nComment Kilo and I’ll send you the link.\n\n#KiloCode #AIcoding #DevTools #CodeReview #Programming",
+      "creator": "kortexy.com",
+      "likes": 1247,
+      "views": 26300,
+      "comments": 25,
+      "postedAt": "2026-03-06T13:16:37.000Z",
+      "source": "apify",
+      "format": "low-cost ai ugc",
+      "fitScore": 3,
+      "fitVerdict": "weak",
+      "fitReasons": [
+        "First-person creator framing",
+        "Short hook line"
+      ],
+      "flags": [
+        "Missing emotional/confessional hook"
+      ],
+      "hardReject": false
+    }
+  ],
+  "diagnostics": [
+    "Apify tiktok returned 8 items.",
+    "Apify instagram returned 1 items.",
+    "Apify tiktok returned 8 items.",
+    "Apify instagram returned 1 items.",
+    "Apify tiktok returned 8 items.",
+    "Apify instagram returned 1 items.",
+    "Apify tiktok returned 8 items.",
+    "Apify instagram returned 8 items.",
+    "Apify tiktok returned 8 items.",
+    "Apify instagram returned 1 items.",
+    "Apify tiktok returned 8 items.",
+    "Apify instagram returned 1 items."
+  ]
+}

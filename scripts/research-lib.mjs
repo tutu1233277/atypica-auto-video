@@ -14,6 +14,9 @@ const highCostKeywords = [
   '追人',
 ];
 
+export const DEFAULT_MIN_LIKES = 5000;
+export const DEFAULT_RECENT_DAYS = 120;
+
 export const loadEnvFiles = () => {
   for (const fileName of ['.env.local', '.env']) {
     const absolutePath = path.resolve(projectRoot, fileName);
@@ -97,6 +100,14 @@ export const scoreItem = (item) => {
   return likes * 3 + comments * 5 + views * 0.02;
 };
 
+export const passesLikesThreshold = (item, minLikes = DEFAULT_MIN_LIKES) => {
+  if (!Number.isFinite(minLikes) || minLikes <= 0) {
+    return true;
+  }
+
+  return numberOrZero(item.likes) >= minLikes;
+};
+
 const genericLowFitKeywords = [
   'top 10',
   'top ten',
@@ -110,6 +121,198 @@ const genericLowFitKeywords = [
   'free tools',
   'for success in 2025',
   'websites you should know',
+];
+
+const educationalExplainerKeywords = [
+  'course',
+  'lecture',
+  'playlist',
+  'tutorial',
+  'follow me',
+  'save this post',
+  'job ready',
+  'internship',
+  'call:',
+  'no degree required',
+  'learn ai',
+  'free ai course',
+  'surface-level',
+  'fundamentals',
+  'masterclass',
+  'webinar',
+];
+
+const ugcHookSignals = [
+  'i almost',
+  'i thought',
+  'i found out',
+  'turns out',
+  'nobody tells you',
+  'my boss',
+  'don’t let',
+  'do not let',
+  'dont let',
+  'waste your money',
+  'how is this even legal',
+  'what nobody tells you',
+  'secretly',
+  'i was wrong',
+  'i tried',
+  'i paid',
+];
+
+const productProofSignals = [
+  'step 1',
+  'step 2',
+  'step 3',
+  '1.',
+  '2.',
+  '3.',
+  'report',
+  'workflow',
+  'screen',
+  'dashboard',
+  'question',
+  'generate',
+  'paste',
+  'copy',
+  '20 min',
+  '20 minutes',
+  'save',
+  'saved me',
+  'roi',
+];
+
+const promoHeavyKeywords = [
+  'dm ',
+  'comment "',
+  "comment '",
+  'comment “',
+  'comment below',
+  'follow for more',
+  'follow me',
+  'link in bio',
+  'swipe right',
+  'call:',
+  'www.',
+];
+
+const explainerLeadSignals = [
+  'this ai can',
+  'here is how',
+  "here's how",
+  'here are',
+  'how to make',
+  'most people are using',
+  'learn how to',
+];
+
+const tutorialHeavyKeywords = [
+  'tutorial',
+  'step by step tutorial',
+  'top 5',
+  'top five',
+  'top tools',
+  'tool list',
+  'best tools',
+  'best ai tools',
+  'free course',
+  'workshop',
+  'webinar',
+];
+
+const reactionHookSignals = [
+  'this is crazy',
+  'wish i knew this earlier',
+  'dont buy this yet',
+  'don’t buy this yet',
+  'turns out',
+  'nobody tells you',
+  'my boss',
+  'i almost',
+  'i didn’t expect this',
+  'i didn\'t expect this',
+  'i was wrong',
+  'what if',
+  'real question',
+  'you need to see this',
+  'wait',
+  'hold on',
+  'bro',
+  'no way',
+  'wtf',
+  'why is nobody talking about this',
+  'i cant believe',
+  'i can’t believe',
+  'i was today years old',
+  'did not know this',
+  'didn’t know this',
+];
+
+const aiToolSignals = [
+  'ai',
+  'chatgpt',
+  'openai',
+  'claude',
+  'perplexity',
+  'tool',
+  'tools',
+  'software',
+  'app',
+  'apps',
+  'workflow',
+  'automation',
+  'dashboard',
+  'research',
+  'prompt',
+  'generate',
+  'content',
+  'saas',
+];
+
+const humanHookSignals = [
+  'i ',
+  'my ',
+  'me ',
+  'we ',
+  'my boss',
+  'i almost',
+  'i thought',
+  'i found out',
+  'i tried',
+  'i paid',
+  'i was wrong',
+  'turns out',
+  'nobody tells you',
+  'what if',
+  'wait',
+  'hold on',
+  'you need to see this',
+];
+
+const productUiSignals = [
+  'app',
+  'tool',
+  'software',
+  'dashboard',
+  'screen',
+  'interface',
+  'project',
+  'calendar',
+  'report',
+  'workflow',
+  'prompt',
+  'generate',
+  'generated',
+  'results',
+  'comments',
+  'data',
+  'input',
+  'output',
+  'connect',
+  'set up',
+  'builds',
+  'built',
 ];
 
 const topicSignals = [
@@ -170,6 +373,7 @@ export const parseMarkdownTrendBlocks = (markdown) => {
     .map((block) => block.trim())
     .filter(Boolean)
     .filter((block) => !isHighCostFormat(block))
+    .filter((block) => /https?:\/\/\S+/.test(block))
     .map((block, index) => {
       const url = block.match(/https?:\/\/\S+/)?.[0] ?? null;
       const titleLine =
@@ -177,6 +381,10 @@ export const parseMarkdownTrendBlocks = (markdown) => {
           .split('\n')
           .find((line) => line.includes('**@') || line.includes('**公式：')) ??
         `Local reference ${index + 1}`;
+      const explicitHookLine = block
+        .split('\n')
+        .find((line) => /hook[:：]/i.test(line));
+      const quotedHookMatch = block.match(/\*\*"([^"\n]{4,160})"\*\*/);
       const insightLine =
         block.split('\n').find((line) => line.includes('**核心借鉴：')) ??
         'Use a low-cost proof-driven UGC structure.';
@@ -185,12 +393,12 @@ export const parseMarkdownTrendBlocks = (markdown) => {
         platform: url?.includes('instagram') ? 'instagram' : 'tiktok',
         url,
         title: cleanMarkdown(titleLine),
-        hook: '',
+        hook: cleanMarkdown(explicitHookLine ?? quotedHookMatch?.[1] ?? ''),
         summary: cleanMarkdown(insightLine),
         creator: '',
-        likes: 0,
-        views: 0,
-        comments: 0,
+        likes: extractMetricFromText(titleLine, 'likes'),
+        views: extractMetricFromText(titleLine, 'views'),
+        comments: extractMetricFromText(titleLine, 'comments'),
         source: 'local_markdown',
         format: inferFormat(`${titleLine}\n${insightLine}`),
       };
@@ -200,7 +408,18 @@ export const parseMarkdownTrendBlocks = (markdown) => {
 export const selectBestInspiration = (items, options = {}) => {
   const hint = typeof options === 'string' ? options : options.hint;
   const topic = typeof options === 'string' ? '' : options.topic ?? '';
-  const filtered = items.filter((item) => !isHighCostFormat(`${item.title} ${item.summary} ${item.hook}`));
+  const minLikes =
+    typeof options === 'string' ? DEFAULT_MIN_LIKES : Number(options.minLikes ?? DEFAULT_MIN_LIKES);
+  const filtered = items.filter((item) => {
+    if (isHighCostFormat(`${item.title} ${item.summary} ${item.hook}`)) {
+      return false;
+    }
+    if (!passesLikesThreshold(item, minLikes)) {
+      return false;
+    }
+    const fit = annotateTrendItem(item, {topic, hint});
+    return !fit.hardReject;
+  });
   const hinted = hint
     ? filtered.filter((item) =>
         `${item.title} ${item.summary} ${item.hook}`.toLowerCase().includes(hint.toLowerCase()),
@@ -211,9 +430,23 @@ export const selectBestInspiration = (items, options = {}) => {
     .sort((a, b) => rankInspiration(b, {topic, hint}) - rankInspiration(a, {topic, hint}))[0] ?? null;
 };
 
-const rankInspiration = (item, {topic, hint}) => {
-  const fit = scoreAtypicaFit(item, {topic, hint});
-  return fit * 100000 + scoreItem(item);
+export const rankInspiration = (item, {topic = '', hint = ''} = {}) => {
+  const fit = annotateTrendItem(item, {topic, hint});
+  const freshness = item.postedAt ? Date.parse(item.postedAt) || 0 : 0;
+  return fit.fitScore * 100000 + freshness * 0.000001 + scoreItem(item);
+};
+
+export const isRecentEnough = (item, recentDays = DEFAULT_RECENT_DAYS) => {
+  if (!Number.isFinite(recentDays) || recentDays <= 0) {
+    return true;
+  }
+
+  const postedAt = Date.parse(item.postedAt ?? '');
+  if (!Number.isFinite(postedAt)) {
+    return false;
+  }
+
+  return Date.now() - postedAt <= recentDays * 24 * 60 * 60 * 1000;
 };
 
 const scoreAtypicaFit = (item, {topic, hint}) => {
@@ -266,6 +499,147 @@ const scoreAtypicaFit = (item, {topic, hint}) => {
   return score;
 };
 
+export const annotateTrendItem = (item, {topic = '', hint = ''} = {}) => {
+  const text = `${item.title} ${item.summary} ${item.hook}`.toLowerCase();
+  let fitScore = scoreAtypicaFit(item, {topic, hint});
+  const fitReasons = [];
+  const flags = [];
+
+  const instagramReel =
+    item.platform === 'instagram' &&
+    (item.url?.includes('/reel/') ||
+      item.productType === 'clips' ||
+      item.mediaType === 'Video' ||
+      item.isVideo === true);
+  const instagramFeedPost =
+    item.platform === 'instagram' &&
+    !instagramReel &&
+    (item.url?.includes('/p/') || item.mediaType === 'Image' || item.mediaType === 'Sidecar');
+  if (instagramReel) {
+    fitScore += 5;
+    fitReasons.push('Instagram Reel format');
+  }
+  if (instagramFeedPost) {
+    fitScore -= 8;
+    flags.push('Instagram feed post, not Reel');
+  }
+
+  const hookMatches = ugcHookSignals.filter((keyword) => text.includes(keyword));
+  if (hookMatches.length > 0) {
+    fitScore += Math.min(8, hookMatches.length * 2);
+    fitReasons.push(`UGC hook signals: ${hookMatches.slice(0, 2).join(', ')}`);
+  } else {
+    fitScore -= 5;
+    flags.push('Missing emotional/confessional hook');
+  }
+
+  const proofMatches = productProofSignals.filter((keyword) => text.includes(keyword));
+  if (proofMatches.length > 0) {
+    fitScore += Math.min(6, proofMatches.length * 2);
+    fitReasons.push('Shows proof, steps, or workflow');
+  }
+
+  const aiToolMatches = aiToolSignals.filter((keyword) => text.includes(keyword));
+  if (aiToolMatches.length > 0) {
+    fitScore += Math.min(8, aiToolMatches.length);
+    fitReasons.push(`AI/product signals: ${aiToolMatches.slice(0, 3).join(', ')}`);
+  } else {
+    fitScore -= 8;
+    flags.push('Missing AI/product keywords');
+  }
+
+  if (/\bi\b|\bmy\b|\bme\b/.test(text)) {
+    fitScore += 2;
+    fitReasons.push('First-person creator framing');
+  }
+
+  if ((item.hook ?? '').length > 0 && item.hook.length <= 120) {
+    fitScore += 2;
+    fitReasons.push('Short hook line');
+  }
+
+  const reactionMatches = reactionHookSignals.filter((keyword) => text.includes(keyword));
+  if (reactionMatches.length > 0) {
+    fitScore += Math.min(10, reactionMatches.length * 3);
+    fitReasons.push(`Reaction/confessional hooks: ${reactionMatches.slice(0, 2).join(', ')}`);
+  }
+
+  const humanHookMatches = humanHookSignals.filter((keyword) => text.includes(keyword));
+  if (humanHookMatches.length > 0) {
+    fitScore += Math.min(8, humanHookMatches.length * 2);
+    fitReasons.push(`Human hook framing: ${humanHookMatches.slice(0, 2).join(', ')}`);
+  } else {
+    fitScore -= 8;
+    flags.push('Missing human/person-led hook');
+  }
+
+  const productUiMatches = productUiSignals.filter((keyword) => text.includes(keyword));
+  if (productUiMatches.length > 0) {
+    fitScore += Math.min(10, productUiMatches.length * 2);
+    fitReasons.push(`Product UI/proof signals: ${productUiMatches.slice(0, 3).join(', ')}`);
+  } else {
+    fitScore -= 10;
+    flags.push('Missing product UI/proof signals');
+  }
+
+  const explainerMatches = educationalExplainerKeywords.filter((keyword) => text.includes(keyword));
+  if (explainerMatches.length > 0) {
+    fitScore -= Math.min(12, explainerMatches.length * 3);
+    flags.push(`Educational/explainer cues: ${explainerMatches.slice(0, 2).join(', ')}`);
+  }
+
+  const tutorialMatches = tutorialHeavyKeywords.filter((keyword) => text.includes(keyword));
+  if (tutorialMatches.length > 0) {
+    fitScore -= Math.min(14, tutorialMatches.length * 4);
+    flags.push(`Tutorial/listicle cues: ${tutorialMatches.slice(0, 2).join(', ')}`);
+  }
+
+  if (explainerLeadSignals.some((keyword) => text.startsWith(keyword))) {
+    fitScore -= 4;
+    flags.push('Starts like an explainer instead of a UGC hook');
+  }
+
+  const promoMatches = promoHeavyKeywords.filter((keyword) => text.includes(keyword));
+  if (promoMatches.length > 0 && proofMatches.length === 0) {
+    fitScore -= Math.min(8, promoMatches.length * 2);
+    flags.push('Heavy CTA without enough proof');
+  }
+
+  if ((item.summary ?? '').length > 900) {
+    fitScore -= 4;
+    flags.push('Caption is very long, likely explainer-heavy');
+  }
+
+  if (!isRecentEnough(item, DEFAULT_RECENT_DAYS)) {
+    fitScore -= 10;
+    flags.push(`Older than ${DEFAULT_RECENT_DAYS} days`);
+  }
+
+  if (item.source !== 'local_markdown' && (item.views ?? 0) === 0 && (item.likes ?? 0) < 30) {
+    fitScore -= 3;
+    flags.push('Weak visible traction');
+  }
+
+  const hardReject =
+    instagramFeedPost ||
+    !isRecentEnough(item, DEFAULT_RECENT_DAYS) ||
+    aiToolMatches.length === 0 ||
+    humanHookMatches.length === 0 ||
+    productUiMatches.length === 0 ||
+    tutorialMatches.length >= 1 ||
+    (explainerMatches.length >= 2 && proofMatches.length === 0) ||
+    fitScore < -2;
+
+  return {
+    ...item,
+    fitScore,
+    fitVerdict: hardReject ? 'reject' : fitScore >= 16 ? 'strong' : fitScore >= 8 ? 'usable' : 'weak',
+    fitReasons,
+    flags,
+    hardReject,
+  };
+};
+
 export const normalizeTrendItem = (raw, platform, source) => {
   const caption =
     pickString(raw, [
@@ -300,16 +674,43 @@ export const normalizeTrendItem = (raw, platform, source) => {
         'username',
       ]) ?? '',
     likes: numberOrZero(
-      pickNumber(raw, ['likesCount', 'diggCount', 'likes', 'edge_media_preview_like.count']),
+      pickNumber(raw, [
+        'likesCount',
+        'like_count',
+        'diggCount',
+        'likes',
+        'edge_media_preview_like.count',
+      ]),
     ),
     views: numberOrZero(
-      pickNumber(raw, ['playCount', 'videoPlayCount', 'viewCount', 'video_view_count']),
+      pickNumber(raw, [
+        'playCount',
+        'videoPlayCount',
+        'igPlayCount',
+        'play_count',
+        'view_count',
+        'videoViewCount',
+        'viewCount',
+        'video_view_count',
+      ]),
     ),
     comments: numberOrZero(
-      pickNumber(raw, ['commentsCount', 'commentCount', 'comments', 'edge_media_to_comment.count']),
+      pickNumber(raw, [
+        'commentsCount',
+        'comment_count',
+        'commentCount',
+        'comments',
+        'edge_media_to_comment.count',
+      ]),
     ),
+    postedAt:
+      pickString(raw, ['createTimeISO', 'timestamp', 'taken_at', 'taken_at_timestamp', 'createTime']) ??
+      null,
     source,
     format: inferFormat(`${title}\n${caption}`),
+    mediaType: pickString(raw, ['type']) ?? null,
+    productType: pickString(raw, ['productType', 'product_type']) ?? null,
+    isVideo: getByPath(raw, 'is_video') ?? null,
   };
 };
 
@@ -378,6 +779,9 @@ export const renderResearchMarkdown = (report) => {
     lines.push(`### ${item.title}`);
     lines.push(`- Platform: ${item.platform}`);
     lines.push(`- Format: ${item.format}`);
+    if (item.fitVerdict) {
+      lines.push(`- Fit: ${item.fitVerdict} (${item.fitScore})`);
+    }
     if (item.url) {
       lines.push(`- URL: ${item.url}`);
     }
@@ -386,6 +790,12 @@ export const renderResearchMarkdown = (report) => {
     }
     lines.push(`- Metrics: likes ${item.likes}, comments ${item.comments}, views ${item.views}`);
     lines.push(`- Hook: ${item.hook || 'n/a'}`);
+    if (item.fitReasons?.length) {
+      lines.push(`- Why it fits: ${item.fitReasons.join('; ')}`);
+    }
+    if (item.flags?.length) {
+      lines.push(`- Risks: ${item.flags.join('; ')}`);
+    }
     lines.push(`- Summary: ${item.summary || 'n/a'}`);
     lines.push('');
   }
@@ -401,6 +811,7 @@ export const fetchTrendReport = async ({
   query,
   limit,
   platforms,
+  minLikes = DEFAULT_MIN_LIKES,
 }) => {
   loadEnvFiles();
   const providerConfig = loadProviderConfig();
@@ -411,8 +822,11 @@ export const fetchTrendReport = async ({
       const apifyItems = await fetchFromApify({query, limit, platforms, providerConfig, diagnostics});
       if (apifyItems.length > 0) {
         const sorted = apifyItems
+          .map((item) => annotateTrendItem(item, {topic: query}))
           .filter((item) => !isHighCostFormat(`${item.title} ${item.summary} ${item.hook}`))
-          .sort((a, b) => scoreItem(b) - scoreItem(a));
+          .filter((item) => passesLikesThreshold(item, minLikes))
+          .filter((item) => !item.hardReject)
+          .sort((a, b) => rankInspiration(b, {topic: query}) - rankInspiration(a, {topic: query}));
         return buildReport({
           query,
           platforms,
@@ -433,7 +847,11 @@ export const fetchTrendReport = async ({
   }
 
   const localMarkdown = readVaultDoc('tiktok ig视频链接.md');
-  const localItems = parseMarkdownTrendBlocks(localMarkdown).slice(0, limit);
+  const localItems = parseMarkdownTrendBlocks(localMarkdown)
+    .map((item) => annotateTrendItem(item, {topic: query}))
+    .filter((item) => passesLikesThreshold(item, minLikes))
+    .sort((a, b) => rankInspiration(b, {topic: query}) - rankInspiration(a, {topic: query}))
+    .slice(0, limit);
   return buildReport({
     query,
     platforms,
@@ -461,9 +879,12 @@ const fetchFromApify = async ({query, limit, platforms, providerConfig, diagnost
 
     const body = fillTemplate(settings.baseInput ?? {}, {
       query,
+      queryTag: toTagToken(query),
+      querySlug: slugify(query).replace(/-/g, ''),
       limit,
       platform,
     });
+    sanitizeApifyInput(body, {platform, query});
     const endpoint = buildApifyEndpoint({settings, token});
     const response = await fetch(endpoint, {
       method: 'POST',
@@ -493,16 +914,66 @@ const fetchFromApify = async ({query, limit, platforms, providerConfig, diagnost
   return outputs;
 };
 
+const sanitizeApifyInput = (body, {platform, query}) => {
+  if (!body || typeof body !== 'object') {
+    return;
+  }
+
+  if (platform === 'instagram') {
+    body.hashtags = buildInstagramHashtags(query, body.hashtags);
+  }
+};
+
+const buildInstagramHashtags = (query, seedTags = []) => {
+  const normalized = String(query ?? '').toLowerCase();
+  const tags = new Set(seedTags);
+
+  if (normalized.includes('boss')) {
+    tags.add('aitools');
+    tags.add('chatgpttips');
+    tags.add('automation');
+  }
+  if (normalized.includes('crazy') || normalized.includes('turns out')) {
+    tags.add('aitools');
+    tags.add('aiworkflow');
+    tags.add('automation');
+  }
+  if (normalized.includes('wish i knew') || normalized.includes('nobody tells')) {
+    tags.add('aitools');
+    tags.add('chatgpttips');
+    tags.add('productivitytools');
+  }
+  if (normalized.includes('buy this') || normalized.includes('dont buy')) {
+    tags.add('saas');
+    tags.add('software');
+    tags.add('aitools');
+  }
+
+  tags.add('aitools');
+  tags.add('chatgpt');
+  tags.add('openai');
+
+  return [...tags].slice(0, 8);
+};
+
 const buildApifyEndpoint = ({settings, token}) => {
+  const extraParams = new URLSearchParams({token});
+  if (settings.memoryMb) {
+    extraParams.set('memory', String(settings.memoryMb));
+  }
+  if (settings.timeoutSecs) {
+    extraParams.set('timeout', String(settings.timeoutSecs));
+  }
+
   if (settings.taskId) {
     return `https://api.apify.com/v2/actor-tasks/${encodeURIComponent(
       settings.taskId,
-    )}/run-sync-get-dataset-items?token=${encodeURIComponent(token)}`;
+    )}/run-sync-get-dataset-items?${extraParams.toString()}`;
   }
 
   return `https://api.apify.com/v2/acts/${encodeURIComponent(
     settings.actorId,
-  )}/run-sync-get-dataset-items?token=${encodeURIComponent(token)}`;
+  )}/run-sync-get-dataset-items?${extraParams.toString()}`;
 };
 
 const fillTemplate = (value, vars) => {
@@ -526,6 +997,13 @@ const fillTemplate = (value, vars) => {
   }
 
   return value.replace(/\{\{(\w+)\}\}/g, (_, key) => String(vars[key] ?? ''));
+};
+
+const toTagToken = (value) => {
+  const normalized = String(value ?? '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '');
+  return normalized || 'aitools';
 };
 
 const pickString = (source, paths) => {
@@ -567,6 +1045,29 @@ const getByPath = (source, itemPath) => {
 
 const numberOrZero = (value) => {
   return typeof value === 'number' && Number.isFinite(value) ? value : 0;
+};
+
+const extractMetricFromText = (value, label) => {
+  const match = String(value ?? '').match(
+    new RegExp(`([\\d.,]+\\s*[kKmM]?)\\s+${label}\\b`, 'i'),
+  );
+  if (!match) {
+    return 0;
+  }
+
+  return parseCompactNumber(match[1]);
+};
+
+const parseCompactNumber = (value) => {
+  const normalized = String(value ?? '').trim().toLowerCase().replace(/,/g, '');
+  if (!normalized) {
+    return 0;
+  }
+
+  const multiplier = normalized.endsWith('m') ? 1000000 : normalized.endsWith('k') ? 1000 : 1;
+  const numericPart = multiplier === 1 ? normalized : normalized.slice(0, -1);
+  const parsed = Number(numericPart);
+  return Number.isFinite(parsed) ? parsed * multiplier : 0;
 };
 
 const countBy = (values) => {

@@ -1,0 +1,155 @@
+{
+  "query": "interview",
+  "platforms": [
+    "tiktok",
+    "instagram"
+  ],
+  "provider": "apify",
+  "generatedAt": "2026-05-03T13:56:17.667Z",
+  "summary": {
+    "itemCount": 8,
+    "topFormats": [
+      {
+        "name": "low-cost ai ugc",
+        "count": 7
+      },
+      {
+        "name": "screen-proof + insight reveal",
+        "count": 1
+      }
+    ],
+    "platforms": [
+      {
+        "name": "tiktok",
+        "count": 8
+      }
+    ],
+    "sampleHooks": [
+      "There are lots of reasons you may get rejected on the job search. Here’s what the timing may say about your job application  #careeradvice #jobsearchtips #resumetips",
+      "What are some red flags you look for? #worklife #toxic #redflags #corporatehumor #coworkers #corporatelife #interview #jobsearch #job #workhumor #corporatelife",
+      "Pay attention to these red flags during the interview process.  Very telling about how it might be to work there!  #jobinterviewtips #redflags #jobinterview"
+    ]
+  },
+  "items": [
+    {
+      "id": "7488081456070184234",
+      "platform": "tiktok",
+      "url": "https://www.tiktok.com/@realisticrecruiting/video/7488081456070184234",
+      "title": "There are lots of reasons you may get rejected on the job search. Here’s what the timing may say about your job application  #careeradvice #jobsearchtips #resumetips",
+      "hook": "There are lots of reasons you may get rejected on the job search. Here’s what the timing may say about your job application  #careeradvice #jobsearchtips #resumetips",
+      "summary": "There are lots of reasons you may get rejected on the job search. Here’s what the timing may say about your job application  #careeradvice #jobsearchtips #resumetips",
+      "creator": "realisticrecruiting",
+      "likes": 74500,
+      "views": 2100000,
+      "comments": 657,
+      "source": "apify",
+      "format": "low-cost ai ugc"
+    },
+    {
+      "id": "7505769880554130734",
+      "platform": "tiktok",
+      "url": "https://www.tiktok.com/@tiktokamirr/video/7505769880554130734",
+      "title": "What are some red flags you look for? #worklife #toxic #redflags #corporatehumor #coworkers #corporatelife #interview #jobsearch #job #workhumor #corporatelife",
+      "hook": "What are some red flags you look for? #worklife #toxic #redflags #corporatehumor #coworkers #corporatelife #interview #jobsearch #job #workhumor #corporatelife",
+      "summary": "What are some red flags you look for? #worklife #toxic #redflags #corporatehumor #coworkers #corporatelife #interview #jobsearch #job #workhumor #corporatelife",
+      "creator": "tiktokamirr",
+      "likes": 28000,
+      "views": 261800,
+      "comments": 98,
+      "source": "apify",
+      "format": "low-cost ai ugc"
+    },
+    {
+      "id": "7602607534280592671",
+      "platform": "tiktok",
+      "url": "https://www.tiktok.com/@trainerterryjones/video/7602607534280592671",
+      "title": "Pay attention to these red flags during the interview process.  Very telling about how it might be to work there!  #jobinterviewtips #redflags #jobinterview",
+      "hook": "Pay attention to these red flags during the interview process.  Very telling about how it might be to work there!  #jobinterviewtips #redflags #jobinterview",
+      "summary": "Pay attention to these red flags during the interview process.  Very telling about how it might be to work there!  #jobinterviewtips #redflags #jobinterview",
+      "creator": "trainerterryjones",
+      "likes": 4732,
+      "views": 44100,
+      "comments": 40,
+      "source": "apify",
+      "format": "low-cost ai ugc"
+    },
+    {
+      "id": "7532272116943654157",
+      "platform": "tiktok",
+      "url": "https://www.tiktok.com/@mymovingmind/video/7532272116943654157",
+      "title": "When I became a hiring manager, I realized I had been making this mistake! #neurodivergentcareers #tourettesyndrome #adhdinwomen #jobinterviewtips",
+      "hook": "When I became a hiring manager, I realized I had been making this mistake! #neurodivergentcareers #tourettesyndrome #adhdinwomen #jobinterviewtips",
+      "summary": "When I became a hiring manager, I realized I had been making this mistake! #neurodivergentcareers #tourettesyndrome #adhdinwomen #jobinterviewtips",
+      "creator": "mymovingmind",
+      "likes": 3538,
+      "views": 55600,
+      "comments": 129,
+      "source": "apify",
+      "format": "low-cost ai ugc"
+    },
+    {
+      "id": "7223941680897035562",
+      "platform": "tiktok",
+      "url": "https://www.tiktok.com/@roilysm/video/7223941680897035562",
+      "title": "#greenscreen #interviewtips #techtok #jobhunting #jobsearchtips",
+      "hook": "#greenscreen #interviewtips #techtok #jobhunting #jobsearchtips",
+      "summary": "#greenscreen #interviewtips #techtok #jobhunting #jobsearchtips",
+      "creator": "roilysm",
+      "likes": 2515,
+      "views": 68700,
+      "comments": 65,
+      "source": "apify",
+      "format": "screen-proof + insight reveal"
+    },
+    {
+      "id": "7218552246257093931",
+      "platform": "tiktok",
+      "url": "https://www.tiktok.com/@m7admissions/video/7218552246257093931",
+      "title": "Mistakes i see candidates making in interviews as a hiring manager #interviewtips #jobinterview #jobinterviewtips #careertok #careertiktok #careeradvice",
+      "hook": "Mistakes i see candidates making in interviews as a hiring manager #interviewtips #jobinterview #jobinterviewtips #careertok #careertiktok #careeradvice",
+      "summary": "Mistakes i see candidates making in interviews as a hiring manager #interviewtips #jobinterview #jobinterviewtips #careertok #careertiktok #careeradvice",
+      "creator": "m7admissions",
+      "likes": 1871,
+      "views": 56100,
+      "comments": 34,
+      "source": "apify",
+      "format": "low-cost ai ugc"
+    },
+    {
+      "id": "7206417761315294510",
+      "platform": "tiktok",
+      "url": "https://www.tiktok.com/@hannagetshired/video/7206417761315294510",
+      "title": "Gotta use those expert listening skills and watch out for these 🚩🚩🚩 in your next interview\n\n#interview #interviewquestions #interviewtips #interviewredflags #interviewprep #jobsearch #jobsearchstruggles #jobsearchtips #jobseeker #findajob #techjob #advice #redflags",
+      "hook": "Gotta use those expert listening skills and watch out for these 🚩🚩🚩 in your next interview",
+      "summary": "Gotta use those expert listening skills and watch out for these 🚩🚩🚩 in your next interview\n\n#interview #interviewquestions #interviewtips #interviewredflags #interviewprep #jobsearch #jobsearchstruggles #jobsearchtips #jobseeker #findajob #techjob #advice #redflags",
+      "creator": "hannagetshired",
+      "likes": 1094,
+      "views": 30600,
+      "comments": 8,
+      "source": "apify",
+      "format": "low-cost ai ugc"
+    },
+    {
+      "id": "7627131194005622047",
+      "platform": "tiktok",
+      "url": "https://www.tiktok.com/@citypersonnel/video/7627131194005622047",
+      "title": "Is it a red flag…🚩leaving an interview early for another one 😳 or admitting you don’t know something?\n\nThese moments can either hurt you—or actually HELP you stand out. Here’s what hiring managers really think. Watch before your next interview.\n#JobInterview #CareerAdvice #HiringTips #JobSearch #InterviewTips",
+      "hook": "Is it a red flag…🚩leaving an interview early for another one 😳 or admitting you don’t know something?",
+      "summary": "Is it a red flag…🚩leaving an interview early for another one 😳 or admitting you don’t know something?\n\nThese moments can either hurt you—or actually HELP you stand out. Here’s what hiring managers really think. Watch before your next interview.\n#JobInterview #CareerAdvice #HiringTips #JobSearch #InterviewTips",
+      "creator": "citypersonnel",
+      "likes": 472,
+      "views": 59700,
+      "comments": 95,
+      "source": "apify",
+      "format": "low-cost ai ugc"
+    }
+  ],
+  "diagnostics": [
+    "Apify tiktok returned 8 items.",
+    "Apify instagram returned 1 items.",
+    "Apify tiktok returned 8 items.",
+    "Apify instagram returned 1 items.",
+    "Apify tiktok returned 8 items.",
+    "Apify instagram returned 1 items."
+  ]
+}

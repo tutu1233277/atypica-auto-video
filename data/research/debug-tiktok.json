@@ -1,0 +1,81 @@
+{
+  "query": "this is crazy ai",
+  "platforms": [
+    "tiktok"
+  ],
+  "provider": "apify",
+  "generatedAt": "2026-05-09T08:22:40.835Z",
+  "summary": {
+    "itemCount": 2,
+    "topFormats": [
+      {
+        "name": "low-cost ai ugc",
+        "count": 2
+      }
+    ],
+    "platforms": [
+      {
+        "name": "tiktok",
+        "count": 2
+      }
+    ],
+    "sampleHooks": [
+      "Crazy stuff ⏳ #strangerthings #fyp #viral",
+      "Crazy AI fitness#gym #ai #sora #funny #fyp"
+    ]
+  },
+  "items": [
+    {
+      "id": "7608809203171396886",
+      "platform": "tiktok",
+      "url": "https://www.tiktok.com/@allyouseeisai/video/7608809203171396886",
+      "title": "Crazy stuff ⏳ #strangerthings #fyp #viral",
+      "hook": "Crazy stuff ⏳ #strangerthings #fyp #viral",
+      "summary": "Crazy stuff ⏳ #strangerthings #fyp #viral",
+      "creator": "allyouseeisai",
+      "likes": 287500,
+      "views": 7000000,
+      "comments": 1484,
+      "postedAt": "2026-02-20T05:06:09.000Z",
+      "source": "apify",
+      "format": "low-cost ai ugc",
+      "fitScore": -1,
+      "fitVerdict": "weak",
+      "fitReasons": [
+        "Short hook line"
+      ],
+      "flags": [
+        "Missing emotional/confessional hook"
+      ],
+      "hardReject": false
+    },
+    {
+      "id": "7588840147840470303",
+      "platform": "tiktok",
+      "url": "https://www.tiktok.com/@lily.melt7/video/7588840147840470303",
+      "title": "Crazy AI fitness#gym #ai #sora #funny #fyp",
+      "hook": "Crazy AI fitness#gym #ai #sora #funny #fyp",
+      "summary": "Crazy AI fitness#gym #ai #sora #funny #fyp",
+      "creator": "lily.melt7",
+      "likes": 10800,
+      "views": 345800,
+      "comments": 704,
+      "postedAt": "2025-12-28T09:36:40.000Z",
+      "source": "apify",
+      "format": "low-cost ai ugc",
+      "fitScore": -1,
+      "fitVerdict": "weak",
+      "fitReasons": [
+        "Short hook line"
+      ],
+      "flags": [
+        "Missing emotional/confessional hook"
+      ],
+      "hardReject": false
+    }
+  ],
+  "diagnostics": [
+    "Apify tiktok returned 8 items.",
+    "Applied minimum likes filter: 5000."
+  ]
+}

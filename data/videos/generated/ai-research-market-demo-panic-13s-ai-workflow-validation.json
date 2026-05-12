@@ -1,0 +1,74 @@
+{
+  "id": "ai-research-market-demo-panic-13s-ai-workflow-validation",
+  "title": "AI Research / Market validation Demo",
+  "topic": "AI workflow validation",
+  "fps": 30,
+  "width": 1080,
+  "height": 1920,
+  "style": {
+    "accent": "#ff8d4d",
+    "background": "#050816"
+  },
+  "inspiration": [
+    {
+      "platform": "TikTok",
+      "title": "Market validation creator-style proof flow",
+      "insight": "Use a surprised hook, then show the workflow moving from question to repeated signals to a decision."
+    }
+  ],
+  "scenes": [
+    {
+      "id": "hook-reaction",
+      "assetPath": "hook/特写脸部惊讶表情.mp4",
+      "durationInFrames": 90,
+      "subtitle": {
+        "zh": "看到这个结果的时候\n我真的慌了一下",
+        "en": "When I saw this result\nI actually panicked"
+      },
+      "note": "真人惊讶表情，像刚意识到自己差点踩坑。"
+    },
+    {
+      "id": "research-question",
+      "assetPath": "source/室内设计是否有市场：抓取社媒界面.mp4",
+      "durationInFrames": 100,
+      "subtitle": {
+        "zh": "我把这个市场问题\n直接丢进去",
+        "en": "I dropped the market question\nstraight in"
+      },
+      "note": "产品画面展示输入问题，不要像普通搜索。"
+    },
+    {
+      "id": "signal-patterns",
+      "assetPath": "source/market-social-proof.mp4",
+      "durationInFrames": 100,
+      "subtitle": {
+        "zh": "它不是给我几条评论\n而是找重复出现的信号",
+        "en": "It did not give me random comments\nit found repeated signals"
+      },
+      "note": "重点是 scale + synthesis，不是手动刷评论。"
+    },
+    {
+      "id": "decision-payoff",
+      "assetPath": "source/atypica-pointing-hand.mp4",
+      "durationInFrames": 100,
+      "subtitle": {
+        "zh": "结果我发现\n用户卡住的点完全不是价格",
+        "en": "Turns out\nprice was not the real blocker"
+      },
+      "note": "结尾必须给一个能改变决策的发现。"
+    }
+  ],
+  "cta": {
+    "zh": "",
+    "en": ""
+  },
+  "notes": {
+    "generatedBy": "video-tool",
+    "generatedAt": "2026-05-07T13:38:34.208Z",
+    "featureKey": "research",
+    "caseKey": "market",
+    "hookStyle": "panic",
+    "durationSeconds": 13,
+    "reviewScore": 92
+  }
+}
