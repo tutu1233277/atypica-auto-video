@@ -34,11 +34,13 @@ export const RemotionRoot: React.FC = () => {
         )}
         calculateMetadata={({props}) => {
           const config = props.config;
+          const durationInFrames = config.scenes.reduce(
+            (total, scene) => total + scene.durationInFrames,
+            0,
+          );
+          console.log('[Remotion] calculateMetadata: durationInFrames =', durationInFrames, 'scenes =', config.scenes.length);
           return {
-            durationInFrames: config.scenes.reduce(
-              (total, scene) => total + scene.durationInFrames,
-              0,
-            ),
+            durationInFrames,
             width: config.width,
             height: config.height,
             fps: config.fps,

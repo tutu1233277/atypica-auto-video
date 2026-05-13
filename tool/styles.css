@@ -518,6 +518,103 @@ button:disabled {
   opacity: 0.65;
 }
 
+/* 加载状态 */
+body.is-busy .primary-action,
+body.is-busy .secondary-action {
+  position: relative;
+}
+
+body.is-busy .primary-action::after,
+body.is-busy .secondary-action::after {
+  content: "";
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255,255,255,0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+body.is-busy .secondary-action:not(.dark)::after {
+  border-color: rgba(0,0,0,0.15);
+  border-top-color: var(--ink);
+}
+
+@keyframes spin {
+  to { transform: translateY(-50%) rotate(360deg); }
+}
+
+/* Toast 提示 */
+.toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  background: var(--ink);
+  color: #fff;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  z-index: 1000;
+  opacity: 0;
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+}
+
+.toast.show {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+}
+
+.toast.error {
+  background: #c0392b;
+}
+
+.toast.success {
+  background: var(--accent-dark);
+}
+
+/* 状态标签增强 */
+.status-strip {
+  transition: all 0.2s ease;
+}
+
+body.is-busy .status-strip {
+  border-color: var(--accent);
+  background: #e7f2ee;
+}
+
+body.is-busy .status-dot {
+  animation: pulse 1.5s ease infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+/* 候选卡片选中状态增强 */
+.candidate-card.active {
+  border-color: var(--accent);
+  background: #e7f2ee;
+}
+
+/* 错误状态 */
+.error-banner {
+  background: #fdf2f2;
+  border: 1px solid #f5c6cb;
+  color: #721c24;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  margin-bottom: 12px;
+}
+
 @media (max-width: 1240px) {
   .workspace {
     grid-template-columns: 1fr;

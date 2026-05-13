@@ -5,6 +5,8 @@ import {spawn} from 'node:child_process';
 import {fileURLToPath} from 'node:url';
 import {loadEnvFiles, slugify} from './research-lib.mjs';
 import {findFeaturePreset, generateScriptCandidates, loadGeneratorPresets} from './openai-script-generator.mjs';
+import {initDb, saveCandidates, getCandidates, selectCandidate, createJob, updateJob, getJob, getRecentJobs} from './db.mjs';
+import {uploadToCos, getPresignedUrl} from './cos-client.mjs';
 
 const root = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 const port = Number(process.env.PORT ?? 4180);
@@ -17,17 +19,46 @@ const mimeTypes = new Map([
   ['.mp4', 'video/mp4'],
 ]);
 
+// 初始化数据库
+await initDb();
+
 const server = http.createServer(async (request, response) => {
   const url = new URL(request.url ?? '/', `http://127.0.0.1:${port}`);
   console.log(`${request.method} ${url.pathname}`);
+
+  // CORS headers
+  response.setHeader('Access-Control-Allow-Origin', '*');
+  response.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  response.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+
+  if (request.method === 'OPTIONS') {
+    response.writeHead(204);
+    response.end();
+    return;
+  }
 
   if (request.method === 'GET' && url.pathname === '/api/presets') {
     sendJson(response, 200, loadGeneratorPresets());
     return;
   }
 
+  if (request.method === 'GET' && url.pathname === '/api/candidates') {
+    await handleGetCandidates(request, response);
+    return;
+  }
+
+  if (request.method === 'GET' && url.pathname === '/api/jobs') {
+    await handleGetJobs(request, response);
+    return;
+  }
+
   if (request.method === 'POST' && url.pathname === '/api/generate-candidates') {
     await handleGenerateCandidates(request, response);
+    return;
+  }
+
+  if (request.method === 'POST' && url.pathname === '/api/select-candidate') {
+    await handleSelectCandidate(request, response);
     return;
   }
 
@@ -44,10 +75,39 @@ const server = http.createServer(async (request, response) => {
   serveStatic(url.pathname, response);
 });
 
-if (process.argv[1] === fileURLToPath(import.meta.url)) {
-  server.listen(port, '127.0.0.1', () => {
-    console.log(`Atypica Video Generator: http://127.0.0.1:${port}`);
-  });
+server.listen(port, '0.0.0.0', () => {
+  console.log(`Atypica Video Generator: http://127.0.0.1:${port}`);
+  console.log(`Database: PostgreSQL at ${process.env.DB_HOST || '127.0.0.1'}:${process.env.DB_PORT || 5432}`);
+});
+
+async function handleGetCandidates(request, response) {
+  try {
+    const url = new URL(request.url ?? '/', `http://127.0.0.1:${port}`);
+    const feature = url.searchParams.get('feature') || 'research';
+    const candidates = await getCandidates(feature);
+    sendJson(response, 200, {ok: true, candidates});
+  } catch (error) {
+    sendJson(response, 500, {ok: false, error: error.message});
+  }
+}
+
+async function handleGetJobs(request, response) {
+  try {
+    const jobs = await getRecentJobs(20);
+    sendJson(response, 200, {ok: true, jobs});
+  } catch (error) {
+    sendJson(response, 500, {ok: false, error: error.message});
+  }
+}
+
+async function handleSelectCandidate(request, response) {
+  try {
+    const payload = await readRequestBody(request);
+    const candidate = await selectCandidate(payload.candidateId);
+    sendJson(response, 200, {ok: true, candidate});
+  } catch (error) {
+    sendJson(response, 400, {ok: false, error: error.message});
+  }
 }
 
 async function handleGenerateCandidates(request, response) {
@@ -57,12 +117,22 @@ async function handleGenerateCandidates(request, response) {
       featureKey: coerceFeature(payload.feature),
       topic: typeof payload.topic === 'string' ? payload.topic : '',
     });
+
+    // 保存到数据库
+    await saveCandidates(result.candidates, {
+      feature: result.feature,
+      topic: result.topic,
+      model: result.model,
+      baseURL: result.baseURL,
+    });
+
     sendJson(response, 200, {
       ok: true,
       message: 'Script candidates generated',
       ...result,
     });
   } catch (error) {
+    console.error('Generate candidates error:', error);
     sendJson(response, 400, {
       ok: false,
       error: error instanceof Error ? error.message : 'Unknown error',
@@ -75,9 +145,22 @@ async function handleGenerateJson(request, response) {
     const payload = await readRequestBody(request);
     const result = createVideoConfig(payload);
     writeJsonFile(result.configPath, result.config);
+
+    // 创建任务记录
+    const jobId = `job-${Date.now()}`;
+    await createJob(jobId, {
+      candidateId: payload.candidate?.candidateId,
+      feature: result.feature,
+      topic: result.topic,
+      configPath: result.configPath,
+      outputPath: result.outputPath,
+      command: result.command,
+    });
+
     sendJson(response, 200, {
       ok: true,
       message: 'JSON generated',
+      jobId,
       ...result,
     });
   } catch (error) {
@@ -89,18 +172,66 @@ async function handleGenerateJson(request, response) {
 }
 
 async function handleRender(request, response) {
+  let jobId = null;
   try {
     const payload = await readRequestBody(request);
     const result = createVideoConfig(payload);
     writeJsonFile(result.configPath, result.config);
+
+    // 创建任务记录
+    jobId = `job-${Date.now()}`;
+    await createJob(jobId, {
+      candidateId: payload.candidate?.candidateId,
+      feature: result.feature,
+      topic: result.topic,
+      configPath: result.configPath,
+      outputPath: result.outputPath,
+      command: result.command,
+    });
+
+    // 更新状态为渲染中
+    await updateJob(jobId, {status: 'rendering'});
+
     const render = await runRender(result.configPath, result.outputPath);
+
+    // 上传视频到 COS
+    let cosUrl = null;
+    let presignedUrl = null;
+    if (render.exitCode === 0) {
+      try {
+        const cosKey = `videos/${path.basename(result.outputPath)}`;
+        cosUrl = await uploadToCos(result.outputPath, cosKey);
+        presignedUrl = await getPresignedUrl(cosKey, 3600 * 24); // 24小时有效
+        console.log(`[COS] Uploaded: ${cosUrl}`);
+      } catch (cosError) {
+        console.error(`[COS] Upload failed: ${cosError.message}`);
+      }
+    }
+
+    // 更新渲染结果
+    await updateJob(jobId, {
+      status: render.exitCode === 0 ? 'completed' : 'failed',
+      exit_code: render.exitCode,
+      render_stdout: render.stdout,
+      render_stderr: render.stderr,
+    });
+
     sendJson(response, render.exitCode === 0 ? 200 : 500, {
       ok: render.exitCode === 0,
       message: render.exitCode === 0 ? 'Render completed' : 'Render failed',
+      jobId,
+      cosUrl,
+      presignedUrl,
       ...result,
       render,
     });
   } catch (error) {
+    if (jobId) {
+      await updateJob(jobId, {
+        status: 'failed',
+        error_message: error.message,
+      });
+    }
     sendJson(response, 400, {
       ok: false,
       error: error instanceof Error ? error.message : 'Unknown error',

@@ -10,6 +10,13 @@ import {
 import {BilingualCaption} from './BilingualCaption';
 import {SceneConfig} from '../types';
 
+function resolveVideoSrc(assetPath: string): string {
+  if (assetPath.startsWith('http://') || assetPath.startsWith('https://')) {
+    return assetPath;
+  }
+  return staticFile(assetPath);
+}
+
 export const SceneVideo: React.FC<{
   scene: SceneConfig;
   from: number;
@@ -32,6 +39,8 @@ const SceneVideoInner: React.FC<{
     extrapolateRight: 'clamp',
   });
 
+  const videoSrc = resolveVideoSrc(scene.assetPath);
+
   return (
     <AbsoluteFill
       style={{
@@ -40,7 +49,7 @@ const SceneVideoInner: React.FC<{
       }}
     >
       <OffthreadVideo
-        src={staticFile(scene.assetPath)}
+        src={videoSrc}
         startFrom={scene.startFrom ?? 0}
         endAt={scene.endAt}
         style={{

@@ -25,32 +25,32 @@
           "id": "hook-reaction",
           "time": "0-3s",
           "title": "Hook",
-          "assetPath": "hook/特写脸部惊讶表情.mp4",
-          "previewPath": "/public/hook/特写脸部惊讶表情.mp4",
+          "assetPath": "https://atypica-video-1309599102.cos.ap-singapore.myqcloud.com/hook/特写脸部惊讶表情.mp4",
+          "previewPath": "https://atypica-video-1309599102.cos.ap-singapore.myqcloud.com/hook/特写脸部惊讶表情.mp4",
           "note": "真人惊讶或秘密感开场，像差点做错重大决策。"
         },
         {
           "id": "research-question",
           "time": "3-6s",
           "title": "问题输入",
-          "assetPath": "source/室内设计是否有市场：抓取社媒界面.mp4",
-          "previewPath": "/public/source/室内设计是否有市场：抓取社媒界面.mp4",
+          "assetPath": "https://atypica-video-1309599102.cos.ap-singapore.myqcloud.com/source/室内设计是否有市场：抓取社媒界面.mp4",
+          "previewPath": "https://atypica-video-1309599102.cos.ap-singapore.myqcloud.com/source/室内设计是否有市场：抓取社媒界面.mp4",
           "note": "产品画面应该像输入研究问题，不要像普通搜索引擎。"
         },
         {
           "id": "signal-patterns",
           "time": "6-9s",
           "title": "模式归纳",
-          "assetPath": "source/market-social-proof.mp4",
-          "previewPath": "/public/source/market-social-proof.mp4",
+          "assetPath": "https://atypica-video-1309599102.cos.ap-singapore.myqcloud.com/source/market-social-proof.mp4",
+          "previewPath": "https://atypica-video-1309599102.cos.ap-singapore.myqcloud.com/source/market-social-proof.mp4",
           "note": "强调规模化抓取、重复信号、结构化总结。"
         },
         {
           "id": "decision-payoff",
           "time": "9-12s",
           "title": "结论回报",
-          "assetPath": "source/atypica-pointing-hand.mp4",
-          "previewPath": "/public/source/atypica-pointing-hand.mp4",
+          "assetPath": "https://atypica-video-1309599102.cos.ap-singapore.myqcloud.com/source/atypica-pointing-hand.mp4",
+          "previewPath": "https://atypica-video-1309599102.cos.ap-singapore.myqcloud.com/source/atypica-pointing-hand.mp4",
           "note": "结尾要有可改变决策的发现，不要是泛泛 CTA。"
         }
       ]
@@ -70,32 +70,32 @@
           "id": "hook-reaction",
           "time": "0-3s",
           "title": "Hook",
-          "assetPath": "hook/嘘.mp4",
-          "previewPath": "/hook/嘘.mp4",
+          "assetPath": "https://atypica-video-1309599102.cos.ap-singapore.myqcloud.com/hook/嘘.mp4",
+          "previewPath": "https://atypica-video-1309599102.cos.ap-singapore.myqcloud.com/hook/嘘.mp4",
           "note": "适合秘密感、自白式、差点犯错类开场。"
         },
         {
           "id": "persona-selection",
           "time": "3-6s",
           "title": "选择人设",
-          "assetPath": "source/atypica-pointing-hand.mp4",
-          "previewPath": "/public/source/atypica-pointing-hand.mp4",
+          "assetPath": "https://atypica-video-1309599102.cos.ap-singapore.myqcloud.com/source/atypica-pointing-hand.mp4",
+          "previewPath": "https://atypica-video-1309599102.cos.ap-singapore.myqcloud.com/source/atypica-pointing-hand.mp4",
           "note": "要明确是选择目标人设，不是泛泛问 AI。"
         },
         {
           "id": "follow-up-probing",
           "time": "6-9s",
           "title": "继续追问",
-          "assetPath": "source/market-social-proof.mp4",
-          "previewPath": "/public/source/market-social-proof.mp4",
+          "assetPath": "https://atypica-video-1309599102.cos.ap-singapore.myqcloud.com/source/market-social-proof.mp4",
+          "previewPath": "https://atypica-video-1309599102.cos.ap-singapore.myqcloud.com/source/market-social-proof.mp4",
           "note": "要体现 AI 在持续追问、挖出真实动机。"
         },
         {
           "id": "motive-reveal",
           "time": "9-12s",
           "title": "原因揭示",
-          "assetPath": "hook/邪恶一笑.mp4",
-          "previewPath": "/hook/邪恶一笑.mp4",
+          "assetPath": "https://atypica-video-1309599102.cos.ap-singapore.myqcloud.com/hook/邪恶一笑.mp4",
+          "previewPath": "https://atypica-video-1309599102.cos.ap-singapore.myqcloud.com/hook/邪恶一笑.mp4",
           "note": "结尾应该是反直觉发现，不是硬广收尾。"
         }
       ]

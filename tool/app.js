@@ -69,11 +69,15 @@ async function init() {
   appendLog("正在加载脚本生成预设...");
 
   try {
-    const response = await fetch("/api/presets");
+    const response = await fetchWithTimeout("/api/presets", {}, 10000);
     const presets = await response.json();
     state.presets = presets;
     state.feature = presets.features[0]?.key ?? "research";
     syncFeatureToggle();
+
+    // 加载该功能的历史候选脚本
+    await loadExistingCandidates();
+
     render();
     appendLog("脚本生成预设加载完成。");
     jobBadge.textContent = "空闲";
@@ -83,6 +87,32 @@ async function init() {
   } finally {
     setBusy(false);
   }
+}
+
+async function loadExistingCandidates() {
+  try {
+    const response = await fetchWithTimeout(`/api/candidates?feature=${state.feature}`, {}, 5000);
+    const result = await response.json();
+    if (result.ok && result.candidates.length > 0) {
+      state.candidates = result.candidates.map(dbToCandidate);
+      state.selectedCandidateIndex = 0;
+      appendLog(`已加载 ${state.candidates.length} 个历史脚本。`);
+    }
+  } catch {
+    // 静默失败，不影响主流程
+  }
+}
+
+function dbToCandidate(row) {
+  return {
+    candidateId: row.candidate_id,
+    title: row.title,
+    angle: row.angle,
+    hookStyle: row.hook_style,
+    score: row.score,
+    scenes: row.scenes || [],
+    audit: row.audit || [],
+  };
 }
 
 function currentFeature() {
@@ -143,7 +173,7 @@ function render() {
     timeline.innerHTML = `
       <article class="empty-card">
         <p class="empty-title">还没有脚本候选</p>
-        <p class="empty-copy">先选择功能，然后点击“生成 3 个脚本”。</p>
+        <p class="empty-copy">先选择功能，然后点击"生成 3 个脚本"。</p>
       </article>
     `;
     auditList.innerHTML = `
@@ -190,7 +220,7 @@ function render() {
     .join("");
 
   renderCommand.value =
-    state.generated?.command ?? "选择这个脚本后，点击“生成 JSON”得到可执行渲染命令。";
+    state.generated?.command ?? '选择这个脚本后，点击"生成 JSON"得到可执行渲染命令。';
 
   if (!state.generated) {
     jsonPath.textContent = "尚未生成";
@@ -263,7 +293,7 @@ async function generateCandidates() {
   appendLog("正在基于当前功能和主题生成 3 个脚本...");
 
   try {
-    const response = await fetch("/api/generate-candidates", {
+    const response = await fetchWithTimeout("/api/generate-candidates", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -271,7 +301,8 @@ async function generateCandidates() {
       body: JSON.stringify({
         feature: state.feature,
       }),
-    });
+    }, 120000); // 120秒超时
+
     const result = await response.json();
 
     if (!response.ok || !result.ok) {
@@ -294,7 +325,11 @@ async function generateCandidates() {
     jobBadge.textContent = "脚本已生成";
   } catch (error) {
     jobBadge.textContent = "错误";
-    appendLog(`错误：${error.message}`);
+    if (error.name === "AbortError") {
+      appendLog("错误：生成超时（120秒），请检查 AI SDK 配置或稍后重试。");
+    } else {
+      appendLog(`错误：${error.message}`);
+    }
   } finally {
     setBusy(false);
     render();
@@ -312,13 +347,14 @@ async function runJob(label, endpoint) {
   appendLog(label);
 
   try {
-    const response = await fetch(endpoint, {
+    const response = await fetchWithTimeout(endpoint, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(requestPayload()),
-    });
+    }, 300000); // 5分钟超时（渲染可能较慢）
+
     const result = await response.json();
 
     if (!response.ok || !result.ok) {
@@ -335,6 +371,12 @@ async function runJob(label, endpoint) {
 
     if (result.render) {
       appendLog(`视频文件：${result.outputPath}`);
+      if (result.cosUrl) {
+        appendLog(`COS 地址：${result.cosUrl}`);
+      }
+      if (result.presignedUrl) {
+        appendLog(`下载链接（24h有效）：${result.presignedUrl}`);
+      }
       if (result.render.stdout.trim()) {
         appendLog(result.render.stdout.trim());
       }
@@ -344,10 +386,32 @@ async function runJob(label, endpoint) {
     }
   } catch (error) {
     jobBadge.textContent = "错误";
-    appendLog(`错误：${error.message}`);
+    if (error.name === "AbortError") {
+      appendLog("错误：请求超时，请稍后重试。");
+    } else {
+      appendLog(`错误：${error.message}`);
+    }
   } finally {
     setBusy(false);
     render();
+  }
+}
+
+// 带超时的 fetch
+async function fetchWithTimeout(url, options = {}, timeoutMs = 10000) {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+
+  try {
+    const response = await fetch(url, {
+      ...options,
+      signal: controller.signal,
+    });
+    clearTimeout(timeoutId);
+    return response;
+  } catch (error) {
+    clearTimeout(timeoutId);
+    throw error;
   }
 }
 
@@ -365,6 +429,14 @@ function setBusy(isBusy, label = null) {
   generateScriptsButton.disabled = isBusy;
   generateJsonButton.disabled = isBusy || !selectedCandidate();
   renderButton.disabled = isBusy || !selectedCandidate();
+
+  // 添加/移除加载动画
+  if (isBusy) {
+    document.body.classList.add("is-busy");
+  } else {
+    document.body.classList.remove("is-busy");
+  }
+
   if (label) {
     jobBadge.textContent = label;
   }
