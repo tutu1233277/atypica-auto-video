@@ -1,10 +1,11 @@
 import React, {useEffect} from 'react';
-import {AbsoluteFill, continueRender, delayRender} from 'remotion';
+import {AbsoluteFill, continueRender, delayRender, getRemotionEnvironment} from 'remotion';
 import {SceneVideo} from './components/SceneVideo';
 import {CompositionProps} from './types';
 import {ensureGoogleFonts} from './googleFonts';
 
-const handle = delayRender('Loading subtitle fonts');
+const shouldBlockForFonts = !getRemotionEnvironment().isRendering;
+const handle = shouldBlockForFonts ? delayRender('Loading subtitle fonts') : null;
 
 export const AtypicaAutoVideo: React.FC<CompositionProps> = ({config}) => {
   let cursor = 0;
@@ -13,12 +14,16 @@ export const AtypicaAutoVideo: React.FC<CompositionProps> = ({config}) => {
     let mounted = true;
 
     const load = async () => {
+      if (!shouldBlockForFonts) {
+        return;
+      }
+
       ensureGoogleFonts();
 
       try {
         await document.fonts.ready;
       } finally {
-        if (mounted) {
+        if (mounted && handle !== null) {
           continueRender(handle);
         }
       }

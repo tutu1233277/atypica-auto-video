@@ -1,5 +1,5 @@
 import {spawnSync} from 'node:child_process';
-import {getArg, projectRoot, readConfig} from './remotion-helpers.mjs';
+import {ensurePublicAssetLinks, getArg, projectRoot, readConfig} from './remotion-helpers.mjs';
 
 const configPath = getArg('config', 'data/videos/competitor-ugc.json');
 const outPath = getArg(
@@ -9,6 +9,8 @@ const outPath = getArg(
 const browserExecutable = getArg('browser-executable', '');
 const timeout = getArg('timeout', '120000');
 const config = readConfig(configPath);
+
+ensurePublicAssetLinks();
 
 const renderArgs = [
   'remotion',

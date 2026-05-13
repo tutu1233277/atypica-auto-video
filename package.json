@@ -12,13 +12,14 @@
     "launch:x": "node scripts/run-x-launch-flow.mjs"
   },
   "dependencies": {
+    "@ai-sdk/openai": "^2.0.56",
     "@remotion/cli": "^4.0.454",
     "@remotion/player": "^4.0.454",
-    "@ai-sdk/openai": "^2.0.56",
     "@types/node": "^25.6.0",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "ai": "^5.0.91",
+    "cos-nodejs-sdk-v5": "^2.15.4",
     "react": "^19.2.5",
     "react-dom": "^19.2.5",
     "remotion": "^4.0.454",

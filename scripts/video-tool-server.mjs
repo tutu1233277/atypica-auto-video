@@ -10,6 +10,7 @@ import {uploadToCos, getPresignedUrl} from './cos-client.mjs';
 
 const root = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 const port = Number(process.env.PORT ?? 4180);
+const host = process.env.HOST ?? '127.0.0.1';
 
 const mimeTypes = new Map([
   ['.html', 'text/html; charset=utf-8'],
@@ -75,9 +76,14 @@ const server = http.createServer(async (request, response) => {
   serveStatic(url.pathname, response);
 });
 
-server.listen(port, '0.0.0.0', () => {
+server.listen(port, host, () => {
   console.log(`Atypica Video Generator: http://127.0.0.1:${port}`);
-  console.log(`Database: PostgreSQL at ${process.env.DB_HOST || '127.0.0.1'}:${process.env.DB_PORT || 5432}`);
+  console.log(`Storage: local JSON db at data/tool/local-db.json`);
+  if (process.env.COS_BUCKET && process.env.COS_REGION) {
+    console.log(`COS: enabled for bucket ${process.env.COS_BUCKET} (${process.env.COS_REGION})`);
+  } else {
+    console.log('COS: not configured locally, render API will skip upload');
+  }
 });
 
 async function handleGetCandidates(request, response) {

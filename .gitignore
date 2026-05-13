@@ -5,3 +5,4 @@ node_modules/
 .cache/
 dist/
 build/
+data/tool/local-db.json
