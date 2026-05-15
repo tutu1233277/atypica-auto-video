@@ -1,148 +1,167 @@
 const state = {
   presets: null,
-  feature: "research",
+  section: "generate",
+  feature: null,
+  hasChosenFeature: false,
   candidates: [],
+  focusedCandidateIndex: 0,
   selectedCandidateIndex: -1,
-  activeSceneIndex: 0,
   generated: null,
+  assets: [],
+  selectedAssetId: "",
+  customHookAssetPath: "",
   busy: false,
+  pendingAction: null,
+  lastError: "",
 };
 
-const timeline = document.querySelector("#timeline");
-const scriptTitle = document.querySelector("#scriptTitle");
-const featureBadge = document.querySelector("#featureBadge");
+const navRail = document.querySelector(".nav-rail");
+const chatStream = document.querySelector("#chatStream");
 const previewVideo = document.querySelector("#previewVideo");
-const captionPreview = document.querySelector("#captionPreview");
-const auditList = document.querySelector("#auditList");
-const scoreBadge = document.querySelector("#scoreBadge");
-const renderCommand = document.querySelector("#renderCommand");
-const jsonPath = document.querySelector("#jsonPath");
-const videoPath = document.querySelector("#videoPath");
-const activityLog = document.querySelector("#activityLog");
-const jobBadge = document.querySelector("#jobBadge");
-const copyButton = document.querySelector("#copyCommand");
-const generateScriptsButton = document.querySelector("#generateScriptsButton");
-const generateJsonButton = document.querySelector("#generateJsonButton");
-const renderButton = document.querySelector("#renderButton");
-const candidateList = document.querySelector("#candidateList");
-const candidateSummary = document.querySelector("#candidateSummary");
+const stageOverlay = document.querySelector("#stageOverlay");
+const scriptTitle = document.querySelector("#scriptTitle");
+const stageMeta = document.querySelector("#stageMeta");
 const statusText = document.querySelector("#statusText");
-const modeStat = document.querySelector("#modeStat");
-const historyStat = document.querySelector("#historyStat");
-const outputStat = document.querySelector("#outputStat");
+const chatPanelHeading = document.querySelector("#chatPanelHeading");
+const composerZone = document.querySelector("#composerZone");
+const hookUploadInput = document.querySelector("#hookUploadInput");
 
-document.querySelectorAll(".segment").forEach((button) => {
-  button.addEventListener("click", () => {
-    if (!state.presets || state.feature === button.dataset.feature) {
-      return;
+navRail.addEventListener("click", (event) => {
+  const sectionButton = event.target.closest("[data-section]");
+  if (!sectionButton || state.busy) {
+    return;
+  }
+
+  handleSectionChange(sectionButton.dataset.section);
+});
+
+chatStream.addEventListener("click", (event) => {
+  const featureButton = event.target.closest("[data-feature]");
+  if (featureButton) {
+    handleFeatureChoice(featureButton.dataset.feature);
+    return;
+  }
+
+  const navButton = event.target.closest("[data-candidate-nav]");
+  if (navButton) {
+    shiftCandidate(navButton.dataset.candidateNav);
+    return;
+  }
+
+  const assetPreviewButton = event.target.closest("[data-asset-preview]");
+  if (assetPreviewButton) {
+    handleAssetPreview(assetPreviewButton.dataset.assetPreview);
+    return;
+  }
+
+  const assetHookButton = event.target.closest("[data-asset-hook]");
+  if (assetHookButton) {
+    handleAssetAsHook(assetHookButton.dataset.assetHook);
+  }
+});
+
+composerZone.addEventListener("click", (event) => {
+  const actionButton = event.target.closest("[data-action]");
+  if (!actionButton || state.busy) {
+    return;
+  }
+
+  const {action} = actionButton.dataset;
+  if (action === "refresh-scripts") {
+    if (state.hasChosenFeature) {
+      generateCandidates();
     }
+    return;
+  }
 
-    state.feature = button.dataset.feature;
-    state.activeSceneIndex = 0;
-    state.candidates = [];
-    state.selectedCandidateIndex = -1;
-    state.generated = null;
-    syncFeatureToggle();
-    render();
-  });
+  if (action === "render-video") {
+    renderVideo();
+    return;
+  }
+
+  if (action === "reload-assets") {
+    loadAssets();
+    return;
+  }
+
+  if (action === "upload-hook") {
+    hookUploadInput.click();
+    return;
+  }
+
+  if (action === "go-generate") {
+    handleSectionChange("generate");
+  }
 });
 
-generateScriptsButton.addEventListener("click", async () => {
-  await generateCandidates();
-});
+hookUploadInput.addEventListener("change", async () => {
+  const [file] = hookUploadInput.files ?? [];
+  if (!file) {
+    return;
+  }
 
-generateJsonButton.addEventListener("click", async () => {
-  await runJob("正在生成 JSON...", "/api/generate-json");
-});
-
-renderButton.addEventListener("click", async () => {
-  await runJob("正在渲染视频...", "/api/render");
-});
-
-copyButton.addEventListener("click", async () => {
-  renderCommand.select();
-  await navigator.clipboard.writeText(renderCommand.value);
-  copyButton.textContent = "已复制";
-  window.setTimeout(() => {
-    copyButton.textContent = "复制命令";
-  }, 1100);
+  try {
+    await uploadHook(file);
+  } finally {
+    hookUploadInput.value = "";
+  }
 });
 
 async function init() {
   setBusy(true, "加载中");
-  appendLog("正在加载脚本生成预设...");
 
   try {
     const response = await fetchWithTimeout("/api/presets", {}, 10000);
-    const presets = await response.json();
-    state.presets = presets;
-    state.feature = presets.features[0]?.key ?? "research";
-    syncFeatureToggle();
-
-    // 加载该功能的历史候选脚本
-    await loadExistingCandidates();
-
-    render();
-    appendLog("脚本生成预设加载完成。");
-    jobBadge.textContent = "空闲";
+    state.presets = await response.json();
+    state.feature = state.presets.features[0]?.key ?? "research";
+    await loadAssets({quiet: true});
   } catch (error) {
-    jobBadge.textContent = "错误";
-    appendLog(`预设加载失败：${error.message}`);
+    state.lastError = `预设加载失败：${error.message}`;
   } finally {
     setBusy(false);
+    render();
   }
-}
-
-async function loadExistingCandidates() {
-  try {
-    const response = await fetchWithTimeout(`/api/candidates?feature=${state.feature}`, {}, 5000);
-    const result = await response.json();
-    if (result.ok && result.candidates.length > 0) {
-      state.candidates = result.candidates.map(dbToCandidate);
-      state.selectedCandidateIndex = 0;
-      appendLog(`已加载 ${state.candidates.length} 个历史脚本。`);
-    }
-  } catch {
-    // 静默失败，不影响主流程
-  }
-}
-
-function dbToCandidate(row) {
-  return {
-    candidateId: row.candidate_id,
-    title: row.title,
-    angle: row.angle,
-    hookStyle: row.hook_style,
-    score: row.score,
-    scenes: row.scenes || [],
-    audit: row.audit || [],
-  };
 }
 
 function currentFeature() {
-  return state.presets.features.find((item) => item.key === state.feature);
+  return state.presets?.features.find((item) => item.key === state.feature) ?? null;
 }
 
 function selectedCandidate() {
   return state.candidates[state.selectedCandidateIndex] ?? null;
 }
 
-function selectedScenes() {
+function focusedCandidate() {
+  return state.candidates[state.focusedCandidateIndex] ?? null;
+}
+
+function selectedAsset() {
+  return state.assets.find((asset) => asset.id === state.selectedAssetId) ?? state.assets[0] ?? null;
+}
+
+function selectedHookAsset() {
+  return state.assets.find((asset) => asset.assetPath === state.customHookAssetPath) ?? null;
+}
+
+function currentScenes() {
   const feature = currentFeature();
-  const candidate = selectedCandidate();
+  const candidate = focusedCandidate();
+  const customHook = selectedHookAsset();
   if (!feature || !candidate) {
     return [];
   }
 
   return feature.scenePlan.map((scenePlan, index) => {
     const candidateScene = candidate.scenes[index];
+    const previewPath =
+      index === 0 && customHook ? customHook.previewPath : scenePlan.previewPath;
+
     return {
-      ...scenePlan,
-      subtitle: {
-        zh: candidateScene?.zh ?? "",
-        en: candidateScene?.en ?? "",
-      },
-      candidateTitle: candidateScene?.title ?? scenePlan.title,
+      time: scenePlan.time,
+      title: candidateScene?.title ?? scenePlan.title,
+      previewPath,
+      zh: candidateScene?.zh ?? "",
+      en: candidateScene?.en ?? "",
       note: normalizeSceneNote(candidateScene?.note ?? scenePlan.note),
     };
   });
@@ -150,339 +169,784 @@ function selectedScenes() {
 
 function normalizeSceneNote(note) {
   const value = String(note ?? "").trim();
-  if (value === "Match subtitle pacing to footage.") {
-    return "";
-  }
-
-  return value;
+  return value === "Match subtitle pacing to footage." ? "" : value;
 }
 
-function syncFeatureToggle() {
-  document
-    .querySelectorAll(".segment")
-    .forEach((item) => item.classList.toggle("active", item.dataset.feature === state.feature));
+async function handleSectionChange(section) {
+  state.section = section === "materials" ? "materials" : "generate";
+  state.lastError = "";
+
+  if (state.section === "materials" && state.assets.length === 0) {
+    await loadAssets();
+    return;
+  }
+
+  render();
+}
+
+async function handleFeatureChoice(featureKey) {
+  if (!state.presets || state.busy) {
+    return;
+  }
+
+  state.feature = featureKey;
+  state.hasChosenFeature = true;
+  state.candidates = [];
+  state.focusedCandidateIndex = 0;
+  state.selectedCandidateIndex = -1;
+  state.generated = null;
+  state.lastError = "";
+  render();
+  await generateCandidates();
+}
+
+function shiftCandidate(direction) {
+  if (state.candidates.length === 0) {
+    return;
+  }
+
+  if (direction === "prev") {
+    state.focusedCandidateIndex =
+      (state.focusedCandidateIndex - 1 + state.candidates.length) % state.candidates.length;
+  } else {
+    state.focusedCandidateIndex = (state.focusedCandidateIndex + 1) % state.candidates.length;
+  }
+
+  state.selectedCandidateIndex = state.focusedCandidateIndex;
+  state.generated = null;
+  render();
+}
+
+function handleAssetPreview(assetId) {
+  state.selectedAssetId = assetId;
+  render();
+}
+
+function handleAssetAsHook(assetId) {
+  const asset = state.assets.find((item) => item.id === assetId);
+  if (!asset || asset.category !== "hook") {
+    return;
+  }
+
+  state.customHookAssetPath = asset.assetPath;
+  state.selectedAssetId = asset.id;
+  state.generated = null;
+  render();
+}
+
+async function generateCandidates() {
+  state.lastError = "";
+  state.generated = null;
+  setBusy(true, "正在生成候选脚本...", "scripts");
+  render();
+
+  try {
+    const response = await fetchWithTimeout(
+      "/api/generate-candidates",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          feature: state.feature,
+        }),
+      },
+      120000,
+    );
+
+    const result = await response.json();
+    if (!response.ok || !result.ok) {
+      throw new Error(localizeServerMessage(result.error || result.message || "Request failed"));
+    }
+
+    state.candidates = result.candidates ?? [];
+    state.focusedCandidateIndex = 0;
+    state.selectedCandidateIndex = state.candidates.length > 0 ? 0 : -1;
+  } catch (error) {
+    state.lastError = error.name === "AbortError" ? "生成脚本超时，请稍后重试。" : error.message;
+  } finally {
+    setBusy(false);
+    render();
+  }
+}
+
+async function renderVideo() {
+  if (!state.hasChosenFeature || state.candidates.length === 0 || state.busy) {
+    return;
+  }
+
+  state.lastError = "";
+  state.selectedCandidateIndex = state.focusedCandidateIndex;
+  setBusy(true, "正在渲染视频...", "render");
+  render();
+
+  try {
+    const response = await fetchWithTimeout(
+      "/api/render",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestPayload()),
+      },
+      300000,
+    );
+
+    const result = await response.json();
+    if (!response.ok || !result.ok) {
+      throw new Error(localizeServerMessage(result.error || result.message || "Request failed"));
+    }
+
+    state.generated = result;
+  } catch (error) {
+    state.lastError = error.name === "AbortError" ? "渲染超时，请稍后重试。" : error.message;
+  } finally {
+    setBusy(false);
+    render();
+  }
+}
+
+async function loadAssets({quiet = false} = {}) {
+  if (!quiet) {
+    setBusy(true, "正在加载素材库...", "assets");
+    render();
+  }
+
+  try {
+    const response = await fetchWithTimeout("/api/assets", {}, 15000);
+    const result = await response.json();
+    if (!response.ok || !result.ok) {
+      throw new Error(localizeServerMessage(result.error || result.message || "Request failed"));
+    }
+
+    state.assets = result.assets ?? [];
+    if (!state.selectedAssetId && state.assets.length > 0) {
+      state.selectedAssetId = state.assets[0].id;
+    }
+  } catch (error) {
+    state.lastError = error.name === "AbortError" ? "加载素材超时，请稍后重试。" : error.message;
+  } finally {
+    if (!quiet) {
+      setBusy(false);
+      render();
+    }
+  }
+}
+
+async function uploadHook(file) {
+  if (!isSupportedHookFile(file)) {
+    state.lastError = "只支持上传 mp4、mov、webm 格式的 Hook 视频。";
+    render();
+    return;
+  }
+
+  state.lastError = "";
+  setBusy(true, "正在上传 Hook...", "upload");
+  render();
+
+  try {
+    const contentBase64 = await fileToBase64(file);
+    const response = await fetchWithTimeout(
+      "/api/upload-hook",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          fileName: file.name,
+          mimeType: file.type,
+          contentBase64,
+        }),
+      },
+      120000,
+    );
+
+    const result = await response.json();
+    if (!response.ok || !result.ok) {
+      throw new Error(localizeServerMessage(result.error || result.message || "Request failed"));
+    }
+
+    state.assets = [result.asset, ...state.assets.filter((asset) => asset.id !== result.asset.id)];
+    state.selectedAssetId = result.asset.id;
+    state.customHookAssetPath = result.asset.assetPath;
+    state.generated = null;
+    updateStatus(`已上传并设为当前 Hook：${result.asset.name}`);
+  } catch (error) {
+    state.lastError = error.name === "AbortError" ? "上传 Hook 超时，请稍后重试。" : error.message;
+  } finally {
+    setBusy(false);
+    render();
+  }
+}
+
+function isSupportedHookFile(file) {
+  const ext = file.name.toLowerCase().slice(file.name.lastIndexOf("."));
+  return [".mp4", ".mov", ".webm"].includes(ext);
+}
+
+function requestPayload() {
+  return {
+    feature: state.feature,
+    duration: Number(state.presets?.defaults?.durationSeconds ?? 12),
+    topic: currentFeature()?.defaultTopic,
+    candidate: selectedCandidate(),
+    customHookAssetPath: state.customHookAssetPath,
+  };
 }
 
 function render() {
   if (!state.presets) {
+    renderBooting();
     return;
   }
 
+  renderNavRail();
+
+  if (state.section === "materials") {
+    renderMaterialsWorkspace();
+    return;
+  }
+
+  renderGenerateWorkspace();
+}
+
+function renderNavRail() {
+  document.querySelectorAll("[data-section]").forEach((button) => {
+    button.classList.toggle("active", button.dataset.section === state.section);
+  });
+}
+
+function renderGenerateWorkspace() {
   const feature = currentFeature();
-  const candidate = selectedCandidate();
-  const scenes = selectedScenes();
-  const durationSeconds = currentDurationSeconds();
+  const candidate = focusedCandidate();
+  const scenes = currentScenes();
+  const stageState = currentStageState();
+  const activeHook = selectedHookAsset();
 
-  featureBadge.textContent = feature.label;
-  modeStat.textContent = feature.label;
-  historyStat.textContent = String(state.candidates.length);
-  outputStat.textContent = state.generated?.render ? "成片已出" : "未渲染";
-  scoreBadge.textContent = candidate ? String(candidate.score) : "--";
-  scriptTitle.textContent = candidate ? candidate.title : `${feature.label} / 等待生成脚本`;
-  candidateSummary.textContent = candidate
-    ? `共 ${state.candidates.length} 个候选脚本，当前是第 ${state.selectedCandidateIndex + 1} 个，默认 ${durationSeconds}s`
-    : `先生成 3 个脚本，再选择 1 个继续出片`;
+  chatPanelHeading.textContent = "视频生成控制台";
+  scriptTitle.textContent = candidate ? candidate.title : activeHook ? `当前 Hook：${activeHook.name}` : "等待渲染视频";
+  stageMeta.textContent = stageState === "final" ? "最终成片" : stageState === "rendering" ? "渲染中" : activeHook ? "自定义 Hook 已启用" : "等待脚本";
 
-  renderCandidateList();
+  updateStatus(buildGenerateStatusText(feature, candidate, stageState, activeHook));
+  renderGenerateConversation(feature, candidate, scenes, activeHook);
+  renderGenerateComposer(feature, candidate, stageState, activeHook);
+  setComposerStats({
+    mode: feature?.label ?? "--",
+    history: `${state.candidates.length} 个候选`,
+    output: activeHook ? "Hook 已设" : stageState === "final" ? "已出片" : stageState === "rendering" ? "渲染中" : "未渲染",
+  });
+  renderGenerateStage(stageState, scenes, activeHook);
+}
 
-  if (!candidate) {
-    updateStatus("先生成 3 个脚本，再选 1 个继续出片");
-    timeline.innerHTML = `
-      <article class="empty-card">
-        <p class="empty-title">还没有脚本候选</p>
-        <p class="empty-copy">先选择功能，然后点击"生成 3 个脚本"。</p>
-      </article>
-    `;
-    auditList.innerHTML = `
-      <li>
-        <span class="audit-icon">待选</span>
-        <span>脚本生成后，这里会显示基于审查 skill 的通过点。</span>
-      </li>
-    `;
-    renderCommand.value = "先生成脚本并选择一个候选，再生成 JSON 或渲染视频。";
-    if (!state.generated) {
-      jsonPath.textContent = "尚未生成";
-      videoPath.textContent = "尚未渲染";
-    }
-    clearPreview();
-    return;
-  }
+function renderMaterialsWorkspace() {
+  const asset = selectedAsset();
+  const hook = selectedHookAsset();
 
-  updateStatus(state.generated?.render ? "成片已生成，可继续审看或重做脚本" : "已选中脚本，可继续生成 JSON 或直接渲染");
+  chatPanelHeading.textContent = "素材库";
+  scriptTitle.textContent = asset ? asset.name : "等待预览素材";
+  stageMeta.textContent = asset ? (asset.category === "hook" ? "Hook 素材" : "Source 素材") : "等待素材";
 
-  timeline.innerHTML = scenes
-    .map(
-      (scene, index) => `
-        <article class="timeline-item ${index === state.activeSceneIndex ? "active" : ""}" data-scene="${index}">
-          <div class="timeline-marker">
-            <span class="timecode">${scene.time}</span>
-          </div>
-          <div class="timeline-copy">
-            <p class="scene-title">${escapeHtml(scene.candidateTitle)}</p>
-            <p class="line-label">EN</p>
-            <p class="line-en">${escapeHtml(scene.subtitle.en).replace(/\n/g, "<br>")}</p>
-            <p class="line-label">ZH</p>
-            <p class="line-zh">${escapeHtml(scene.subtitle.zh).replace(/\n/g, "<br>")}</p>
-            ${scene.note ? `<p class="shot-note">${escapeHtml(scene.note)}</p>` : ""}
+  updateStatus(buildMaterialsStatusText(asset, hook));
+  renderMaterialsConversation(asset, hook);
+  renderMaterialsComposer(hook);
+  setComposerStats({
+    mode: "素材",
+    history: `${state.assets.length} 条素材`,
+    output: hook ? "当前 Hook 已设" : "未设 Hook",
+  });
+  renderMaterialsStage(asset);
+}
+
+function renderBooting() {
+  composerZone.innerHTML = "";
+
+  if (state.lastError) {
+    chatStream.innerHTML = `
+      <div class="chat-thread">
+        <article class="message-row assistant">
+          <div class="message-card error-message">
+            <span class="message-role">System</span>
+            <p class="message-title">加载失败</p>
+            <p class="message-copy">${escapeHtml(state.lastError)}</p>
           </div>
         </article>
+      </div>
+    `;
+    return;
+  }
+
+  chatStream.innerHTML = `
+    <div class="chat-thread">
+      <article class="message-row assistant">
+        <div class="message-card">
+          <span class="message-role">System</span>
+          <p class="message-title">正在准备视频工作台。</p>
+          <div class="loading-dots" aria-hidden="true">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </div>
+      </article>
+    </div>
+  `;
+}
+
+function renderGenerateConversation(feature, candidate, scenes, activeHook) {
+  const blocks = [];
+
+  blocks.push(`
+    <article class="message-row assistant">
+      <div class="message-card">
+        <span class="message-role">System</span>
+        <p class="message-title">请选择这次要生成的能力方向。</p>
+        <div class="feature-picker" role="tablist" aria-label="功能类型">
+          ${renderFeatureButtons()}
+        </div>
+      </div>
+    </article>
+  `);
+
+  if (activeHook) {
+    blocks.push(`
+      <article class="message-row user">
+        <div class="message-card">
+          <span class="message-role">You</span>
+          <p class="message-title">当前使用自定义 Hook：${escapeHtml(activeHook.name)}</p>
+        </div>
+      </article>
+    `);
+  }
+
+  if (state.hasChosenFeature) {
+    blocks.push(`
+      <article class="message-row user">
+        <div class="message-card">
+          <span class="message-role">You</span>
+          <p class="message-title">这次做 ${escapeHtml(feature?.label ?? state.feature)}</p>
+        </div>
+      </article>
+    `);
+  }
+
+  if (state.busy && state.pendingAction === "scripts") {
+    blocks.push(renderLoadingMessage("正在生成 3 个候选脚本", "稍等一下，我正在整理这次的视频脚本方案。"));
+  }
+
+  if (state.candidates.length > 0 && candidate) {
+    blocks.push(`
+      <article class="message-row assistant">
+        <div class="message-card">
+          <span class="message-role">Atypica</span>
+          <p class="message-title">候选脚本 ${state.focusedCandidateIndex + 1} / ${state.candidates.length}</p>
+          <div class="candidate-switcher">
+            <button type="button" class="switch-arrow" data-candidate-nav="prev">← 上一个</button>
+            <div class="candidate-meta-strip">
+              <span>${hookStyleLabel(candidate.hookStyle)}</span>
+              <span>评分 ${candidate.score}</span>
+              <span>${escapeHtml(candidate.title)}</span>
+            </div>
+            <button type="button" class="switch-arrow" data-candidate-nav="next">下一个 →</button>
+          </div>
+          <div class="script-summary">
+            <p class="summary-heading">角度</p>
+            <p class="summary-copy">${escapeHtml(candidate.angle)}</p>
+          </div>
+          <div class="script-table-wrap">
+            <table class="script-table">
+              <thead>
+                <tr>
+                  <th>时间</th>
+                  <th>Scene</th>
+                  <th>EN</th>
+                  <th>ZH</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${scenes
+                  .map(
+                    (scene) => `
+                      <tr>
+                        <td>${escapeHtml(scene.time)}</td>
+                        <td>${escapeHtml(scene.title)}</td>
+                        <td>${escapeHtml(scene.en).replace(/\n/g, "<br>")}</td>
+                        <td>${escapeHtml(scene.zh).replace(/\n/g, "<br>")}</td>
+                      </tr>
+                    `,
+                  )
+                  .join("")}
+              </tbody>
+            </table>
+          </div>
+          ${renderAuditBlock(candidate.audit)}
+        </div>
+      </article>
+    `);
+  }
+
+  if (state.busy && state.pendingAction === "render") {
+    blocks.push(renderLoadingMessage("正在渲染视频", "右侧已经进入视频舞台，渲染完成后会直接切换成最终成片。"));
+  }
+
+  if (state.generated?.render) {
+    blocks.push(`
+      <article class="message-row assistant">
+        <div class="message-card success-message">
+          <span class="message-role">Atypica</span>
+          <p class="message-title">视频已经生成完成。</p>
+          <p class="message-copy">右侧现在显示的是最终视频，你可以继续切换脚本再重新渲染。</p>
+        </div>
+      </article>
+    `);
+  }
+
+  if (state.lastError) {
+    blocks.push(renderErrorMessage());
+  }
+
+  chatStream.innerHTML = `<div class="chat-thread">${blocks.join("")}</div>`;
+  requestAnimationFrame(() => {
+    chatStream.scrollTop = chatStream.scrollHeight;
+  });
+}
+
+function renderMaterialsConversation(asset, hook) {
+  const hooks = state.assets.filter((item) => item.category === "hook");
+  const sources = state.assets.filter((item) => item.category === "source");
+  const blocks = [];
+
+  blocks.push(`
+    <article class="message-row assistant">
+      <div class="message-card">
+        <span class="message-role">Atypica</span>
+        <p class="message-title">这里是当前的视频素材库。</p>
+        <p class="message-copy">你可以先浏览现有 Hook 和 Source 片段，也可以上传你自己的形象 Hook，然后回到“生成”直接出片。</p>
+      </div>
+    </article>
+  `);
+
+  if (hook) {
+    blocks.push(`
+      <article class="message-row user">
+        <div class="message-card">
+          <span class="message-role">You</span>
+          <p class="message-title">当前 Hook 已锁定为 ${escapeHtml(hook.name)}</p>
+        </div>
+      </article>
+    `);
+  }
+
+  if (state.busy && state.pendingAction === "assets") {
+    blocks.push(renderLoadingMessage("正在加载素材", "我正在整理 Hook 和 Source 素材列表。"));
+  }
+
+  if (state.busy && state.pendingAction === "upload") {
+    blocks.push(renderLoadingMessage("正在上传 Hook", "上传完成后会自动加入素材库，并设为当前 Hook。"));
+  }
+
+  blocks.push(renderAssetSection("Hook 素材", "可直接设为开场 Hook。", hooks, asset));
+  blocks.push(renderAssetSection("Source 素材", "用于中段证明、结论和补充画面。", sources, asset));
+
+  if (state.lastError) {
+    blocks.push(renderErrorMessage());
+  }
+
+  chatStream.innerHTML = `<div class="chat-thread">${blocks.join("")}</div>`;
+}
+
+function renderAssetSection(title, copy, assets, activeAsset) {
+  return `
+    <article class="message-row assistant">
+      <div class="message-card">
+        <span class="message-role">Library</span>
+        <p class="message-title">${escapeHtml(title)}</p>
+        <p class="message-copy">${escapeHtml(copy)}</p>
+        <div class="asset-grid">
+          ${
+            assets.length > 0
+              ? assets.map((asset) => renderAssetCard(asset, activeAsset)).join("")
+              : `<div class="asset-empty">当前还没有这类素材。</div>`
+          }
+        </div>
+      </div>
+    </article>
+  `;
+}
+
+function renderAssetCard(asset, activeAsset) {
+  const isActive = activeAsset?.id === asset.id;
+  const isCurrentHook = state.customHookAssetPath === asset.assetPath;
+
+  return `
+    <article class="asset-card ${isActive ? "active" : ""}">
+      <video class="asset-thumb" src="${escapeHtml(asset.previewPath)}" muted playsinline preload="metadata"></video>
+      <div class="asset-copy">
+        <div class="asset-meta">
+          <span class="asset-tag">${asset.category === "hook" ? "Hook" : "Source"}</span>
+          ${asset.isCustom ? `<span class="asset-tag strong">自定义</span>` : ""}
+          ${isCurrentHook ? `<span class="asset-tag strong">当前 Hook</span>` : ""}
+        </div>
+        <p class="asset-name">${escapeHtml(asset.name)}</p>
+        <p class="asset-desc">${formatBytes(asset.sizeBytes)} · ${formatDate(asset.updatedAt)}</p>
+      </div>
+      <div class="asset-actions">
+        <button type="button" class="ghost-action small" data-asset-preview="${escapeHtml(asset.id)}">预览</button>
+        ${
+          asset.category === "hook"
+            ? `<button type="button" class="ghost-action small ${isCurrentHook ? "is-selected" : ""}" data-asset-hook="${escapeHtml(asset.id)}">${isCurrentHook ? "已设为 Hook" : "设为 Hook"}</button>`
+            : ""
+        }
+      </div>
+    </article>
+  `;
+}
+
+function renderGenerateComposer(feature, candidate, stageState, activeHook) {
+  composerZone.innerHTML = `
+    <div class="composer-card">
+      <div class="composer-footer">
+        <p class="composer-hint">${escapeHtml(buildComposerHint(feature, candidate, stageState, activeHook))}</p>
+        <div class="composer-metrics">
+          <span>${escapeHtml(feature?.label ?? "--")}</span>
+          <span>${state.candidates.length} 个候选</span>
+          <span>${activeHook ? `Hook: ${escapeHtml(shorten(activeHook.name, 18))}` : "默认 Hook"}</span>
+        </div>
+        <div class="composer-actions">
+          <button class="ghost-action" type="button" data-action="refresh-scripts" ${state.busy || !state.hasChosenFeature ? "disabled" : ""}>
+            重新生成
+          </button>
+        </div>
+      </div>
+      <button class="primary-action" type="button" data-action="render-video" ${state.busy || !candidate ? "disabled" : ""}>
+        生成视频
+      </button>
+    </div>
+  `;
+}
+
+function renderMaterialsComposer(hook) {
+  composerZone.innerHTML = `
+    <div class="composer-card">
+      <div class="composer-footer">
+        <p class="composer-hint">上传你自己的形象 Hook，上传后会自动加入素材库，并可直接带回“生成”页使用。</p>
+        <div class="composer-metrics">
+          <span>${state.assets.length} 条素材</span>
+          <span>${hook ? `当前 Hook: ${escapeHtml(shorten(hook.name, 18))}` : "当前未设 Hook"}</span>
+        </div>
+        <div class="composer-actions">
+          <button class="ghost-action" type="button" data-action="reload-assets" ${state.busy ? "disabled" : ""}>
+            刷新素材
+          </button>
+          <button class="ghost-action" type="button" data-action="upload-hook" ${state.busy ? "disabled" : ""}>
+            上传 Hook
+          </button>
+        </div>
+      </div>
+      <button class="primary-action" type="button" data-action="go-generate" ${state.busy ? "disabled" : ""}>
+        去生成视频
+      </button>
+    </div>
+  `;
+}
+
+function setComposerStats({mode, history, output}) {
+  const modeStat = composerZone.querySelector("#modeStat");
+  const historyStat = composerZone.querySelector("#historyStat");
+  const outputStat = composerZone.querySelector("#outputStat");
+
+  if (modeStat) {
+    modeStat.textContent = mode;
+  }
+
+  if (historyStat) {
+    historyStat.textContent = history;
+  }
+
+  if (outputStat) {
+    outputStat.textContent = output;
+  }
+}
+
+function renderFeatureButtons() {
+  return (state.presets?.features ?? [])
+    .map(
+      (feature) => `
+        <button
+          type="button"
+          class="${feature.key === state.feature && state.hasChosenFeature ? "active" : ""}"
+          data-feature="${feature.key}"
+          ${state.busy ? "disabled" : ""}
+        >
+          ${escapeHtml(feature.label)}
+        </button>
       `,
     )
     .join("");
+}
 
-  document.querySelectorAll(".timeline-item").forEach((item) => {
-    item.addEventListener("click", () => {
-      state.activeSceneIndex = Number(item.dataset.scene);
-      setPreview(scenes[state.activeSceneIndex]);
-      render();
-    });
-  });
-
-  auditList.innerHTML = candidate.audit
-    .map((item) => `<li><span class="audit-icon">通过</span><span>${escapeHtml(item)}</span></li>`)
-    .join("");
-
-  renderCommand.value =
-    state.generated?.command ?? '选择这个脚本后，点击"生成 JSON"得到可执行渲染命令。';
-
-  if (!state.generated) {
-    jsonPath.textContent = "尚未生成";
-    videoPath.textContent = "尚未渲染";
+function renderAuditBlock(audit = []) {
+  if (audit.length === 0) {
+    return "";
   }
 
-  if (state.generated?.render && state.generated?.outputPath) {
-    setRenderedPreview(state.generated);
+  return `
+    <div class="script-audit">
+      <p class="summary-heading">审查结论</p>
+      <ul class="audit-inline">
+        ${audit.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}
+      </ul>
+    </div>
+  `;
+}
+
+function renderErrorMessage() {
+  return `
+    <article class="message-row assistant">
+      <div class="message-card error-message">
+        <span class="message-role">Atypica</span>
+        <p class="message-title">当前步骤失败</p>
+        <p class="message-copy">${escapeHtml(state.lastError)}</p>
+      </div>
+    </article>
+  `;
+}
+
+function renderLoadingMessage(title, copy) {
+  return `
+    <article class="message-row assistant">
+      <div class="message-card">
+        <span class="message-role">Atypica</span>
+        <p class="message-title">${escapeHtml(title)}</p>
+        <p class="message-copy">${escapeHtml(copy)}</p>
+        <div class="loading-dots" aria-hidden="true">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </div>
+    </article>
+  `;
+}
+
+function currentStageState() {
+  if (state.section === "materials") {
+    return selectedAsset() ? "asset" : "idle";
+  }
+  if (state.busy && state.pendingAction === "render") {
+    return "rendering";
+  }
+  if (state.generated?.render) {
+    return "final";
+  }
+  if (focusedCandidate()) {
+    return "preview";
+  }
+  return "idle";
+}
+
+function renderGenerateStage(stageState, scenes) {
+  if (stageState === "idle") {
+    clearPreview();
+    setStageOverlay("等待脚本", "左边先选 AI Research 或 AI Interview，然后会自动生成候选脚本。");
     return;
   }
 
-  setPreview(scenes[state.activeSceneIndex] ?? scenes[0]);
-}
-
-function renderCandidateList() {
-  if (state.candidates.length === 0) {
-    candidateList.innerHTML = `
-      <article class="empty-card compact">
-        <p class="empty-title">未生成候选</p>
-        <p class="empty-copy">点击左侧按钮后，这里会出现 3 个脚本方案。</p>
-      </article>
-    `;
+  if (stageState === "final" && state.generated?.outputPath) {
+    setStageOverlay(null, null);
+    setRenderedPreview(state.generated.outputPath);
     return;
   }
 
-  candidateList.innerHTML = state.candidates
-    .map((candidate, index) => {
-      const isActive = index === state.selectedCandidateIndex;
-      return `
-        <button class="candidate-card ${isActive ? "active" : ""}" data-candidate="${index}" type="button">
-          <div class="candidate-card-top">
-            <span class="candidate-rank">方案 ${index + 1}</span>
-            <div class="candidate-badges">
-              <span class="candidate-hook">${hookStyleLabel(candidate.hookStyle)}</span>
-              <span class="candidate-score">评分 ${candidate.score}</span>
-            </div>
-          </div>
-          <p class="candidate-title">${escapeHtml(candidate.title)}</p>
-          <p class="candidate-angle">${escapeHtml(candidate.angle)}</p>
-          <div class="candidate-meta">
-            <span>${isActive ? "当前选中" : "点击查看并继续出片"}</span>
-            <span>${escapeHtml(candidate.candidateId)}</span>
-          </div>
-        </button>
-      `;
-    })
-    .join("");
+  const scene = scenes[0] ?? null;
+  if (scene) {
+    setPreview(scene.previewPath);
+  }
 
-  document.querySelectorAll(".candidate-card").forEach((item) => {
-    item.addEventListener("click", () => {
-      state.selectedCandidateIndex = Number(item.dataset.candidate);
-      state.activeSceneIndex = 0;
-      state.generated = null;
-      render();
-    });
-  });
+  if (stageState === "rendering") {
+    setStageOverlay("正在渲染视频", "保持当前窗口打开，渲染完成后这里会自动切成最终视频。");
+  } else {
+    setStageOverlay(null, null);
+  }
 }
 
-function setPreview(scene) {
-  if (!scene) {
+function renderMaterialsStage(asset) {
+  if (!asset) {
+    clearPreview();
+    setStageOverlay("等待素材", "左边先浏览素材库，点“预览”就会在这里播放片段。");
+    return;
+  }
+
+  setPreview(asset.previewPath);
+  if (state.busy && state.pendingAction === "upload") {
+    setStageOverlay("正在上传 Hook", "上传完成后这里会保持当前素材，并自动把新 Hook 加入素材库。");
+  } else {
+    setStageOverlay(null, null);
+  }
+}
+
+function setPreview(src) {
+  if (!src) {
     clearPreview();
     return;
   }
 
-  previewVideo.src = scene.previewPath;
-  captionPreview.innerHTML = escapeHtml(scene.subtitle.en).replace(/\n/g, "<br>");
+  if (previewVideo.dataset.src !== src) {
+    previewVideo.src = src;
+    previewVideo.dataset.src = src;
+  }
+
+  previewVideo.loop = true;
+  previewVideo.controls = true;
   previewVideo.play().catch(() => {});
 }
 
-function setRenderedPreview(result) {
-  const src = toBrowserPath(result.outputPath);
-  previewVideo.src = src;
-  captionPreview.textContent = "";
+function setRenderedPreview(outputPath) {
+  const src = toBrowserPath(outputPath);
+  if (previewVideo.dataset.src !== src) {
+    previewVideo.src = src;
+    previewVideo.dataset.src = src;
+  }
+
+  previewVideo.loop = true;
+  previewVideo.controls = true;
   previewVideo.currentTime = 0;
   previewVideo.play().catch(() => {});
 }
 
 function clearPreview() {
   previewVideo.removeAttribute("src");
+  previewVideo.removeAttribute("data-src");
   previewVideo.load();
-  captionPreview.textContent = "脚本生成后会在这里预览当前 scene 的素材和字幕。";
 }
 
-async function generateCandidates() {
-  setBusy(true, "生成脚本中");
-  appendLog("正在基于当前功能和主题生成 3 个脚本...");
-
-  try {
-    const response = await fetchWithTimeout("/api/generate-candidates", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        feature: state.feature,
-      }),
-    }, 120000); // 120秒超时
-
-    const result = await response.json();
-
-    if (!response.ok || !result.ok) {
-      throw new Error(localizeServerMessage(result.error || result.message || "Request failed"));
-    }
-
-    state.candidates = result.candidates ?? [];
-    state.selectedCandidateIndex = state.candidates.length > 0 ? 0 : -1;
-    state.activeSceneIndex = 0;
-    state.generated = null;
-
-    appendLog(localizeServerMessage(result.message));
-    appendLog(`模型：${result.model}`);
-    if (result.baseURL) {
-      appendLog(`网关：${result.baseURL}`);
-    }
-    appendLog(`功能：${featureLabel(result.feature)}`);
-    appendLog(`主题：${result.topic}`);
-    appendLog(`已生成 ${state.candidates.length} 个候选脚本。`);
-    jobBadge.textContent = "脚本已生成";
-    updateStatus(`已生成 ${state.candidates.length} 个候选脚本，选择 1 个继续出片`);
-  } catch (error) {
-    jobBadge.textContent = "错误";
-    if (error.name === "AbortError") {
-      appendLog("错误：生成超时（120秒），请检查 AI SDK 配置或稍后重试。");
-    } else {
-      appendLog(`错误：${error.message}`);
-    }
-  } finally {
-    setBusy(false);
-    render();
-  }
-}
-
-async function runJob(label, endpoint) {
-  if (!selectedCandidate()) {
-    appendLog("请先生成 3 个脚本，并选择其中一个。");
-    jobBadge.textContent = "待选择";
+function setStageOverlay(title, copy) {
+  if (!title) {
+    stageOverlay.classList.remove("visible");
+    stageOverlay.innerHTML = "";
     return;
   }
 
-  setBusy(true, label);
-  appendLog(label);
-
-  try {
-    const response = await fetchWithTimeout(endpoint, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(requestPayload()),
-    }, 300000); // 5分钟超时（渲染可能较慢）
-
-    const result = await response.json();
-
-    if (!response.ok || !result.ok) {
-      const error = new Error(localizeServerMessage(result.error || result.message || "Request failed"));
-      error.result = result;
-      throw error;
-    }
-
-    state.generated = result;
-    renderCommand.value = result.command;
-    jsonPath.textContent = result.configPath;
-    videoPath.textContent = result.render ? result.outputPath : "尚未渲染";
-    jobBadge.textContent = endpoint === "/api/render" ? "已渲染" : "JSON 已生成";
-    updateStatus(endpoint === "/api/render" ? "成片已生成，右侧正在播放最终视频" : "JSON 已生成，可继续执行渲染");
-    appendLog(localizeServerMessage(result.message));
-    appendLog(`配置文件：${result.configPath}`);
-
-    if (result.render) {
-      appendLog(`视频文件：${result.outputPath}`);
-      if (result.cosUrl) {
-        appendLog(`COS 地址：${result.cosUrl}`);
-      }
-      if (result.presignedUrl) {
-        appendLog(`下载链接（24h有效）：${result.presignedUrl}`);
-      }
-      if (result.render.stdout.trim()) {
-        appendLog(result.render.stdout.trim());
-      }
-      if (result.render.stderr.trim()) {
-        appendLog(result.render.stderr.trim());
-      }
-    }
-  } catch (error) {
-    jobBadge.textContent = "错误";
-    updateStatus("当前步骤失败，请查看日志后重试");
-    if (error.name === "AbortError") {
-      appendLog("错误：请求超时，请稍后重试。");
-    } else {
-      appendLog(`错误：${error.message}`);
-      if (error.result?.configPath) {
-        appendLog(`配置文件：${error.result.configPath}`);
-      }
-      if (error.result?.render?.stderr?.trim()) {
-        appendLog(error.result.render.stderr.trim());
-      } else if (error.result?.render?.stdout?.trim()) {
-        appendLog(error.result.render.stdout.trim());
-      }
-    }
-  } finally {
-    setBusy(false);
-    render();
-  }
+  stageOverlay.classList.add("visible");
+  stageOverlay.innerHTML = `
+    <div class="stage-overlay-card">
+      <p class="stage-overlay-title">${escapeHtml(title)}</p>
+      <p class="stage-overlay-copy">${escapeHtml(copy)}</p>
+      <div class="loading-dots" aria-hidden="true">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+  `;
 }
 
-// 带超时的 fetch
-async function fetchWithTimeout(url, options = {}, timeoutMs = 10000) {
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
-
-  try {
-    const response = await fetch(url, {
-      ...options,
-      signal: controller.signal,
-    });
-    clearTimeout(timeoutId);
-    return response;
-  } catch (error) {
-    clearTimeout(timeoutId);
-    throw error;
-  }
-}
-
-function requestPayload() {
-  return {
-    feature: state.feature,
-    duration: currentDurationSeconds(),
-    topic: currentFeature().defaultTopic,
-    candidate: selectedCandidate(),
-  };
-}
-
-function setBusy(isBusy, label = null) {
+function setBusy(isBusy, label = null, pendingAction = null) {
   state.busy = isBusy;
-  generateScriptsButton.disabled = isBusy;
-  generateJsonButton.disabled = isBusy || !selectedCandidate();
-  renderButton.disabled = isBusy || !selectedCandidate();
+  state.pendingAction = isBusy ? pendingAction : null;
 
-  // 添加/移除加载动画
   if (isBusy) {
     document.body.classList.add("is-busy");
   } else {
@@ -490,7 +954,6 @@ function setBusy(isBusy, label = null) {
   }
 
   if (label) {
-    jobBadge.textContent = label;
     updateStatus(label);
   }
 }
@@ -499,25 +962,64 @@ function updateStatus(message) {
   statusText.textContent = message;
 }
 
-function appendLog(message) {
-  const nextLine = `[${new Date().toLocaleTimeString()}] ${message}`;
-  activityLog.value = activityLog.value ? `${activityLog.value}\n${nextLine}` : nextLine;
-  activityLog.scrollTop = activityLog.scrollHeight;
+function buildGenerateStatusText(feature, candidate, stageState, activeHook) {
+  if (state.lastError) {
+    return "当前步骤失败，请在左侧查看错误消息。";
+  }
+  if (!state.hasChosenFeature) {
+    return "先选择 AI Research 或 AI Interview。";
+  }
+  if (stageState === "rendering") {
+    return "正在渲染视频，右侧会自动更新成片。";
+  }
+  if (stageState === "final") {
+    return "成片已经生成，右侧显示最终视频。";
+  }
+  if (activeHook) {
+    return `当前已启用自定义 Hook：${shorten(activeHook.name, 20)}。`;
+  }
+  if (candidate) {
+    return `当前浏览脚本 ${state.focusedCandidateIndex + 1} / ${state.candidates.length}。`;
+  }
+  return `当前模式：${feature?.label ?? "--"}。`;
 }
 
-function featureLabel(featureKey) {
-  return state.presets.features.find((item) => item.key === featureKey)?.label ?? featureKey;
+function buildMaterialsStatusText(asset, hook) {
+  if (state.lastError) {
+    return "素材操作失败，请查看左侧提示。";
+  }
+  if (state.busy && state.pendingAction === "upload") {
+    return "正在上传你的 Hook 素材。";
+  }
+  if (hook) {
+    return `当前 Hook 已锁定：${shorten(hook.name, 24)}。`;
+  }
+  if (asset) {
+    return `正在浏览素材：${shorten(asset.name, 24)}。`;
+  }
+  return "先上传 Hook 或选择一个现有素材。";
 }
 
-function currentDurationSeconds() {
-  return Number(state.presets?.defaults?.durationSeconds ?? 12);
-}
-
-function toBrowserPath(filePath) {
-  return `/${String(filePath)
-    .split("/")
-    .map((segment) => encodeURIComponent(segment))
-    .join("/")}`;
+function buildComposerHint(feature, candidate, stageState, activeHook) {
+  if (!state.hasChosenFeature) {
+    return "先选择模式。";
+  }
+  if (state.busy && state.pendingAction === "scripts") {
+    return "脚本生成中...";
+  }
+  if (stageState === "rendering") {
+    return "正在渲染当前脚本。";
+  }
+  if (stageState === "final") {
+    return "可以切换脚本并再次渲染。";
+  }
+  if (activeHook) {
+    return `当前会用 ${shorten(activeHook.name, 18)} 作为开场 Hook。`;
+  }
+  if (candidate) {
+    return `当前是 ${feature?.label ?? "--"}，切换左右箭头查看别的脚本。`;
+  }
+  return "正在准备脚本。";
 }
 
 function hookStyleLabel(hookStyle) {
@@ -531,24 +1033,88 @@ function hookStyleLabel(hookStyle) {
 
 function localizeServerMessage(message) {
   const dictionary = {
-    "Script candidates generated": "3 个脚本已生成。",
-    "JSON generated": "JSON 生成完成。",
-    "Render completed": "视频渲染完成。",
-    "Render failed": "视频渲染失败。",
     "Request failed": "请求失败。",
     "Unknown error": "未知错误。",
-    "Missing candidate": "缺少已选脚本，请先选一个候选脚本。",
-    "Missing AI_SDK_API_KEY": "缺少 AI_SDK_API_KEY。请先在项目根目录 `.env.local` 或当前终端环境里配置它。",
-    "Invalid JSON body": "请求体 JSON 格式无效。",
-    "Unknown feature: research": "未知功能：research",
-    "Unknown feature: interviews": "未知功能：interviews",
+    "Missing candidate": "缺少脚本候选，请重新生成。",
+    "Missing AI_SDK_API_KEY": "缺少 AI_SDK_API_KEY，请先配置环境变量。",
+    "Missing upload content": "上传内容为空，请重新选择文件。",
+    "Uploaded file was empty": "上传文件为空，请重新选择。",
+    "Uploaded hook is too large": "上传 Hook 过大，请压缩后再试。",
+    "Unsupported hook file type": "只支持上传 mp4、mov、webm 格式的 Hook 视频。",
   };
-
   return dictionary[message] ?? message;
 }
 
+function toBrowserPath(filePath) {
+  return `/${String(filePath)
+    .split("/")
+    .map((segment) => encodeURIComponent(segment))
+    .join("/")}`;
+}
+
+async function fetchWithTimeout(url, options = {}, timeoutMs = 10000) {
+  const controller = new AbortController();
+  const timeoutId = window.setTimeout(() => controller.abort(), timeoutMs);
+
+  try {
+    const response = await fetch(url, {
+      ...options,
+      signal: controller.signal,
+    });
+    window.clearTimeout(timeoutId);
+    return response;
+  } catch (error) {
+    window.clearTimeout(timeoutId);
+    throw error;
+  }
+}
+
+function fileToBase64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      const result = String(reader.result ?? "");
+      const [, base64 = ""] = result.split(",");
+      resolve(base64);
+    };
+    reader.onerror = () => reject(new Error("读取上传文件失败。"));
+    reader.readAsDataURL(file);
+  });
+}
+
+function formatBytes(value) {
+  const size = Number(value);
+  if (!Number.isFinite(size) || size <= 0) {
+    return "0 B";
+  }
+
+  if (size >= 1024 * 1024) {
+    return `${(size / (1024 * 1024)).toFixed(1)} MB`;
+  }
+
+  if (size >= 1024) {
+    return `${Math.round(size / 1024)} KB`;
+  }
+
+  return `${size} B`;
+}
+
+function formatDate(value) {
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) {
+    return "--";
+  }
+
+  return `${date.getMonth() + 1}/${date.getDate()} ${String(date.getHours()).padStart(2, "0")}:${String(date.getMinutes()).padStart(2, "0")}`;
+}
+
+function shorten(value, limit) {
+  const text = String(value ?? "");
+  return text.length > limit ? `${text.slice(0, limit - 1)}…` : text;
+}
+
 function escapeHtml(value) {
-  return String(value)
+  return String(value ?? "")
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;")

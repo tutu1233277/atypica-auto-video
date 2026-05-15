@@ -9,6 +9,13 @@ const defaultDb = () => ({
   jobs: [],
 });
 
+const blockedFragments = [
+  'subtitle to be refined',
+  '待补充中文字幕',
+  'match subtitle pacing to footage',
+  '结构合理，但仍建议在最终出片前人工复核字幕节奏与镜头匹配。',
+];
+
 const ensureDbFile = () => {
   fs.mkdirSync(path.dirname(dbPath), {recursive: true});
   if (!fs.existsSync(dbPath)) {
@@ -32,11 +39,16 @@ export const initDb = async () => {
 };
 
 export const saveCandidates = async (candidates, metadata = {}) => {
+  const validCandidates = candidates.filter(isUsableCandidate);
+  if (validCandidates.length !== candidates.length) {
+    throw new Error('Generated candidates contained placeholder script content');
+  }
+
   const db = readDb();
   const createdAt = nowIso();
   const feature = metadata.feature ?? 'unknown';
 
-  const rows = candidates.map((candidate, index) => ({
+  const rows = validCandidates.map((candidate, index) => ({
     id: `${candidate.candidateId}-${Date.now()}-${index}`,
     candidate_id: candidate.candidateId,
     feature,
@@ -64,6 +76,7 @@ export const getCandidates = async (feature) => {
   const db = readDb();
   return db.candidates
     .filter((row) => row.feature === feature)
+    .filter(isUsableCandidate)
     .sort((a, b) => String(b.updated_at).localeCompare(String(a.updated_at)));
 };
 
@@ -149,3 +162,38 @@ export const getRecentJobs = async (limit = 20) => {
   const db = readDb();
   return db.jobs.slice(0, limit);
 };
+
+function isUsableCandidate(candidate) {
+  if (!candidate || typeof candidate !== 'object') {
+    return false;
+  }
+
+  if (containsBlockedText(candidate.angle)) {
+    return false;
+  }
+
+  if (Array.isArray(candidate.audit) && candidate.audit.some(containsBlockedText)) {
+    return false;
+  }
+
+  if (!Array.isArray(candidate.scenes) || candidate.scenes.length === 0) {
+    return false;
+  }
+
+  return candidate.scenes.every((scene) => {
+    if (!scene || typeof scene !== 'object') {
+      return false;
+    }
+
+    return !containsBlockedText(scene.zh) && !containsBlockedText(scene.en);
+  });
+}
+
+function containsBlockedText(value) {
+  const text = String(value ?? '').trim().toLowerCase();
+  if (!text) {
+    return true;
+  }
+
+  return blockedFragments.some((fragment) => text.includes(fragment.toLowerCase()));
+}

@@ -9,6 +9,7 @@ import {initDb, saveCandidates, getCandidates, selectCandidate, createJob, updat
 import {uploadToCos, getPresignedUrl} from './cos-client.mjs';
 
 const root = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
+const publicDir = path.join(root, 'public');
 const port = Number(process.env.PORT ?? 4180);
 const host = process.env.HOST ?? '127.0.0.1';
 
@@ -18,6 +19,17 @@ const mimeTypes = new Map([
   ['.js', 'text/javascript; charset=utf-8'],
   ['.json', 'application/json; charset=utf-8'],
   ['.mp4', 'video/mp4'],
+  ['.mov', 'video/quicktime'],
+  ['.webm', 'video/webm'],
+  ['.png', 'image/png'],
+  ['.jpg', 'image/jpeg'],
+  ['.jpeg', 'image/jpeg'],
+]);
+
+const uploadMimeToExt = new Map([
+  ['video/mp4', '.mp4'],
+  ['video/quicktime', '.mov'],
+  ['video/webm', '.webm'],
 ]);
 
 // 初始化数据库
@@ -53,8 +65,18 @@ const server = http.createServer(async (request, response) => {
     return;
   }
 
+  if (request.method === 'GET' && url.pathname === '/api/assets') {
+    await handleGetAssets(request, response);
+    return;
+  }
+
   if (request.method === 'POST' && url.pathname === '/api/generate-candidates') {
     await handleGenerateCandidates(request, response);
+    return;
+  }
+
+  if (request.method === 'POST' && url.pathname === '/api/upload-hook') {
+    await handleUploadHook(request, response);
     return;
   }
 
@@ -106,6 +128,17 @@ async function handleGetJobs(request, response) {
   }
 }
 
+async function handleGetAssets(request, response) {
+  try {
+    sendJson(response, 200, {
+      ok: true,
+      assets: listVideoAssets(),
+    });
+  } catch (error) {
+    sendJson(response, 500, {ok: false, error: error.message});
+  }
+}
+
 async function handleSelectCandidate(request, response) {
   try {
     const payload = await readRequestBody(request);
@@ -143,6 +176,45 @@ async function handleGenerateCandidates(request, response) {
       ok: false,
       error: error instanceof Error ? error.message : 'Unknown error',
     });
+  }
+}
+
+async function handleUploadHook(request, response) {
+  try {
+    const payload = await readRequestBody(request);
+    const fileName = typeof payload.fileName === 'string' ? payload.fileName : 'hook.mp4';
+    const mimeType = typeof payload.mimeType === 'string' ? payload.mimeType : '';
+    const contentBase64 = typeof payload.contentBase64 === 'string' ? payload.contentBase64 : '';
+
+    if (!contentBase64) {
+      throw new Error('Missing upload content');
+    }
+
+    const extension = resolveUploadExtension(fileName, mimeType);
+    const baseName = path.basename(fileName, path.extname(fileName)) || 'hook';
+    const safeName = slugify(baseName) || 'hook';
+    const relativePath = path.posix.join('hook', 'uploads', `${safeName}-${Date.now()}${extension}`);
+    const absolutePath = path.join(publicDir, ...relativePath.split('/'));
+    const buffer = Buffer.from(contentBase64, 'base64');
+
+    if (buffer.byteLength === 0) {
+      throw new Error('Uploaded file was empty');
+    }
+
+    if (buffer.byteLength > 250 * 1024 * 1024) {
+      throw new Error('Uploaded hook is too large');
+    }
+
+    fs.mkdirSync(path.dirname(absolutePath), {recursive: true});
+    fs.writeFileSync(absolutePath, buffer);
+
+    sendJson(response, 200, {
+      ok: true,
+      message: 'Hook uploaded',
+      asset: buildAssetRecord(relativePath),
+    });
+  } catch (error) {
+    sendJson(response, 400, {ok: false, error: error.message});
   }
 }
 
@@ -275,9 +347,14 @@ export function createVideoConfig(payload) {
       throw new Error('Candidate scene count does not match feature scene plan');
     }
 
+    const resolvedAssetPath =
+      index === 0 && typeof payload.customHookAssetPath === 'string' && payload.customHookAssetPath.trim()
+        ? payload.customHookAssetPath.trim()
+        : scenePlan.assetPath;
+
     return {
       id: scenePlan.id,
-      assetPath: scenePlan.assetPath,
+      assetPath: resolvedAssetPath,
       durationInFrames: sceneDurations[index],
       subtitle: {
         zh: scene.zh,
@@ -313,6 +390,8 @@ export function createVideoConfig(payload) {
       featureKey: feature,
       candidateId,
       hookStyle: candidate.hookStyle,
+      customHookAssetPath:
+        typeof payload.customHookAssetPath === 'string' ? payload.customHookAssetPath.trim() : '',
       score: candidate.score,
       audit: candidate.audit,
       model: process.env.AI_SDK_MODEL || process.env.LITELLM_MODEL || 'claude-sonnet-4-6',
@@ -375,6 +454,85 @@ function runRender(configPath, outputPath) {
       });
     });
   });
+}
+
+function listVideoAssets() {
+  const assetDirs = [
+    path.join(publicDir, 'hook'),
+    path.join(publicDir, 'source'),
+  ];
+
+  return assetDirs.flatMap((dirPath) => walkAssetDir(dirPath)).sort(compareAssets);
+}
+
+function walkAssetDir(dirPath) {
+  if (!fs.existsSync(dirPath)) {
+    return [];
+  }
+
+  const entries = fs.readdirSync(dirPath, {withFileTypes: true});
+  const assets = [];
+
+  for (const entry of entries) {
+    const absolutePath = path.join(dirPath, entry.name);
+    if (entry.isDirectory()) {
+      assets.push(...walkAssetDir(absolutePath));
+      continue;
+    }
+
+    const extension = path.extname(entry.name).toLowerCase();
+    if (!['.mp4', '.mov', '.webm'].includes(extension)) {
+      continue;
+    }
+
+    const relativePath = path.relative(publicDir, absolutePath).split(path.sep).join('/');
+    assets.push(buildAssetRecord(relativePath));
+  }
+
+  return assets;
+}
+
+function buildAssetRecord(relativePath) {
+  const absolutePath = path.join(publicDir, ...relativePath.split('/'));
+  const stats = fs.statSync(absolutePath);
+  const [category = 'source'] = relativePath.split('/');
+
+  return {
+    id: relativePath,
+    name: path.basename(relativePath),
+    category,
+    assetPath: relativePath,
+    previewPath: `/${relativePath.split('/').map((segment) => encodeURIComponent(segment)).join('/')}`,
+    sizeBytes: stats.size,
+    updatedAt: stats.mtime.toISOString(),
+    isCustom: relativePath.startsWith('hook/uploads/'),
+  };
+}
+
+function compareAssets(left, right) {
+  if (left.category !== right.category) {
+    return left.category === 'hook' ? -1 : 1;
+  }
+
+  if (left.isCustom !== right.isCustom) {
+    return left.isCustom ? -1 : 1;
+  }
+
+  return String(right.updatedAt).localeCompare(String(left.updatedAt));
+}
+
+function resolveUploadExtension(fileName, mimeType) {
+  const fromName = path.extname(fileName).toLowerCase();
+  if (['.mp4', '.mov', '.webm'].includes(fromName)) {
+    return fromName;
+  }
+
+  const fromMime = uploadMimeToExt.get(mimeType.toLowerCase());
+  if (fromMime) {
+    return fromMime;
+  }
+
+  throw new Error('Unsupported hook file type');
 }
 
 function serveStatic(pathname, response) {

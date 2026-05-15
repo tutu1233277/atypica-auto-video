@@ -16,13 +16,12 @@ import {
 const root = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 const presetsPath = path.join(root, 'data/tool/script-generator-presets.json');
 const auditSkillPath = path.join(root, 'skills/script-review-audit/SKILL.md');
-const debugDir = path.join(root, 'data/tool/debug');
 
 const sceneSchema = z.object({
   title: z.string().min(1),
   zh: z.string().min(1),
   en: z.string().min(1),
-  note: z.string().min(1),
+  note: z.string().optional().default(''),
 });
 
 const candidateSchema = z.object({
@@ -31,7 +30,7 @@ const candidateSchema = z.object({
   angle: z.string().min(1),
   hookStyle: z.enum(['secret', 'mistake', 'panic']),
   score: z.number().int().min(0).max(100),
-  audit: z.array(z.string().min(1)).min(3).max(5),
+  audit: z.array(z.string().min(1)).max(5),
   scenes: z.array(sceneSchema).length(4),
 });
 
@@ -40,20 +39,44 @@ const responseSchema = z.object({
 });
 
 const alternateSceneSchema = z.object({
+  scene_id: z.string().min(1).optional(),
   id: z.string().min(1).optional(),
-  title: z.string().min(1),
-  assetPath: z.string().min(1).optional(),
+  title: z.string().min(1).optional(),
   time: z.string().min(1).optional(),
-  subtitles: z.object({
-    zh: z.string().min(1),
-    en: z.string().min(1),
-  }),
-  directorNote: z.string().min(1),
+  zh: z.string().min(1).optional(),
+  en: z.string().min(1).optional(),
+  note: z.string().min(1).optional(),
+  audit: z
+    .union([
+      z.string().min(1),
+      z.object({
+        zh: z.string().min(1).optional(),
+        en: z.string().min(1).optional(),
+      }),
+    ])
+    .optional(),
+  asset: z.string().min(1).optional(),
 });
 
 const alternateCandidateSchema = z.object({
+  candidateId: z.string().min(1).optional(),
   id: z.string().min(1).optional(),
-  internalTitle: z.string().min(1),
+  title: z.string().min(1).optional(),
+  theme: z.string().min(1).optional(),
+  internalTitle: z.string().min(1).optional(),
+  angle: z.string().min(1).optional(),
+  hookStyle: z.string().min(1).optional(),
+  hook_type: z.string().min(1).optional(),
+  score: z.number().int().min(0).max(100).optional(),
+  audit: z
+    .object({
+      feature_fit: z.string().min(1).optional(),
+      hook_strength: z.string().min(1).optional(),
+      claim_credibility: z.string().min(1).optional(),
+      visual_match: z.string().min(1).optional(),
+      watch_out: z.string().min(1).optional(),
+    })
+    .optional(),
   auditNotes: z
     .object({
       zh: z.string().min(1).optional(),
@@ -119,7 +142,13 @@ export async function generateScriptCandidates({featureKey, topic, researchPath 
     'Do not include explanation before or after the JSON.',
     'Use double quotes for every JSON key and every string value.',
     'Escape any double quote characters inside string values.',
+    'Prefer rewriting to avoid double quote characters inside string values entirely.',
     'Do not use trailing commas.',
+    'Every candidate must include 4 fully written scenes with non-placeholder zh and en subtitle lines.',
+    'Do not use placeholders such as "Subtitle to be refined", "待补充中文字幕", or "TBD".',
+    'Audit items must be specific and non-generic.',
+    'Use exactly this shape and no extra keys: {"candidates":[{"candidateId":"","title":"","angle":"","hookStyle":"secret|mistake|panic","score":90,"audit":["","",""],"scenes":[{"title":"","zh":"","en":"","note":""},{"title":"","zh":"","en":"","note":""},{"title":"","zh":"","en":"","note":""},{"title":"","zh":"","en":"","note":""}]}]}',
+    'Do not output nested audit objects, scene_id fields, theme fields, asset fields, or time fields.',
   ].join('\n');
 
   const input = [
@@ -149,6 +178,8 @@ export async function generateScriptCandidates({featureKey, topic, researchPath 
       '- English subtitle lines should be concise and readable in 2-3 seconds.',
       '- Chinese subtitle lines are only for internal review and should match the English meaning.',
       '- Audit points should explain why the candidate passes or what to watch out for.',
+      '- Keep every audit point to one short sentence.',
+      '- Do not quote phrases inside audit or note text; rewrite instead.',
     ].join('\n'),
   ].join('\n\n');
 
@@ -161,39 +192,8 @@ export async function generateScriptCandidates({featureKey, topic, researchPath 
     model: litellm.chat(model),
     system: instructions,
     prompt: input,
-    temperature: 0.7,
   });
-  const rawJson = extractJsonText(text);
-  let parsedJson;
-  try {
-    parsedJson = JSON.parse(rawJson);
-  } catch (error) {
-    const repairedJson = await repairJsonText({
-      litellm,
-      model,
-      rawJson,
-      errorMessage: error instanceof Error ? error.message : String(error),
-    });
-
-    try {
-      parsedJson = JSON.parse(repairedJson);
-    } catch (repairError) {
-      fs.mkdirSync(debugDir, {recursive: true});
-      const rawPath = path.join(debugDir, 'last-script-response.txt');
-      const repairedPath = path.join(debugDir, 'last-script-response-repaired.txt');
-      fs.writeFileSync(rawPath, `${rawJson}\n`, 'utf8');
-      fs.writeFileSync(repairedPath, `${repairedJson}\n`, 'utf8');
-      console.error('Failed to parse model JSON response:');
-      console.error(rawJson);
-      console.error('Failed to parse repaired JSON response:');
-      console.error(repairedJson);
-      throw new Error(
-        `Model returned invalid JSON twice. Debug files saved to ${path.relative(root, rawPath)} and ${path.relative(root, repairedPath)}`,
-      );
-    }
-  }
-
-  const parsed = normalizeCandidateResponse(parsedJson);
+  const parsed = validateCandidateResponse(await parseCandidateTextResponse(text, litellm.chat(model)));
 
   return {
     model,
@@ -299,76 +299,221 @@ function trimInline(value, limit) {
   return `${text.slice(0, limit - 1)}…`;
 }
 
+function validateCandidateResponse(value) {
+  const parsed = normalizeCandidateResponse(value);
+
+  for (const candidate of parsed.candidates) {
+    assertMeaningfulText(candidate.angle, `Candidate "${candidate.title}" is missing a usable angle`);
+
+    for (const auditItem of candidate.audit) {
+      assertMeaningfulText(auditItem, `Candidate "${candidate.title}" contains a generic audit note`);
+    }
+
+    for (const scene of candidate.scenes) {
+      assertMeaningfulText(scene.zh, `Candidate "${candidate.title}" has a placeholder Chinese subtitle`);
+      assertMeaningfulText(scene.en, `Candidate "${candidate.title}" has a placeholder English subtitle`);
+    }
+  }
+
+  return parsed;
+}
+
+async function parseCandidateTextResponse(text, model) {
+  const extracted = extractJsonObject(text);
+  const attempts = [extracted, repairJsonStringQuotes(extracted)];
+  let lastError = null;
+
+  for (const candidateText of attempts) {
+    try {
+      return JSON.parse(candidateText);
+    } catch (error) {
+      lastError = error;
+    }
+  }
+
+  if (model) {
+    const repaired = await repairCandidateJsonWithModel(extracted, model);
+    const repairedObject = extractJsonObject(repaired);
+    for (const candidateText of [repairedObject, repairJsonStringQuotes(repairedObject)]) {
+      try {
+        return JSON.parse(candidateText);
+      } catch (error) {
+        lastError = error;
+      }
+    }
+  }
+
+  throw lastError ?? new Error('Model output was not valid JSON');
+}
+
+function extractJsonObject(text) {
+  const raw = String(text ?? '').trim();
+  const fenced = raw.replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/i, '').trim();
+  const start = fenced.indexOf('{');
+  const end = fenced.lastIndexOf('}');
+  if (start === -1 || end === -1 || end <= start) {
+    throw new Error('Model output did not contain a JSON object');
+  }
+
+  return fenced.slice(start, end + 1);
+}
+
+function repairJsonStringQuotes(text) {
+  let result = '';
+  let inString = false;
+  let escaping = false;
+
+  for (let index = 0; index < text.length; index += 1) {
+    const char = text[index];
+
+    if (!inString) {
+      if (char === '"') {
+        inString = true;
+      }
+      result += char;
+      continue;
+    }
+
+    if (escaping) {
+      result += char;
+      escaping = false;
+      continue;
+    }
+
+    if (char === '\\') {
+      result += char;
+      escaping = true;
+      continue;
+    }
+
+    if (char === '"') {
+      const nextNonWhitespace = findNextNonWhitespace(text, index + 1);
+      if (nextNonWhitespace === ',' || nextNonWhitespace === '}' || nextNonWhitespace === ']' || nextNonWhitespace === ':') {
+        result += char;
+        inString = false;
+      } else {
+        result += '\\"';
+      }
+      continue;
+    }
+
+    result += char;
+  }
+
+  return result;
+}
+
+function findNextNonWhitespace(text, startIndex) {
+  for (let index = startIndex; index < text.length; index += 1) {
+    const char = text[index];
+    if (!/\s/u.test(char)) {
+      return char;
+    }
+  }
+
+  return '';
+}
+
+async function repairCandidateJsonWithModel(brokenJson, model) {
+  const repairInstructions = [
+    'You repair malformed JSON.',
+    'Return valid JSON only.',
+    'Preserve all original content and wording.',
+    'Do not summarize, translate, or rewrite content.',
+    'Only fix escaping, missing commas, brackets, or quotes.',
+    'Do not wrap the JSON in markdown fences.',
+  ].join('\n');
+
+  const {text} = await generateText({
+    model,
+    system: repairInstructions,
+    prompt: brokenJson,
+  });
+
+  return text;
+}
+
 function normalizeCandidateResponse(value) {
   const standard = responseSchema.safeParse(value);
   if (standard.success) {
     return standard.data;
   }
 
-  if (!value || typeof value !== 'object' || !Array.isArray(value.candidates)) {
+  const alternate = alternateResponseSchema.safeParse(value);
+  if (!alternate.success) {
     throw standard.error;
   }
 
-  const normalized = {
-    candidates: value.candidates.map((candidate, index) => normalizeLooseCandidate(candidate, index)),
-  };
-
-  return responseSchema.parse(normalized);
+  return responseSchema.parse({
+    candidates: alternate.data.candidates.map((candidate, index) => normalizeAlternateCandidate(candidate, index)),
+  });
 }
 
-function normalizeLooseCandidate(candidate, index) {
-  const safeCandidate = candidate && typeof candidate === 'object' ? candidate : {};
-  const rawScenes = Array.isArray(safeCandidate.scenes) ? safeCandidate.scenes : [];
-  const auditText = pickFirstString([
-    safeCandidate.angle,
-    safeCandidate.auditNotes?.zh,
-    safeCandidate.auditNotes?.en,
-    safeCandidate.audit?.[0],
-  ]);
-  const audit = normalizeAuditList(safeCandidate.audit, safeCandidate.auditNotes);
-
+function normalizeAlternateCandidate(candidate, index) {
+  const auditList = normalizeAuditList(candidate.audit, candidate.auditNotes, candidate.scenes);
+  const title = pickFirstString([candidate.title, candidate.theme, candidate.internalTitle]);
   return {
-    candidateId: pickFirstString([safeCandidate.candidateId, safeCandidate.id, `candidate-${index + 1}`]),
-    title: pickFirstString([
-      safeCandidate.title,
-      safeCandidate.internalTitle,
-      `Candidate ${index + 1}`,
+    candidateId: pickFirstString([candidate.candidateId, candidate.id, `candidate-${index + 1}`]),
+    title,
+    angle: pickFirstString([
+      candidate.angle,
+      candidate.theme,
+      typeof candidate.audit === 'object' && !Array.isArray(candidate.audit) ? candidate.audit.hook_strength : '',
+      auditList[0],
+      title,
     ]),
-    angle: auditText || audit[0],
-    hookStyle: normalizeHookStyle(safeCandidate.hookStyle, rawScenes),
-    score: normalizeScore(safeCandidate.score, index),
-    audit,
-    scenes: rawScenes.map((scene, sceneIndex) => normalizeLooseScene(scene, sceneIndex)),
+    hookStyle: normalizeHookStyle(candidate.hookStyle || candidate.hook_type),
+    score: normalizeScore(candidate.score, index),
+    audit: auditList,
+    scenes: candidate.scenes.map((scene, sceneIndex) => normalizeAlternateScene(scene, sceneIndex)),
   };
 }
 
-function normalizeLooseScene(scene, sceneIndex) {
-  const safeScene = scene && typeof scene === 'object' ? scene : {};
-  const zh = pickFirstString([
-    safeScene.zh,
-    safeScene.subtitles?.zh,
-    safeScene.subtitle?.zh,
-  ]);
-  const en = pickFirstString([
-    safeScene.en,
-    safeScene.subtitles?.en,
-    safeScene.subtitle?.en,
-  ]);
-
+function normalizeAlternateScene(scene, sceneIndex) {
+  const auditText = pickAuditText(scene.audit);
   return {
-    title: pickFirstString([safeScene.title, safeScene.id, `Scene ${sceneIndex + 1}`]),
-    zh: zh || '待补充中文字幕',
-    en: en || 'Subtitle to be refined',
-    note: pickFirstString([safeScene.note, safeScene.directorNote, 'Match subtitle pacing to footage.']),
+    title: pickFirstString([scene.title, humanizeSceneId(scene.scene_id || scene.id), `Scene ${sceneIndex + 1}`]),
+    zh: requireText(scene.zh, `Scene ${sceneIndex + 1} is missing Chinese subtitle`),
+    en: requireText(scene.en, `Scene ${sceneIndex + 1} is missing English subtitle`),
+    note: pickFirstString([scene.note, auditText]),
   };
 }
 
-function normalizeAuditList(audit, auditNotes) {
+function assertMeaningfulText(value, errorMessage) {
+  const text = String(value ?? '').trim();
+  if (!text) {
+    throw new Error(errorMessage);
+  }
+
+  const normalized = text.toLowerCase();
+  const blockedPhrases = [
+    'subtitle to be refined',
+    '待补充中文字幕',
+    'match subtitle pacing to footage',
+    'tbd',
+    'to be filled',
+    'placeholder',
+    '结构合理，但仍建议在最终出片前人工复核字幕节奏与镜头匹配。',
+  ];
+
+  if (blockedPhrases.some((phrase) => normalized.includes(phrase.toLowerCase()))) {
+    throw new Error(errorMessage);
+  }
+}
+
+function normalizeAuditList(audit, auditNotes, scenes = []) {
   const result = [];
 
   if (Array.isArray(audit)) {
     for (const item of audit) {
-      const text = pickFirstString([item]);
+      const text = String(item ?? '').trim();
+      if (text) {
+        result.push(text);
+      }
+    }
+  } else if (audit && typeof audit === 'object') {
+    for (const item of Object.values(audit)) {
+      const text = String(item ?? '').trim();
       if (text) {
         result.push(text);
       }
@@ -383,19 +528,45 @@ function normalizeAuditList(audit, auditNotes) {
     result.push(...splitAuditNotes(auditNotes.en));
   }
 
-  while (result.length < 3) {
-    result.push('结构合理，但仍建议在最终出片前人工复核字幕节奏与镜头匹配。');
+  if (result.length === 0) {
+    for (const scene of scenes) {
+      const sceneAudit = pickAuditText(scene?.audit);
+      if (sceneAudit) {
+        result.push(sceneAudit);
+      }
+    }
   }
 
   return result.slice(0, 5);
 }
 
-function normalizeHookStyle(hookStyle, scenes) {
-  if (hookStyle === 'secret' || hookStyle === 'mistake' || hookStyle === 'panic') {
-    return hookStyle;
+function pickAuditText(value) {
+  if (typeof value === 'string' && value.trim()) {
+    return value.trim();
   }
 
-  return inferHookStyleFromScenes(scenes);
+  if (value && typeof value === 'object') {
+    return pickFirstString([value.zh, value.en]);
+  }
+
+  return '';
+}
+
+function normalizeHookStyle(value) {
+  const text = String(value ?? '').trim().toLowerCase();
+  if (text === 'secret' || text === 'mistake' || text === 'panic') {
+    return text;
+  }
+
+  if (text.includes('almost') || text.includes('mistake')) {
+    return 'mistake';
+  }
+
+  if (text.includes('panic') || text.includes('shock')) {
+    return 'panic';
+  }
+
+  return 'secret';
 }
 
 function normalizeScore(score, index) {
@@ -416,66 +587,32 @@ function pickFirstString(values) {
   return '';
 }
 
+function requireText(value, errorMessage) {
+  const text = String(value ?? '').trim();
+  if (!text) {
+    throw new Error(errorMessage);
+  }
+  return text;
+}
+
+function humanizeSceneId(value) {
+  const text = String(value ?? '').trim();
+  if (!text) {
+    return '';
+  }
+
+  return text
+    .split(/[-_]/)
+    .filter(Boolean)
+    .map((part) => part.slice(0, 1).toUpperCase() + part.slice(1))
+    .join(' ');
+}
+
 function splitAuditNotes(value) {
   return value
     .split(/[。！？\n]+/u)
     .map((item) => item.trim())
     .filter(Boolean);
-}
-
-function inferHookStyleFromScenes(scenes) {
-  const hookText = `${scenes[0]?.subtitles?.zh ?? ''} ${scenes[0]?.subtitles?.en ?? ''}`.toLowerCase();
-  if (hookText.includes('almost') || hookText.includes('差点')) {
-    return 'mistake';
-  }
-  if (hookText.includes('panic') || hookText.includes('慌') || hookText.includes('惊')) {
-    return 'panic';
-  }
-  return 'secret';
-}
-
-function extractJsonText(value) {
-  const trimmed = value.trim();
-  if (trimmed.startsWith('{') && trimmed.endsWith('}')) {
-    return trimmed;
-  }
-
-  const fencedMatch = trimmed.match(/```(?:json)?\s*([\s\S]*?)\s*```/i);
-  if (fencedMatch) {
-    return fencedMatch[1].trim();
-  }
-
-  const firstBrace = trimmed.indexOf('{');
-  const lastBrace = trimmed.lastIndexOf('}');
-  if (firstBrace !== -1 && lastBrace !== -1 && lastBrace > firstBrace) {
-    return trimmed.slice(firstBrace, lastBrace + 1);
-  }
-
-  throw new Error('Model did not return parseable JSON');
-}
-
-async function repairJsonText({litellm, model, rawJson, errorMessage}) {
-  const {text} = await generateText({
-    model: litellm.chat(model),
-    temperature: 0,
-    system: [
-      'You repair invalid JSON.',
-      'Do not change the semantic meaning.',
-      'Return valid JSON only.',
-      'Do not include markdown fences.',
-      'Do not include explanation before or after the JSON.',
-      'Use double quotes for every key and every string value.',
-      'Escape any double quote characters inside string values.',
-      'Do not use trailing commas.',
-    ].join('\n'),
-    prompt: [
-      `The following JSON failed to parse with this error: ${errorMessage}`,
-      'Fix the JSON formatting only and return valid JSON.',
-      rawJson,
-    ].join('\n\n'),
-  });
-
-  return extractJsonText(text);
 }
 
 function trimForPrompt(value, limit) {
