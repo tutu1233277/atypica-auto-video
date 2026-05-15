@@ -27,28 +27,61 @@ function toRelativeAssetPath(assetRef) {
   return trimmed.replace(/^\/+/, '').replace(/^public\//, '');
 }
 
+function buildLocalCandidate(assetPath, previewPath, diskPath) {
+  return {assetPath, previewPath, diskPath};
+}
+
 function resolveLocalAsset(assetRef) {
   const relativeAssetPath = toRelativeAssetPath(assetRef);
   if (!relativeAssetPath) {
     return null;
   }
 
-  if (!relativeAssetPath.startsWith('hook/') && !relativeAssetPath.startsWith('source/')) {
+  const normalizedRelativePath = relativeAssetPath.replace(/^assets\//, '');
+  if (!normalizedRelativePath.startsWith('hook/') && !normalizedRelativePath.startsWith('source/')) {
     return null;
   }
 
-  const directPublicPath = path.join(publicDir, relativeAssetPath);
-  const assetMirrorPath = path.join(publicDir, 'assets', relativeAssetPath);
-  const repoPath = path.join(root, relativeAssetPath);
+  const assetType = normalizedRelativePath.startsWith('hook/') ? 'hook' : 'source';
+  const fileName = path.basename(normalizedRelativePath);
+  const candidates = [
+    buildLocalCandidate(
+      normalizedRelativePath,
+      `/${normalizedRelativePath}`,
+      path.join(publicDir, normalizedRelativePath),
+    ),
+    buildLocalCandidate(
+      `assets/${normalizedRelativePath}`,
+      `/assets/${normalizedRelativePath}`,
+      path.join(publicDir, 'assets', normalizedRelativePath),
+    ),
+    buildLocalCandidate(
+      `${assetType}/${fileName}`,
+      `/${assetType}/${fileName}`,
+      path.join(publicDir, assetType, fileName),
+    ),
+    buildLocalCandidate(
+      `assets/${assetType}/${fileName}`,
+      `/assets/${assetType}/${fileName}`,
+      path.join(publicDir, 'assets', assetType, fileName),
+    ),
+    buildLocalCandidate(
+      `assets/${assetType}/${fileName}`,
+      `/assets/${assetType}/${fileName}`,
+      path.join(root, assetType, fileName),
+    ),
+  ];
 
-  if (!fs.existsSync(directPublicPath) && !fs.existsSync(assetMirrorPath) && !fs.existsSync(repoPath)) {
-    return null;
+  for (const candidate of candidates) {
+    if (fs.existsSync(candidate.diskPath)) {
+      return {
+        assetPath: candidate.assetPath,
+        previewPath: candidate.previewPath,
+      };
+    }
   }
 
-  return {
-    assetPath: `assets/${relativeAssetPath}`,
-    previewPath: `/public/assets/${relativeAssetPath}`,
-  };
+  return null;
 }
 
 export function normalizeAssetPath(assetRef) {
