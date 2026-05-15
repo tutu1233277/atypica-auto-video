@@ -26,6 +26,10 @@ const generateJsonButton = document.querySelector("#generateJsonButton");
 const renderButton = document.querySelector("#renderButton");
 const candidateList = document.querySelector("#candidateList");
 const candidateSummary = document.querySelector("#candidateSummary");
+const statusText = document.querySelector("#statusText");
+const modeStat = document.querySelector("#modeStat");
+const historyStat = document.querySelector("#historyStat");
+const outputStat = document.querySelector("#outputStat");
 
 document.querySelectorAll(".segment").forEach((button) => {
   button.addEventListener("click", () => {
@@ -139,9 +143,18 @@ function selectedScenes() {
         en: candidateScene?.en ?? "",
       },
       candidateTitle: candidateScene?.title ?? scenePlan.title,
-      note: candidateScene?.note ?? scenePlan.note,
+      note: normalizeSceneNote(candidateScene?.note ?? scenePlan.note),
     };
   });
+}
+
+function normalizeSceneNote(note) {
+  const value = String(note ?? "").trim();
+  if (value === "Match subtitle pacing to footage.") {
+    return "";
+  }
+
+  return value;
 }
 
 function syncFeatureToggle() {
@@ -161,15 +174,19 @@ function render() {
   const durationSeconds = currentDurationSeconds();
 
   featureBadge.textContent = feature.label;
+  modeStat.textContent = feature.label;
+  historyStat.textContent = String(state.candidates.length);
+  outputStat.textContent = state.generated?.render ? "成片已出" : "未渲染";
   scoreBadge.textContent = candidate ? String(candidate.score) : "--";
   scriptTitle.textContent = candidate ? candidate.title : `${feature.label} / 等待生成脚本`;
   candidateSummary.textContent = candidate
-    ? `${state.candidates.length} 个候选脚本，当前查看第 ${state.selectedCandidateIndex + 1} 个，默认 ${durationSeconds}s`
-    : `先生成 3 个脚本，再选择 1 个继续出片。当前默认时长 ${durationSeconds}s`;
+    ? `共 ${state.candidates.length} 个候选脚本，当前是第 ${state.selectedCandidateIndex + 1} 个，默认 ${durationSeconds}s`
+    : `先生成 3 个脚本，再选择 1 个继续出片`;
 
   renderCandidateList();
 
   if (!candidate) {
+    updateStatus("先生成 3 个脚本，再选 1 个继续出片");
     timeline.innerHTML = `
       <article class="empty-card">
         <p class="empty-title">还没有脚本候选</p>
@@ -191,16 +208,22 @@ function render() {
     return;
   }
 
+  updateStatus(state.generated?.render ? "成片已生成，可继续审看或重做脚本" : "已选中脚本，可继续生成 JSON 或直接渲染");
+
   timeline.innerHTML = scenes
     .map(
       (scene, index) => `
         <article class="timeline-item ${index === state.activeSceneIndex ? "active" : ""}" data-scene="${index}">
-          <div class="timecode">${scene.time}</div>
-          <div>
+          <div class="timeline-marker">
+            <span class="timecode">${scene.time}</span>
+          </div>
+          <div class="timeline-copy">
             <p class="scene-title">${escapeHtml(scene.candidateTitle)}</p>
+            <p class="line-label">EN</p>
             <p class="line-en">${escapeHtml(scene.subtitle.en).replace(/\n/g, "<br>")}</p>
+            <p class="line-label">ZH</p>
             <p class="line-zh">${escapeHtml(scene.subtitle.zh).replace(/\n/g, "<br>")}</p>
-            <p class="shot-note">${escapeHtml(scene.note)}</p>
+            ${scene.note ? `<p class="shot-note">${escapeHtml(scene.note)}</p>` : ""}
           </div>
         </article>
       `,
@@ -227,6 +250,11 @@ function render() {
     videoPath.textContent = "尚未渲染";
   }
 
+  if (state.generated?.render && state.generated?.outputPath) {
+    setRenderedPreview(state.generated);
+    return;
+  }
+
   setPreview(scenes[state.activeSceneIndex] ?? scenes[0]);
 }
 
@@ -248,12 +276,15 @@ function renderCandidateList() {
         <button class="candidate-card ${isActive ? "active" : ""}" data-candidate="${index}" type="button">
           <div class="candidate-card-top">
             <span class="candidate-rank">方案 ${index + 1}</span>
-            <span class="candidate-hook">${hookStyleLabel(candidate.hookStyle)}</span>
+            <div class="candidate-badges">
+              <span class="candidate-hook">${hookStyleLabel(candidate.hookStyle)}</span>
+              <span class="candidate-score">评分 ${candidate.score}</span>
+            </div>
           </div>
           <p class="candidate-title">${escapeHtml(candidate.title)}</p>
           <p class="candidate-angle">${escapeHtml(candidate.angle)}</p>
           <div class="candidate-meta">
-            <span>评分 ${candidate.score}</span>
+            <span>${isActive ? "当前选中" : "点击查看并继续出片"}</span>
             <span>${escapeHtml(candidate.candidateId)}</span>
           </div>
         </button>
@@ -279,6 +310,14 @@ function setPreview(scene) {
 
   previewVideo.src = scene.previewPath;
   captionPreview.innerHTML = escapeHtml(scene.subtitle.en).replace(/\n/g, "<br>");
+  previewVideo.play().catch(() => {});
+}
+
+function setRenderedPreview(result) {
+  const src = toBrowserPath(result.outputPath);
+  previewVideo.src = src;
+  captionPreview.textContent = "";
+  previewVideo.currentTime = 0;
   previewVideo.play().catch(() => {});
 }
 
@@ -323,6 +362,7 @@ async function generateCandidates() {
     appendLog(`主题：${result.topic}`);
     appendLog(`已生成 ${state.candidates.length} 个候选脚本。`);
     jobBadge.textContent = "脚本已生成";
+    updateStatus(`已生成 ${state.candidates.length} 个候选脚本，选择 1 个继续出片`);
   } catch (error) {
     jobBadge.textContent = "错误";
     if (error.name === "AbortError") {
@@ -358,7 +398,9 @@ async function runJob(label, endpoint) {
     const result = await response.json();
 
     if (!response.ok || !result.ok) {
-      throw new Error(localizeServerMessage(result.error || result.message || "Request failed"));
+      const error = new Error(localizeServerMessage(result.error || result.message || "Request failed"));
+      error.result = result;
+      throw error;
     }
 
     state.generated = result;
@@ -366,6 +408,7 @@ async function runJob(label, endpoint) {
     jsonPath.textContent = result.configPath;
     videoPath.textContent = result.render ? result.outputPath : "尚未渲染";
     jobBadge.textContent = endpoint === "/api/render" ? "已渲染" : "JSON 已生成";
+    updateStatus(endpoint === "/api/render" ? "成片已生成，右侧正在播放最终视频" : "JSON 已生成，可继续执行渲染");
     appendLog(localizeServerMessage(result.message));
     appendLog(`配置文件：${result.configPath}`);
 
@@ -386,10 +429,19 @@ async function runJob(label, endpoint) {
     }
   } catch (error) {
     jobBadge.textContent = "错误";
+    updateStatus("当前步骤失败，请查看日志后重试");
     if (error.name === "AbortError") {
       appendLog("错误：请求超时，请稍后重试。");
     } else {
       appendLog(`错误：${error.message}`);
+      if (error.result?.configPath) {
+        appendLog(`配置文件：${error.result.configPath}`);
+      }
+      if (error.result?.render?.stderr?.trim()) {
+        appendLog(error.result.render.stderr.trim());
+      } else if (error.result?.render?.stdout?.trim()) {
+        appendLog(error.result.render.stdout.trim());
+      }
     }
   } finally {
     setBusy(false);
@@ -439,7 +491,12 @@ function setBusy(isBusy, label = null) {
 
   if (label) {
     jobBadge.textContent = label;
+    updateStatus(label);
   }
+}
+
+function updateStatus(message) {
+  statusText.textContent = message;
 }
 
 function appendLog(message) {
@@ -454,6 +511,13 @@ function featureLabel(featureKey) {
 
 function currentDurationSeconds() {
   return Number(state.presets?.defaults?.durationSeconds ?? 12);
+}
+
+function toBrowserPath(filePath) {
+  return `/${String(filePath)
+    .split("/")
+    .map((segment) => encodeURIComponent(segment))
+    .join("/")}`;
 }
 
 function hookStyleLabel(hookStyle) {

@@ -4,6 +4,7 @@ import {fileURLToPath} from 'node:url';
 import {generateText} from 'ai';
 import {createOpenAI} from '@ai-sdk/openai';
 import {z} from 'zod';
+import {normalizeGeneratorPresets} from './asset-paths.mjs';
 import {
   annotateTrendItem,
   loadEnvFiles,
@@ -67,7 +68,8 @@ const alternateResponseSchema = z.object({
 });
 
 export function loadGeneratorPresets() {
-  return JSON.parse(fs.readFileSync(presetsPath, 'utf8'));
+  const presets = JSON.parse(fs.readFileSync(presetsPath, 'utf8'));
+  return normalizeGeneratorPresets(presets);
 }
 
 export function findFeaturePreset(featureKey) {

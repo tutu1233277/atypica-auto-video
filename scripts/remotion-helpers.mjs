@@ -22,6 +22,12 @@ export const readConfig = (configPath) => {
 
 export const ensurePublicAssetLinks = () => {
   ensureSymlink({
+    linkPath: path.join(publicAssetsDir, 'hook'),
+    preferredTarget: '../../hook',
+    fallbackPath: path.join(projectRoot, 'hook'),
+  });
+
+  ensureSymlink({
     linkPath: path.join(publicAssetsDir, 'source'),
     preferredTarget: '../source',
     fallbackPath: path.join(publicDir, 'source'),

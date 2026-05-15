@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {AbsoluteFill, continueRender, delayRender} from 'remotion';
+import {AbsoluteFill, continueRender, delayRender, getRemotionEnvironment} from 'remotion';
 import {ensureGoogleFonts} from './googleFonts';
 
 const fontSamples = [
@@ -153,19 +153,24 @@ const cardBackgrounds = [
   'linear-gradient(145deg, rgba(196,255,244,0.16), rgba(255,255,255,0.03))',
 ];
 
-const handle = delayRender('Loading Google Fonts');
+const shouldBlockForFonts = !getRemotionEnvironment().isRendering;
+const handle = shouldBlockForFonts ? delayRender('Loading Google Fonts') : null;
 
 export const FontPlayground: React.FC = () => {
   useEffect(() => {
     let mounted = true;
 
     const load = async () => {
+      if (!shouldBlockForFonts) {
+        return;
+      }
+
       ensureGoogleFonts();
 
       try {
         await document.fonts.ready;
       } finally {
-        if (mounted) {
+        if (mounted && handle !== null) {
           continueRender(handle);
         }
       }

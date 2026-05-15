@@ -9,74 +9,96 @@
   <body>
     <main class="app-shell">
       <header class="topbar">
-        <div>
-          <p class="eyebrow">内部视频工具</p>
+        <div class="topbar-copy">
           <h1>Atypica 视频生成工具</h1>
         </div>
-        <div class="status-strip" aria-label="流程状态">
-          <span class="status-dot"></span>
-          <span>先生成 3 个脚本，再选 1 个出片</span>
+        <div class="topbar-meta">
+          <div class="status-strip" aria-label="流程状态">
+            <span class="status-dot"></span>
+            <span id="statusText">先生成 3 个脚本，再选 1 个出片</span>
+          </div>
+          <div class="topbar-stats" aria-label="当前概览">
+            <article class="mini-stat">
+              <span class="mini-label">模式</span>
+              <strong id="modeStat">Research</strong>
+            </article>
+            <article class="mini-stat">
+              <span class="mini-label">候选</span>
+              <strong id="historyStat">0</strong>
+            </article>
+            <article class="mini-stat">
+              <span class="mini-label">输出</span>
+              <strong id="outputStat">未渲染</strong>
+            </article>
+          </div>
         </div>
       </header>
 
       <section class="workspace">
-        <aside class="control-panel" aria-label="视频设置">
-          <div class="field-group">
-            <label>功能</label>
-            <div class="segmented" role="tablist" aria-label="功能类型">
-              <button class="segment active" data-feature="research" type="button">
-                AI Research
-              </button>
-              <button class="segment" data-feature="interviews" type="button">
-                AI Interviews
-              </button>
+        <div class="editor-column">
+          <aside class="control-panel" aria-label="视频设置">
+            <div class="panel-kicker">
+              <p class="eyebrow">Step 01</p>
+              <h2>流程控制</h2>
             </div>
-          </div>
-
-          <div class="field-group helper-block">
-            <p class="helper-title">当前模式</p>
-            <p class="helper-copy">不再手动选主题和时长。脚本生成会直接使用该功能的默认主题和默认时长。</p>
-            <p class="helper-copy">生成 3 个脚本依赖 Vercel AI SDK + LiteLLM 网关，请先配置 `AI_SDK_API_KEY`。</p>
-          </div>
-
-          <div class="action-stack">
-            <button id="generateScriptsButton" class="primary-action" type="button">
-              生成 3 个脚本
-            </button>
-            <button id="generateJsonButton" class="secondary-action" type="button">
-              生成 JSON
-            </button>
-            <button id="renderButton" class="secondary-action dark" type="button">
-              渲染视频
-            </button>
-          </div>
-        </aside>
-
-        <section class="script-panel" aria-label="生成脚本">
-          <div class="panel-heading">
-            <div>
-              <p class="eyebrow">候选脚本</p>
-              <h2 id="scriptTitle">AI Research / 等待生成脚本</h2>
-            </div>
-            <span id="featureBadge" class="badge">AI Research</span>
-          </div>
-
-          <p id="candidateSummary" class="section-copy">先生成 3 个脚本，再选择 1 个继续出片</p>
-          <div id="candidateList" class="candidate-list"></div>
-
-          <div class="timeline-block">
-            <div class="panel-heading compact-heading">
-              <div>
-                <p class="eyebrow">时间轴</p>
-                <h2>选中脚本预览</h2>
+            <div class="field-group">
+              <label>功能</label>
+              <div class="segmented" role="tablist" aria-label="功能类型">
+                <button class="segment active" data-feature="research" type="button">
+                  AI Research
+                </button>
+                <button class="segment" data-feature="interviews" type="button">
+                  AI Interviews
+                </button>
               </div>
             </div>
-          <div id="timeline" class="timeline"></div>
-          </div>
-        </section>
+
+            <div class="action-stack">
+              <button id="generateScriptsButton" class="primary-action" type="button">
+                生成 3 个脚本
+              </button>
+              <button id="generateJsonButton" class="secondary-action" type="button">
+                生成 JSON
+              </button>
+              <button id="renderButton" class="secondary-action dark" type="button">
+                渲染视频
+              </button>
+            </div>
+          </aside>
+
+          <section class="script-panel" aria-label="生成脚本">
+            <div class="panel-heading">
+              <div>
+                <p class="eyebrow">Step 02</p>
+                <h2 id="scriptTitle">AI Research / 等待生成脚本</h2>
+              </div>
+              <span id="featureBadge" class="badge">AI Research</span>
+            </div>
+
+            <p id="candidateSummary" class="section-copy">先生成 3 个脚本，再选择 1 个继续出片</p>
+            <div id="candidateList" class="candidate-list"></div>
+
+            <div class="timeline-block">
+              <div class="panel-heading compact-heading">
+                <div>
+                  <p class="eyebrow">Script Review</p>
+                  <h2>选中脚本时间轴</h2>
+                </div>
+              </div>
+              <div id="timeline" class="timeline"></div>
+            </div>
+          </section>
+        </div>
 
         <section class="preview-panel" aria-label="视频预览与审查">
           <div class="phone-preview">
+            <div class="preview-head">
+              <div>
+                <p class="eyebrow">Step 03</p>
+                <h2>画面预览</h2>
+              </div>
+              <span class="preview-chip">9:16</span>
+            </div>
             <video id="previewVideo" muted loop playsinline controls></video>
             <div class="caption-preview" id="captionPreview"></div>
           </div>
