@@ -239,59 +239,8 @@ p {
   height: 100%;
   min-height: 100%;
   display: grid;
-  grid-template-rows: auto minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr);
   overflow: hidden;
-}
-
-.chat-panel-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  padding: 16px 18px;
-  border-bottom: 1px solid var(--line);
-  background: rgba(255, 255, 255, 0.02);
-}
-
-.chat-panel-title,
-.chat-panel-actions {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.chat-panel-title {
-  min-width: 0;
-  color: var(--ink);
-  font-size: 14px;
-  font-weight: 800;
-}
-
-.chat-panel-dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 999px;
-  background: #ff49bd;
-  box-shadow: 0 0 14px rgba(255, 73, 189, 0.55);
-}
-
-.chat-panel-action {
-  min-height: 34px;
-  padding: 0 12px;
-  border-radius: 12px;
-  border: 1px solid var(--line);
-  background: rgba(255, 255, 255, 0.04);
-  color: var(--muted);
-  display: inline-flex;
-  align-items: center;
-  font-size: 12px;
-  font-weight: 800;
-}
-
-.chat-panel-action.more {
-  min-width: 42px;
-  justify-content: center;
-  letter-spacing: 0.1em;
 }
 
 .chat-panel-body {

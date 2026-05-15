@@ -22,7 +22,6 @@ const stageOverlay = document.querySelector("#stageOverlay");
 const scriptTitle = document.querySelector("#scriptTitle");
 const stageMeta = document.querySelector("#stageMeta");
 const statusText = document.querySelector("#statusText");
-const chatPanelHeading = document.querySelector("#chatPanelHeading");
 const composerZone = document.querySelector("#composerZone");
 const hookUploadInput = document.querySelector("#hookUploadInput");
 
@@ -426,7 +425,6 @@ function renderGenerateWorkspace() {
   const stageState = currentStageState();
   const activeHook = selectedHookAsset();
 
-  chatPanelHeading.textContent = "视频生成控制台";
   scriptTitle.textContent = candidate ? candidate.title : activeHook ? `当前 Hook：${activeHook.name}` : "等待渲染视频";
   stageMeta.textContent = stageState === "final" ? "最终成片" : stageState === "rendering" ? "渲染中" : activeHook ? "自定义 Hook 已启用" : "等待脚本";
 
@@ -445,7 +443,6 @@ function renderMaterialsWorkspace() {
   const asset = selectedAsset();
   const hook = selectedHookAsset();
 
-  chatPanelHeading.textContent = "素材库";
   scriptTitle.textContent = asset ? asset.name : "等待预览素材";
   stageMeta.textContent = asset ? (asset.category === "hook" ? "Hook 素材" : "Source 素材") : "等待素材";
 
