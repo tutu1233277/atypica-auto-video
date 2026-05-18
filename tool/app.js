@@ -142,18 +142,90 @@ function selectedHookAsset() {
   return state.assets.find((asset) => asset.assetPath === state.customHookAssetPath) ?? null;
 }
 
-function defaultHookAsset() {
-  return state.assets.find((asset) => asset.category === "hook") ?? null;
+function automaticHookAsset(candidate = focusedCandidate()) {
+  const hookAssets = state.assets.filter((asset) => asset.category === "hook");
+  if (!candidate || hookAssets.length === 0) {
+    return hookAssets[0] ?? null;
+  }
+
+  const scriptText = [
+    candidate.title,
+    candidate.angle,
+    candidate.hookStyle,
+    ...(candidate.audit ?? []),
+    ...(candidate.scenes ?? []).flatMap((scene) => [scene.title, scene.zh, scene.en, scene.note]),
+  ]
+    .filter(Boolean)
+    .join(" ")
+    .toLowerCase();
+
+  const profiles = [
+    {
+      match: ["疯狂", "痛苦", "panic", "焦虑", "崩溃", "慌", "来不及", "压力", "压迫", "救命", "甩"],
+      nameMatch: ["疯狂", "痛苦", "甩"],
+      bonusHookStyle: "panic",
+      preferredNameMatch: ["疯狂", "痛苦", "甩"],
+    },
+    {
+      match: ["mistake", "工作", "职场", "老板", "面试", "键盘", "办公", "批评", "高压", "差点", "犯错"],
+      nameMatch: ["敲键盘", "工作", "mean", "开门"],
+      bonusHookStyle: "mistake",
+      preferredNameMatch: ["敲键盘", "工作", "mean", "开门"],
+    },
+    {
+      match: ["secret", "research", "ai", "研究", "分析", "市场", "洞察", "验证", "发现", "电脑", "高智", "秘密"],
+      nameMatch: ["高智", "电脑"],
+      bonusHookStyle: "secret",
+      preferredNameMatch: ["高智", "电脑"],
+    },
+  ];
+
+  const targetProfile =
+    profiles
+      .map((profile) => {
+        let score = candidate.hookStyle === profile.bonusHookStyle ? 8 : 0;
+        for (const token of profile.match) {
+          if (scriptText.includes(String(token).toLowerCase())) {
+            score += 2;
+          }
+        }
+        return {profile, score};
+      })
+      .sort((left, right) => right.score - left.score)[0]?.profile ?? profiles[0];
+
+  let bestAsset = hookAssets[0] ?? null;
+  let bestScore = -1;
+
+  for (const asset of hookAssets) {
+    const assetName = String(asset.name ?? "").toLowerCase();
+    let score = 0;
+
+    if (targetProfile.preferredNameMatch.some((token) => assetName.includes(String(token).toLowerCase()))) {
+      score += 20;
+    }
+    for (const token of targetProfile.nameMatch) {
+      if (assetName.includes(String(token).toLowerCase())) {
+        score += 3;
+      }
+    }
+
+    if (score > bestScore) {
+      bestScore = score;
+      bestAsset = asset;
+    }
+  }
+
+  return bestAsset;
 }
 
-function activeHookAsset() {
-  return selectedHookAsset() ?? defaultHookAsset();
+function activeHookAsset(candidate = focusedCandidate()) {
+  return selectedHookAsset() ?? automaticHookAsset(candidate);
 }
 
 function currentScenes() {
   const feature = currentFeature();
   const candidate = focusedCandidate();
-  const hookAsset = activeHookAsset();
+  const hookAsset = activeHookAsset(candidate);
   if (!feature || !candidate) {
     return [];
   }
@@ -395,7 +467,7 @@ function isSupportedHookFile(file) {
 }
 
 function requestPayload() {
-  const hookAsset = activeHookAsset();
+  const hookAsset = activeHookAsset(selectedCandidate());
   return {
     feature: state.feature,
     duration: Number(state.presets?.defaults?.durationSeconds ?? 12),
@@ -432,7 +504,7 @@ function renderGenerateWorkspace() {
   const candidate = focusedCandidate();
   const scenes = currentScenes();
   const stageState = currentStageState();
-  const activeHook = activeHookAsset();
+  const activeHook = activeHookAsset(candidate);
 
   scriptTitle.textContent = candidate ? candidate.title : activeHook ? `当前 Hook：${activeHook.name}` : "等待渲染视频";
   stageMeta.textContent = stageState === "final" ? "最终成片" : stageState === "rendering" ? "渲染中" : activeHook ? "自定义 Hook 已启用" : "等待脚本";
@@ -982,7 +1054,9 @@ function buildGenerateStatusText(feature, candidate, stageState, activeHook) {
     return "成片已经生成，右侧显示最终视频。";
   }
   if (activeHook) {
-    return `当前已启用自定义 Hook：${shorten(activeHook.name, 20)}。`;
+    return selectedHookAsset()
+      ? `当前手动指定 Hook：${shorten(activeHook.name, 20)}。`
+      : `系统已按脚本自动匹配 Hook：${shorten(activeHook.name, 20)}。`;
   }
   if (candidate) {
     return `当前浏览脚本 ${state.focusedCandidateIndex + 1} / ${state.candidates.length}。`;
@@ -1020,7 +1094,9 @@ function buildComposerHint(feature, candidate, stageState, activeHook) {
     return "可以切换脚本并再次渲染。";
   }
   if (activeHook) {
-    return `当前会用 ${shorten(activeHook.name, 18)} 作为开场 Hook。`;
+    return selectedHookAsset()
+      ? `当前会用你手动指定的 ${shorten(activeHook.name, 18)} 作为开场 Hook。`
+      : `系统会根据脚本内容自动用 ${shorten(activeHook.name, 18)} 作为开场 Hook。`;
   }
   if (candidate) {
     return `当前是 ${feature?.label ?? "--"}，切换左右箭头查看别的脚本。`;

@@ -352,7 +352,7 @@ export function createVideoConfig(payload) {
   const configId = slugify(`${feature}-${candidateId}-${resolvedTopic}`);
   const configPath = `data/videos/generated/${configId}.json`;
   const outputPath = `out/${configId}.mp4`;
-  const defaultHookAssetPath = resolveDefaultHookAssetPath();
+  const automaticHookAssetPath = resolveAutomaticHookAssetPath(candidate);
 
   const scenes = featurePreset.scenePlan.map((scenePlan, index) => {
     const scene = candidate.scenes[index];
@@ -363,8 +363,8 @@ export function createVideoConfig(payload) {
     const resolvedAssetPath =
       index === 0 && typeof payload.customHookAssetPath === 'string' && payload.customHookAssetPath.trim()
         ? payload.customHookAssetPath.trim()
-        : index === 0 && defaultHookAssetPath
-          ? defaultHookAssetPath
+        : index === 0 && automaticHookAssetPath
+          ? automaticHookAssetPath
         : scenePlan.assetPath;
 
     return {
@@ -407,7 +407,7 @@ export function createVideoConfig(payload) {
       hookStyle: candidate.hookStyle,
       customHookAssetPath:
         typeof payload.customHookAssetPath === 'string' ? payload.customHookAssetPath.trim() : '',
-      defaultHookAssetPath,
+      automaticHookAssetPath,
       score: candidate.score,
       audit: candidate.audit,
       model: process.env.AI_SDK_MODEL || process.env.LITELLM_MODEL || 'claude-sonnet-4-6',
@@ -481,9 +481,80 @@ function listVideoAssets() {
   ].sort(compareAssets);
 }
 
-function resolveDefaultHookAssetPath() {
-  const firstHook = listVideoAssets().find((asset) => asset.category === 'hook');
-  return firstHook?.assetPath ?? '';
+function resolveAutomaticHookAssetPath(candidate) {
+  const hookAssets = listVideoAssets().filter((asset) => asset.category === 'hook');
+  if (!candidate || hookAssets.length === 0) {
+    return hookAssets[0]?.assetPath ?? '';
+  }
+
+  const scriptText = [
+    candidate.title,
+    candidate.angle,
+    candidate.hookStyle,
+    ...(candidate.audit ?? []),
+    ...(candidate.scenes ?? []).flatMap((scene) => [scene.title, scene.zh, scene.en, scene.note]),
+  ]
+    .filter(Boolean)
+    .join(' ')
+    .toLowerCase();
+
+  const profiles = [
+    {
+      match: ['疯狂', '痛苦', 'panic', '焦虑', '崩溃', '慌', '来不及', '压力', '压迫', '救命', '甩'],
+      nameMatch: ['疯狂', '痛苦', '甩'],
+      bonusHookStyle: 'panic',
+      preferredNameMatch: ['疯狂', '痛苦', '甩'],
+    },
+    {
+      match: ['mistake', '工作', '职场', '老板', '面试', '键盘', '办公', '批评', '高压', '差点', '犯错'],
+      nameMatch: ['敲键盘', '工作', 'mean', '开门'],
+      bonusHookStyle: 'mistake',
+      preferredNameMatch: ['敲键盘', '工作', 'mean', '开门'],
+    },
+    {
+      match: ['secret', 'research', 'ai', '研究', '分析', '市场', '洞察', '验证', '发现', '电脑', '高智', '秘密'],
+      nameMatch: ['高智', '电脑'],
+      bonusHookStyle: 'secret',
+      preferredNameMatch: ['高智', '电脑'],
+    },
+  ];
+
+  const targetProfile =
+    profiles
+      .map((profile) => {
+        let score = candidate.hookStyle === profile.bonusHookStyle ? 8 : 0;
+        for (const token of profile.match) {
+          if (scriptText.includes(String(token).toLowerCase())) {
+            score += 2;
+          }
+        }
+        return {profile, score};
+      })
+      .sort((left, right) => right.score - left.score)[0]?.profile ?? profiles[0];
+
+  let bestAsset = hookAssets[0];
+  let bestScore = -1;
+
+  for (const asset of hookAssets) {
+    const assetName = String(asset.name ?? '').toLowerCase();
+    let score = 0;
+
+    if (targetProfile.preferredNameMatch.some((token) => assetName.includes(String(token).toLowerCase()))) {
+      score += 20;
+    }
+    for (const token of targetProfile.nameMatch) {
+      if (assetName.includes(String(token).toLowerCase())) {
+        score += 3;
+      }
+    }
+
+    if (score > bestScore) {
+      bestScore = score;
+      bestAsset = asset;
+    }
+  }
+
+  return bestAsset?.assetPath ?? '';
 }
 
 function walkAssetDir(dirPath, category, rootDir) {
