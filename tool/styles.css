@@ -64,7 +64,9 @@ p {
 
 .app-shell {
   height: 100vh;
+  height: 100dvh;
   min-height: 100vh;
+  min-height: 100dvh;
   display: grid;
   grid-template-columns: 96px minmax(0, 1fr);
   background: #0a0a0a;
@@ -130,6 +132,7 @@ p {
   min-height: 0;
   display: grid;
   grid-template-rows: auto 1fr;
+  overflow: hidden;
 }
 
 .workspace-header {
@@ -205,7 +208,7 @@ p {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(520px, 0.98fr);
   gap: 0;
-  height: calc(100vh - 98px);
+  height: 100%;
   align-items: start;
   overflow: hidden;
 }
@@ -968,37 +971,139 @@ body.is-busy .status-dot {
 
 @media (max-width: 1360px) {
   .product-shell {
-    grid-template-columns: 1fr;
-    height: calc(100vh - 98px);
+    grid-template-columns: minmax(0, 1fr) minmax(420px, 0.9fr);
   }
 
-  .chat-column {
-    border-right: 0;
-    border-bottom: 1px solid var(--line);
+  .workspace-header {
+    padding-inline: 22px;
   }
 
+  .chat-column,
   .stage-column {
-    grid-template-rows: auto;
+    padding: 22px;
   }
 }
 
 @media (max-width: 980px) {
   .app-shell {
     grid-template-columns: 1fr;
+    grid-template-rows: auto minmax(0, 1fr);
   }
 
   .nav-rail {
-    display: none;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    padding: 12px 16px;
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
   }
 
-  .workspace-header,
-  .chat-column,
-  .stage-column {
+  .rail-logo {
+    width: 42px;
+    height: 42px;
+    border-radius: 14px;
+    flex: 0 0 auto;
+  }
+
+  .rail-items {
+    width: auto;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    overflow-x: auto;
+  }
+
+  .rail-item {
+    min-height: 42px;
+    padding: 0 16px;
+    border-radius: 999px;
+    white-space: nowrap;
+  }
+
+  .workspace-header {
     padding: 18px;
+  }
+
+  .workspace-shell {
+    overflow: hidden;
+  }
+
+  .workspace-tabs {
+    gap: 10px;
+  }
+
+  .workspace-tab {
+    font-size: 16px;
   }
 
   .header-status {
     min-width: 0;
+    width: 100%;
+  }
+
+  .product-shell {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto;
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    align-items: start;
+  }
+
+  .stage-column,
+  .chat-column {
+    height: auto;
+    overflow: visible;
+    padding: 16px 18px;
+  }
+
+  .stage-column {
+    grid-row: 1;
+  }
+
+  .chat-column {
+    grid-row: 2;
+    border-right: 0;
+    border-top: 1px solid var(--line);
+  }
+
+  .chat-panel {
+    height: auto;
+    min-height: 0;
+  }
+
+  .chat-panel-body {
+    grid-template-rows: auto auto;
+  }
+
+  .chat-stream {
+    overflow: visible;
+    padding: 18px 16px 10px;
+  }
+
+  .message-card {
+    width: 100%;
+  }
+
+  .composer-card {
+    margin: 0 12px 12px;
+    position: sticky;
+    bottom: 12px;
+    z-index: 8;
+  }
+
+  .stage-head {
+    flex-wrap: wrap;
+  }
+
+  .stage-title-wrap h2 {
+    font-size: 17px;
+  }
+
+  .stage-frame {
+    border-radius: 20px;
   }
 }
 
@@ -1006,15 +1111,59 @@ body.is-busy .status-dot {
   .workspace-header {
     flex-direction: column;
     align-items: flex-start;
+    gap: 12px;
+    padding: 14px 14px 12px;
+  }
+
+  .workspace-tab {
+    font-size: 14px;
+  }
+
+  .header-status,
+  .preview-chip,
+  .score-pill,
+  .job-pill,
+  .feature-chip,
+  .candidate-score,
+  .candidate-hook,
+  .stage-token,
+  .model-badge {
+    min-height: 34px;
+    padding-inline: 12px;
+    font-size: 12px;
+  }
+
+  .nav-rail {
+    padding: 10px 12px;
+  }
+
+  .rail-item {
+    min-height: 38px;
+    padding-inline: 13px;
+    font-size: 13px;
+  }
+
+  .product-shell {
+    gap: 0;
+  }
+
+  .stage-column,
+  .chat-column {
+    padding: 12px;
   }
 
   .stage-head {
     flex-direction: column;
     align-items: flex-start;
+    gap: 10px;
   }
 
-  .candidate-rail {
-    grid-auto-columns: minmax(260px, 88vw);
+  .stage-head-meta {
+    width: 100%;
+  }
+
+  .preview-chip {
+    max-width: 100%;
   }
 
   .composer-footer {
@@ -1034,14 +1183,125 @@ body.is-busy .status-dot {
   }
 
   .candidate-switcher {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: stretch;
   }
 
-  .script-table {
-    table-layout: auto;
+  .candidate-meta-strip {
+    grid-column: 1 / -1;
+    order: -1;
+  }
+
+  .switch-arrow {
+    min-height: 42px;
+  }
+
+  .script-table-wrap {
+    overflow: visible;
+    border-radius: 16px;
+  }
+
+  .script-table,
+  .script-table tbody,
+  .script-table tr,
+  .script-table td {
+    display: block;
+    width: 100%;
+  }
+
+  .script-table thead {
+    display: none;
+  }
+
+  .script-table tr {
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .script-table tbody tr:last-child {
+    border-bottom: 0;
+  }
+
+  .script-table td {
+    display: grid;
+    grid-template-columns: 64px minmax(0, 1fr);
+    gap: 8px;
+    padding: 6px 0;
+    border-bottom: 0;
+    font-size: 12px;
+    line-height: 1.5;
+  }
+
+  .script-table td::before {
+    content: attr(data-label);
+    color: var(--muted-2);
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .script-table th:nth-child(1),
+  .script-table td:nth-child(1),
+  .script-table th:nth-child(2),
+  .script-table td:nth-child(2) {
+    width: 100%;
   }
 
   .asset-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .asset-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 520px) {
+  .message-card {
+    padding: 13px 14px 12px;
+    border-radius: 16px 16px 16px 8px;
+  }
+
+  .message-row.user .message-card {
+    border-radius: 16px 16px 8px 16px;
+  }
+
+  .message-title {
+    font-size: 15px;
+  }
+
+  .message-copy,
+  .candidate-angle,
+  .summary-copy {
+    font-size: 12px;
+    line-height: 1.55;
+  }
+
+  .candidate-meta-strip span {
+    min-height: 30px;
+    font-size: 10px;
+  }
+
+  .composer-card {
+    margin-inline: 10px;
+    padding: 10px;
+    border-radius: 18px;
+  }
+
+  .composer-actions {
+    width: 100%;
+  }
+
+  .primary-action,
+  .secondary-action,
+  .ghost-action {
+    min-height: 38px;
+    font-size: 12px;
+  }
+
+  .asset-actions {
     grid-template-columns: 1fr;
   }
 }
