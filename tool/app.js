@@ -142,10 +142,18 @@ function selectedHookAsset() {
   return state.assets.find((asset) => asset.assetPath === state.customHookAssetPath) ?? null;
 }
 
+function defaultHookAsset() {
+  return state.assets.find((asset) => asset.category === "hook") ?? null;
+}
+
+function activeHookAsset() {
+  return selectedHookAsset() ?? defaultHookAsset();
+}
+
 function currentScenes() {
   const feature = currentFeature();
   const candidate = focusedCandidate();
-  const customHook = selectedHookAsset();
+  const hookAsset = activeHookAsset();
   if (!feature || !candidate) {
     return [];
   }
@@ -153,7 +161,7 @@ function currentScenes() {
   return feature.scenePlan.map((scenePlan, index) => {
     const candidateScene = candidate.scenes[index];
     const previewPath =
-      index === 0 && customHook ? customHook.previewPath : scenePlan.previewPath;
+      index === 0 && hookAsset ? hookAsset.previewPath : scenePlan.previewPath;
 
     return {
       time: scenePlan.time,
@@ -387,12 +395,13 @@ function isSupportedHookFile(file) {
 }
 
 function requestPayload() {
+  const hookAsset = activeHookAsset();
   return {
     feature: state.feature,
     duration: Number(state.presets?.defaults?.durationSeconds ?? 12),
     topic: currentFeature()?.defaultTopic,
     candidate: selectedCandidate(),
-    customHookAssetPath: state.customHookAssetPath,
+    customHookAssetPath: hookAsset?.assetPath ?? "",
   };
 }
 
@@ -423,7 +432,7 @@ function renderGenerateWorkspace() {
   const candidate = focusedCandidate();
   const scenes = currentScenes();
   const stageState = currentStageState();
-  const activeHook = selectedHookAsset();
+  const activeHook = activeHookAsset();
 
   scriptTitle.textContent = candidate ? candidate.title : activeHook ? `当前 Hook：${activeHook.name}` : "等待渲染视频";
   stageMeta.textContent = stageState === "final" ? "最终成片" : stageState === "rendering" ? "渲染中" : activeHook ? "自定义 Hook 已启用" : "等待脚本";
@@ -441,7 +450,7 @@ function renderGenerateWorkspace() {
 
 function renderMaterialsWorkspace() {
   const asset = selectedAsset();
-  const hook = selectedHookAsset();
+  const hook = activeHookAsset();
 
   scriptTitle.textContent = asset ? asset.name : "等待预览素材";
   stageMeta.textContent = asset ? (asset.category === "hook" ? "Hook 素材" : "Source 素材") : "等待素材";
@@ -567,10 +576,10 @@ function renderGenerateConversation(feature, candidate, scenes, activeHook) {
                   .map(
                     (scene) => `
                       <tr>
-                        <td>${escapeHtml(scene.time)}</td>
-                        <td>${escapeHtml(scene.title)}</td>
-                        <td>${escapeHtml(scene.en).replace(/\n/g, "<br>")}</td>
-                        <td>${escapeHtml(scene.zh).replace(/\n/g, "<br>")}</td>
+                        <td data-label="时间">${escapeHtml(scene.time)}</td>
+                        <td data-label="Scene">${escapeHtml(scene.title)}</td>
+                        <td data-label="EN">${escapeHtml(scene.en).replace(/\n/g, "<br>")}</td>
+                        <td data-label="ZH">${escapeHtml(scene.zh).replace(/\n/g, "<br>")}</td>
                       </tr>
                     `,
                   )

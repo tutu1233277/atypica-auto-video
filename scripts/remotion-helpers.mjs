@@ -1,9 +1,17 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import {fileURLToPath} from 'node:url';
 
-export const projectRoot = process.cwd();
+export const projectRoot = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 const publicDir = path.join(projectRoot, 'public');
 const publicAssetsDir = path.join(publicDir, 'assets');
+const publicHookDir = path.join(publicDir, 'hook');
+
+const hookLibraryCandidates = [
+  path.join(projectRoot, 'AI人 hook'),
+  path.join(projectRoot, 'AI人hook'),
+  path.join(projectRoot, 'hook'),
+];
 
 export const getArg = (name, fallback) => {
   const args = process.argv.slice(2);
@@ -21,10 +29,12 @@ export const readConfig = (configPath) => {
 };
 
 export const ensurePublicAssetLinks = () => {
+  ensureHookAssetMirror();
+
   ensureSymlink({
     linkPath: path.join(publicAssetsDir, 'hook'),
     preferredTarget: '../../hook',
-    fallbackPath: path.join(projectRoot, 'hook'),
+    fallbackPath: publicHookDir,
   });
 
   ensureSymlink({
@@ -32,6 +42,53 @@ export const ensurePublicAssetLinks = () => {
     preferredTarget: '../source',
     fallbackPath: path.join(publicDir, 'source'),
   });
+};
+
+export const getHookLibraryDir = () => {
+  for (const candidate of hookLibraryCandidates) {
+    if (fs.existsSync(candidate) && fs.statSync(candidate).isDirectory()) {
+      return candidate;
+    }
+  }
+
+  return publicHookDir;
+};
+
+export const ensureHookAssetMirror = () => {
+  const hookLibraryDir = getHookLibraryDir();
+
+  if (!fs.existsSync(hookLibraryDir) || path.resolve(hookLibraryDir) === path.resolve(publicHookDir)) {
+    return;
+  }
+
+  fs.mkdirSync(publicHookDir, {recursive: true});
+  mirrorDirectory(hookLibraryDir, publicHookDir);
+};
+
+const mirrorDirectory = (sourceDir, targetDir) => {
+  const entries = fs.readdirSync(sourceDir, {withFileTypes: true});
+
+  for (const entry of entries) {
+    const sourcePath = path.join(sourceDir, entry.name);
+    const targetPath = path.join(targetDir, entry.name);
+
+    if (entry.isDirectory()) {
+      fs.mkdirSync(targetPath, {recursive: true});
+      mirrorDirectory(sourcePath, targetPath);
+      continue;
+    }
+
+    if (!entry.isFile()) {
+      continue;
+    }
+
+    if (fs.existsSync(targetPath)) {
+      continue;
+    }
+
+    const relativeTarget = path.relative(path.dirname(targetPath), sourcePath);
+    fs.symlinkSync(relativeTarget, targetPath);
+  }
 };
 
 const ensureSymlink = ({linkPath, preferredTarget, fallbackPath}) => {

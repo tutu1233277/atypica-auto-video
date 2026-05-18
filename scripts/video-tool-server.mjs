@@ -7,6 +7,7 @@ import {loadEnvFiles, slugify} from './research-lib.mjs';
 import {findFeaturePreset, generateScriptCandidates, loadGeneratorPresets} from './openai-script-generator.mjs';
 import {initDb, saveCandidates, getCandidates, selectCandidate, createJob, updateJob, getJob, getRecentJobs} from './db.mjs';
 import {uploadToCos, getPresignedUrl} from './cos-client.mjs';
+import {ensureHookAssetMirror, getHookLibraryDir} from './remotion-helpers.mjs';
 
 const root = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 const publicDir = path.join(root, 'public');
@@ -34,6 +35,7 @@ const uploadMimeToExt = new Map([
 
 // 初始化数据库
 await initDb();
+ensureHookAssetMirror();
 
 const server = http.createServer(async (request, response) => {
   const url = new URL(request.url ?? '/', `http://127.0.0.1:${port}`);
@@ -130,6 +132,7 @@ async function handleGetJobs(request, response) {
 
 async function handleGetAssets(request, response) {
   try {
+    ensureHookAssetMirror();
     sendJson(response, 200, {
       ok: true,
       assets: listVideoAssets(),
@@ -181,6 +184,7 @@ async function handleGenerateCandidates(request, response) {
 
 async function handleUploadHook(request, response) {
   try {
+    ensureHookAssetMirror();
     const payload = await readRequestBody(request);
     const fileName = typeof payload.fileName === 'string' ? payload.fileName : 'hook.mp4';
     const mimeType = typeof payload.mimeType === 'string' ? payload.mimeType : '';
@@ -193,8 +197,10 @@ async function handleUploadHook(request, response) {
     const extension = resolveUploadExtension(fileName, mimeType);
     const baseName = path.basename(fileName, path.extname(fileName)) || 'hook';
     const safeName = slugify(baseName) || 'hook';
-    const relativePath = path.posix.join('hook', 'uploads', `${safeName}-${Date.now()}${extension}`);
-    const absolutePath = path.join(publicDir, ...relativePath.split('/'));
+    const stamp = Date.now();
+    const relativePath = path.posix.join('hook', 'uploads', `${safeName}-${stamp}${extension}`);
+    const hookLibraryDir = getHookLibraryDir();
+    const absolutePath = path.join(hookLibraryDir, 'uploads', `${safeName}-${stamp}${extension}`);
     const buffer = Buffer.from(contentBase64, 'base64');
 
     if (buffer.byteLength === 0) {
@@ -207,11 +213,16 @@ async function handleUploadHook(request, response) {
 
     fs.mkdirSync(path.dirname(absolutePath), {recursive: true});
     fs.writeFileSync(absolutePath, buffer);
+    ensureHookAssetMirror();
 
     sendJson(response, 200, {
       ok: true,
       message: 'Hook uploaded',
-      asset: buildAssetRecord(relativePath),
+      asset: buildAssetRecord({
+        relativePath,
+        absolutePath,
+        category: 'hook',
+      }),
     });
   } catch (error) {
     sendJson(response, 400, {ok: false, error: error.message});
@@ -318,6 +329,7 @@ async function handleRender(request, response) {
 }
 
 export function createVideoConfig(payload) {
+  ensureHookAssetMirror();
   const feature = coerceFeature(payload.feature);
   const candidate = payload.candidate;
   const topic = typeof payload.topic === 'string' && payload.topic.trim() ? payload.topic.trim() : '';
@@ -340,6 +352,7 @@ export function createVideoConfig(payload) {
   const configId = slugify(`${feature}-${candidateId}-${resolvedTopic}`);
   const configPath = `data/videos/generated/${configId}.json`;
   const outputPath = `out/${configId}.mp4`;
+  const defaultHookAssetPath = resolveDefaultHookAssetPath();
 
   const scenes = featurePreset.scenePlan.map((scenePlan, index) => {
     const scene = candidate.scenes[index];
@@ -350,6 +363,8 @@ export function createVideoConfig(payload) {
     const resolvedAssetPath =
       index === 0 && typeof payload.customHookAssetPath === 'string' && payload.customHookAssetPath.trim()
         ? payload.customHookAssetPath.trim()
+        : index === 0 && defaultHookAssetPath
+          ? defaultHookAssetPath
         : scenePlan.assetPath;
 
     return {
@@ -392,6 +407,7 @@ export function createVideoConfig(payload) {
       hookStyle: candidate.hookStyle,
       customHookAssetPath:
         typeof payload.customHookAssetPath === 'string' ? payload.customHookAssetPath.trim() : '',
+      defaultHookAssetPath,
       score: candidate.score,
       audit: candidate.audit,
       model: process.env.AI_SDK_MODEL || process.env.LITELLM_MODEL || 'claude-sonnet-4-6',
@@ -457,15 +473,20 @@ function runRender(configPath, outputPath) {
 }
 
 function listVideoAssets() {
-  const assetDirs = [
-    path.join(publicDir, 'hook'),
-    path.join(publicDir, 'source'),
-  ];
-
-  return assetDirs.flatMap((dirPath) => walkAssetDir(dirPath)).sort(compareAssets);
+  ensureHookAssetMirror();
+  const hookLibraryDir = getHookLibraryDir();
+  return [
+    ...walkAssetDir(hookLibraryDir, 'hook', hookLibraryDir),
+    ...walkAssetDir(path.join(publicDir, 'source'), 'source', path.join(publicDir, 'source')),
+  ].sort(compareAssets);
 }
 
-function walkAssetDir(dirPath) {
+function resolveDefaultHookAssetPath() {
+  const firstHook = listVideoAssets().find((asset) => asset.category === 'hook');
+  return firstHook?.assetPath ?? '';
+}
+
+function walkAssetDir(dirPath, category, rootDir) {
   if (!fs.existsSync(dirPath)) {
     return [];
   }
@@ -476,7 +497,7 @@ function walkAssetDir(dirPath) {
   for (const entry of entries) {
     const absolutePath = path.join(dirPath, entry.name);
     if (entry.isDirectory()) {
-      assets.push(...walkAssetDir(absolutePath));
+      assets.push(...walkAssetDir(absolutePath, category, rootDir));
       continue;
     }
 
@@ -485,17 +506,21 @@ function walkAssetDir(dirPath) {
       continue;
     }
 
-    const relativePath = path.relative(publicDir, absolutePath).split(path.sep).join('/');
-    assets.push(buildAssetRecord(relativePath));
+    const relativePath = path.posix.join(category, path.relative(rootDir, absolutePath).split(path.sep).join('/'));
+    assets.push(
+      buildAssetRecord({
+        relativePath,
+        absolutePath,
+        category,
+      }),
+    );
   }
 
   return assets;
 }
 
-function buildAssetRecord(relativePath) {
-  const absolutePath = path.join(publicDir, ...relativePath.split('/'));
+function buildAssetRecord({relativePath, absolutePath, category}) {
   const stats = fs.statSync(absolutePath);
-  const [category = 'source'] = relativePath.split('/');
 
   return {
     id: relativePath,
@@ -538,9 +563,15 @@ function resolveUploadExtension(fileName, mimeType) {
 function serveStatic(pathname, response) {
   const decodedPath = decodeURIComponent(pathname);
   const relativePath = decodedPath === '/' ? 'tool/index.html' : decodedPath.slice(1);
-  const target = path.resolve(root, relativePath);
+  const staticRoot =
+    relativePath.startsWith('hook/') ||
+    relativePath.startsWith('source/') ||
+    relativePath.startsWith('assets/')
+      ? publicDir
+      : root;
+  const target = path.resolve(staticRoot, relativePath);
 
-  if (!target.startsWith(root)) {
+  if (!target.startsWith(staticRoot)) {
     response.writeHead(403);
     response.end('Forbidden');
     return;
