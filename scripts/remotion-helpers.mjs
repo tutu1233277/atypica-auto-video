@@ -10,6 +10,7 @@ const publicHookDir = path.join(publicDir, 'hook');
 const hookLibraryCandidates = [
   path.join(projectRoot, 'AI人 hook'),
   path.join(projectRoot, 'AI人hook'),
+  path.join(projectRoot, 'AI人'),
   path.join(projectRoot, 'hook'),
 ];
 
